@@ -1,0 +1,47 @@
+buildscript {
+    ext.kotlin_version = "$kotlinVersion"
+    ext.ktor_version = "$ktorVersion"
+    ext.logback_version = "$logbackVersion"
+    ext.slf4j_version = "$slf4jVersion"
+
+    repositories {
+        mavenCentral()
+        maven { url = "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadowJarVersion"
+    }
+}
+
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+
+    sourceCompatibility = "$javaVersion"
+
+    compileKotlin {
+        kotlinOptions.jvmTarget = "$javaVersion"
+    }
+
+    compileTestKotlin {
+        kotlinOptions.jvmTarget = "$javaVersion"
+    }
+
+    kotlin {
+        experimental {
+            coroutines "enable"
+        }
+    }
+
+    repositories {
+        jcenter()
+        maven { url = "https://dl.bintray.com/kotlin/ktor" }
+    }
+
+    dependencies {
+        compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+        testCompile "junit:junit:$junitVersion"
+    }
+}
