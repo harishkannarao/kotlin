@@ -15,7 +15,7 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.netty.NettyApplicationEngine
 import java.util.concurrent.TimeUnit
 
-class KtorApplicationServer(private val config: KtorApplicationConfig) {
+open class KtorApplicationServer(private val config: KtorApplicationConfig) {
 
     private val server = createServer()
 
@@ -29,8 +29,10 @@ class KtorApplicationServer(private val config: KtorApplicationConfig) {
                 get("/") {
                     call.respondText("My Example Blog", ContentType.Text.Html)
                 }
-                get("/snippets") {
-                    call.respond(mapOf("OK" to true))
+                if(config.enableSnippetsApi) {
+                    get("/snippets") {
+                        call.respond(mapOf("OK" to true))
+                    }
                 }
             }
         }
