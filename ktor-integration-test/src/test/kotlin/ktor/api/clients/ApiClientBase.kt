@@ -1,4 +1,4 @@
-package com.harishkannarao.ktor.api.clients
+package ktor.api.clients
 
 import io.restassured.RestAssured
 import io.restassured.response.Response

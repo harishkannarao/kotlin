@@ -1,6 +1,6 @@
-package com.harishkannarao.ktor.api.clients.factory
+package ktor.api.clients.factory
 
-import com.harishkannarao.ktor.api.clients.SnippetsApiClient
+import ktor.api.clients.SnippetsApiClient
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.specification.RequestSpecification
 

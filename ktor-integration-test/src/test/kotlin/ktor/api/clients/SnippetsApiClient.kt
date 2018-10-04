@@ -1,4 +1,4 @@
-package com.harishkannarao.ktor.api.clients
+package ktor.api.clients
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification

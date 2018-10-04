@@ -1,6 +1,6 @@
-package com.harishkannarao.ktor.api
+package ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import ktor.AbstractBaseIntegration
 import org.junit.Test
 
 

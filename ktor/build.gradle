@@ -16,5 +16,4 @@ dependencies {
     compile "io.ktor:ktor-jackson:$ktorVersion"
     compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
     compile "ch.qos.logback:logback-classic:$logbackVersion"
-    testCompile "io.rest-assured:rest-assured:$restAssuredVersion"
 }

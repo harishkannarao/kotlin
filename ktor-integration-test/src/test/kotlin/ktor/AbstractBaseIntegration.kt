@@ -1,6 +1,6 @@
-package com.harishkannarao.ktor
+package ktor
 
-import com.harishkannarao.ktor.api.clients.factory.ClientFactory
+import ktor.api.clients.factory.ClientFactory
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import org.junit.Before
 

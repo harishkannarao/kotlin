@@ -1,4 +1,4 @@
-package com.harishkannarao.ktor
+package ktor
 
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.server.KtorApplicationServer
