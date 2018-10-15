@@ -3,6 +3,7 @@ package com.harishkannarao.ktor.server
 import com.harishkannarao.ktor.api.SnippetDto
 import com.harishkannarao.ktor.api.SnippetsApi
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.ContentNegotiation
@@ -25,31 +26,32 @@ open class KtorApplicationServer(
 ) {
 
     private val snippetsApi = SnippetsApi()
-    private val server = createServer()
-
-    private fun createServer(): NettyApplicationEngine {
-        return embeddedServer(Netty, config.port) {
-            install(ContentNegotiation) {
-                jackson {
-                }
+    private val myModule: Application.() -> Unit = {
+        install(ContentNegotiation) {
+            jackson {
             }
-            routing {
-                get("/") {
-                    call.respondText("My Example Blog", ContentType.Text.Html)
-                }
-                if (config.enableSnippetsApi) {
-                    route("/snippets") {
-                        get {
-                            call.respond(snippetsApi.getDefaultSnippets())
-                        }
-                        post {
-                            val input = call.receive<SnippetDto>()
-                            call.respond(snippetsApi.createSnippet(input))
-                        }
+        }
+        routing {
+            get("/") {
+                call.respondText("My Example Blog", ContentType.Text.Html)
+            }
+            if (config.enableSnippetsApi) {
+                route("/snippets") {
+                    get {
+                        call.respond(snippetsApi.getDefaultSnippets())
+                    }
+                    post {
+                        val input = call.receive<SnippetDto>()
+                        call.respond(snippetsApi.createSnippet(input))
                     }
                 }
             }
         }
+    }
+    private val server = createServer()
+
+    private fun createServer(): NettyApplicationEngine {
+        return embeddedServer(factory = Netty, port = config.port, module = myModule)
     }
 
     fun start(wait: Boolean = true) {
