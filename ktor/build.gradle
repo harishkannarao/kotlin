@@ -1,7 +1,7 @@
 apply plugin: "com.github.johnrengelman.shadow"
 apply plugin: 'application'
 
-mainClassName = 'com.harishkannarao.ktor.KtorApplicationKt'
+mainClassName = 'com.harishkannarao.ktor.KtorApplication'
 
 shadowJar {
     baseName = 'ktor'
