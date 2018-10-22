@@ -14,6 +14,10 @@ This repository is to play with kotlin programming language and related framewor
 
     ./gradlew clean build
     
+To print the http request and response during integration test execution
+
+    ./gradlew clean build --info
+    
 ## To run ktor application
 
 #### Using gradle
