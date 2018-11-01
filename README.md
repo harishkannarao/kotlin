@@ -29,3 +29,7 @@ To print the http request and response during integration test execution
     ./gradlew clean assemble
     
     java -jar ktor/build/libs/ktor-exec.jar
+    
+Change logback configuration
+
+    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar
