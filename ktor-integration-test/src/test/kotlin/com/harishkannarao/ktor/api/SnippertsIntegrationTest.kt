@@ -30,7 +30,7 @@ class SnippetsIntegrationTest : AbstractBaseIntegration() {
     fun `cannot create a snippet without text`() {
         clients.createSnippetsApiClient()
                 .post()
-                .expectServerErrorStatus()
+                .expectBadRequestStatus()
     }
 
     @Test

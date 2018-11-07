@@ -48,8 +48,8 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return expectStatusCodeToBe(200)
     }
 
-    fun expectServerErrorStatus(): T {
-        return expectStatusCodeToBe(500)
+    fun expectBadRequestStatus(): T {
+        return expectStatusCodeToBe(400)
     }
 
     protected fun expectJsonString(jsonPath: String, value: String): T {
