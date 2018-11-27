@@ -16,8 +16,8 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.*
+import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
 import java.util.concurrent.TimeUnit
 
 open class KtorApplicationServer(
@@ -64,7 +64,7 @@ open class KtorApplicationServer(
     }
 
     private val server = embeddedServer(
-            factory = Netty,
+            factory = CIO,
             port = config.port,
             module = myModule
     )
