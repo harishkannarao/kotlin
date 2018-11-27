@@ -30,9 +30,6 @@ allprojects {
     }
 
     kotlin {
-        experimental {
-            coroutines "enable"
-        }
     }
 
     repositories {
