@@ -32,7 +32,7 @@ abstract class AbstractBaseIntegration {
         val clients: ClientFactory = ClientFactory("http://localhost:8080")
 
         private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
-            val dependencies = Dependencies()
+            val dependencies = Dependencies(config = config)
             val routes = Routes(dependencies)
             val modules = Modules(config, routes)
             val localServer = KtorApplicationServer(config, modules)

@@ -10,7 +10,7 @@ object KtorApplication {
     @JvmStatic
     fun main(args: Array<String>) {
         val config = KtorApplicationConfig()
-        val dependencies = Dependencies()
+        val dependencies = Dependencies(config)
         val routes = Routes(dependencies)
         val modules = Modules(config, routes)
         KtorApplicationServer(config, modules).start()

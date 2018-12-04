@@ -1,11 +1,13 @@
 package com.harishkannarao.ktor.api.snippets
 
-class SnippetsApi {
+import com.harishkannarao.ktor.config.KtorApplicationConfig
+
+class SnippetsApi(private val config: KtorApplicationConfig) {
 
     fun getDefaultSnippets(): List<SnippetDto> {
         return listOf(
                 SnippetDto(
-                        text = "hello"
+                        text = config.port.toString()
                 )
         )
     }

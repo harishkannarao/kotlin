@@ -13,7 +13,7 @@ class SnippetsIntegrationTest : AbstractBaseIntegration() {
                 .get()
                 .expectSuccessStatus()
                 .expectSnippetsCountToBe(1)
-                .expectTextToBe(0, "hello")
+                .expectTextToBe(0, "8080")
     }
 
     @Test
