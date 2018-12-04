@@ -5,6 +5,7 @@ import io.restassured.builder.RequestSpecBuilder
 import io.restassured.specification.RequestSpecification
 import com.harishkannarao.ktor.api.clients.CreateSnippetApiClient
 import com.harishkannarao.ktor.api.clients.FileEchoApiClient
+import com.harishkannarao.ktor.api.clients.RootApiClient
 import io.restassured.filter.log.LogDetail
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
@@ -21,6 +22,10 @@ class ClientFactory(private val baseUrl: String) {
 
     fun fileEchoApiClient(): FileEchoApiClient {
         return FileEchoApiClient(createRequestSpec())
+    }
+
+    fun rootApiClient(): RootApiClient {
+        return RootApiClient(createRequestSpec())
     }
 
     private fun createRequestSpec(): RequestSpecification {

@@ -5,16 +5,10 @@ import io.restassured.specification.RequestSpecification
 
 class CreateSnippetApiClient(requestSpecification: RequestSpecification): ApiClientBase<CreateSnippetApiClient>(requestSpecification) {
 
-    private var requestDto: TestSnippetDto = TestSnippetDto.createDefault()
-
-    fun withText(input: String): CreateSnippetApiClient {
-        requestDto = requestDto.copy(
-                text = input
-        )
-        return this
-    }
-
-    fun post(): CreateSnippetApiClient {
+    fun post(
+            requestModifier: (TestSnippetDto) -> TestSnippetDto = { it }
+    ): CreateSnippetApiClient {
+        val requestDto = requestModifier(TestSnippetDto.createDefault())
         requestSpecification.basePath("/snippets")
         requestSpecification.accept(ContentType.JSON)
         requestSpecification.contentType(ContentType.JSON)
@@ -26,7 +20,7 @@ class CreateSnippetApiClient(requestSpecification: RequestSpecification): ApiCli
         return expectJsonString("text", expectedValue)
     }
 
-    private data class TestSnippetDto(
+    data class TestSnippetDto(
             val text: String? = null
     ) {
         companion object {

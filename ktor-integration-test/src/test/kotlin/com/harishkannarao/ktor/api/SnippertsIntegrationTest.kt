@@ -20,8 +20,13 @@ class SnippetsIntegrationTest : AbstractBaseIntegration() {
     fun `should create a snippet`() {
         val input = TestDataUtil.randomString()
         clients.createSnippetsApiClient()
-                .withText(input)
-                .post()
+                .post(
+                        requestModifier = {
+                            it.copy(
+                                    text = input
+                            )
+                        }
+                )
                 .expectSuccessStatus()
                 .expectTextToBe(input)
     }

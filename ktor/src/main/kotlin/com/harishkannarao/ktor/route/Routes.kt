@@ -25,7 +25,7 @@ class Routes(
 
     val rootPath: Routing.() -> Unit = {
         get("/") {
-            call.respondText("My Example Blog", ContentType.Text.Html)
+            call.respondText("My Example Blog", ContentType.Text.Plain)
         }
     }
 
