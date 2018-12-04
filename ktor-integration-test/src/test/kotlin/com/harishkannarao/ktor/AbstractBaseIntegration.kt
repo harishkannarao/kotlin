@@ -2,6 +2,10 @@ package com.harishkannarao.ktor
 
 import com.harishkannarao.ktor.api.clients.factory.ClientFactory
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import com.harishkannarao.ktor.dependency.Dependencies
+import com.harishkannarao.ktor.module.Modules
+import com.harishkannarao.ktor.route.Routes
+import com.harishkannarao.ktor.server.KtorApplicationServer
 import org.junit.Before
 
 abstract class AbstractBaseIntegration {
@@ -24,11 +28,14 @@ abstract class AbstractBaseIntegration {
     companion object {
         private var runningWithDefaultConfig = true
         val defaultConfig = KtorApplicationConfig()
-        private var server: KtorTestApplicationServer = createAndStartServerWithConfig(defaultConfig)
+        private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
         val clients: ClientFactory = ClientFactory("http://localhost:8080")
 
-        private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorTestApplicationServer {
-            val localServer = KtorTestApplicationServer(config)
+        private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
+            val dependencies = Dependencies()
+            val routes = Routes(dependencies)
+            val modules = Modules(config, routes)
+            val localServer = KtorApplicationServer(config, modules)
             localServer.start(wait = false)
             return localServer
         }
