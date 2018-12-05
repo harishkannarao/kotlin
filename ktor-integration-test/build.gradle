@@ -1,4 +1,4 @@
 dependencies {
-    testCompile project(':ktor')
-    testCompile "io.rest-assured:rest-assured:$restAssuredVersion"
+    testImplementation project(':ktor')
+    testImplementation "io.rest-assured:rest-assured:$restAssuredVersion"
 }

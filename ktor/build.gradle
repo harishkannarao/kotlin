@@ -10,11 +10,11 @@ shadowJar {
 }
 
 dependencies {
-    compile "io.ktor:ktor-server-core:$ktorVersion"
-    compile "io.ktor:ktor-server-cio:$ktorVersion"
-    compile "io.ktor:ktor-html-builder:$ktorVersion"
-    compile "io.ktor:ktor-jackson:$ktorVersion"
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
-    compile "ch.qos.logback:logback-classic:$logbackVersion"
-    compile "commons-io:commons-io:$commonsIoVersion"
+    implementation "io.ktor:ktor-server-core:$ktorVersion"
+    implementation "io.ktor:ktor-server-cio:$ktorVersion"
+    implementation "io.ktor:ktor-html-builder:$ktorVersion"
+    implementation "io.ktor:ktor-jackson:$ktorVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    implementation "ch.qos.logback:logback-classic:$logbackVersion"
+    implementation "commons-io:commons-io:$commonsIoVersion"
 }
