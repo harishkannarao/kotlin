@@ -1,5 +1,5 @@
-rootProject.name = 'kotlin'
+rootProject.name = "kotlin"
 
-include ':ktor'
-include ':ktor-integration-test'
+include ":ktor"
+include ":ktor-integration-test"
 
