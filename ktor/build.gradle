@@ -1,5 +1,7 @@
-apply plugin: "com.github.johnrengelman.shadow"
-apply plugin: "application"
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow"
+}
 
 mainClassName = "com.harishkannarao.ktor.KtorApplication"
 

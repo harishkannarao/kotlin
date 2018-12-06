@@ -1,5 +1,17 @@
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "org.jetbrains.kotlin.jvm") {
+                useVersion kotlinVersion
+            }
+            if (requested.id.id == "com.github.johnrengelman.shadow") {
+                useVersion shadowJarVersion
+            }
+        }
+    }
+}
+
 rootProject.name = "kotlin"
 
 include ":ktor"
 include ":ktor-integration-test"
-
