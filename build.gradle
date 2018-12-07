@@ -34,7 +34,7 @@ allprojects {
     }
 
     dependencies {
-        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-        testImplementation "junit:junit:$junitVersion"
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
+        testImplementation("junit:junit:$junitVersion")
     }
 }
