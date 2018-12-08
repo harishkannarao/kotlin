@@ -1,6 +1,5 @@
 package com.harishkannarao.ktor.route
 
-import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.dependency.Dependencies
 import io.ktor.application.call
 import io.ktor.http.ContentType
@@ -8,9 +7,8 @@ import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
 import io.ktor.request.contentType
-import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
-import io.ktor.response.respond
+import io.ktor.request.receiveText
 import io.ktor.response.respondText
 import io.ktor.routing.Routing
 import io.ktor.routing.get
@@ -32,11 +30,12 @@ class Routes(
     val snippetsPath: Routing.() -> Unit = {
         route("/snippets") {
             get {
-                call.respond(dependencies.snippetsApi.getDefaultSnippets())
+                val result = dependencies.snippetsApi.getDefaultSnippets()
+                call.respondText(result, ContentType.Application.Json)
             }
             post {
-                val input = call.receive<SnippetDto>()
-                call.respond(dependencies.snippetsApi.createSnippet(input))
+                val result = dependencies.snippetsApi.createSnippet(call.receiveText())
+                call.respondText(result, ContentType.Application.Json)
             }
         }
     }
