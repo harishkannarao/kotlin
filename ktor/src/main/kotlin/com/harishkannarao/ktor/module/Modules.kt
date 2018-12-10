@@ -23,6 +23,10 @@ class Modules(
     private val logger = LoggerFactory.getLogger(Modules::class.java)
 
     val myModule: Application.() -> Unit = {
+        install(ContentNegotiation) {
+            jackson {
+            }
+        }
         install(StatusPages) {
             exception<Throwable> { error ->
                 if (error is MissingKotlinParameterException) {
