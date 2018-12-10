@@ -12,7 +12,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.request.uri
 import io.ktor.response.respond
-import io.ktor.routing.routing
+import io.ktor.routing.Routing
 import org.slf4j.LoggerFactory
 
 class Modules(
@@ -38,7 +38,7 @@ class Modules(
                 }
             }
         }
-        routing {
+        install(Routing) {
             routes.rootPath(this)
             if (config.enableSnippetsApi) {
                 routes.snippetsPath(this)
