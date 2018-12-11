@@ -16,18 +16,16 @@ class BasicAuthIntegrationTest : AbstractBaseIntegration() {
 
     @Test
     fun `returns unauthorised status with bad credentials`() {
-        clients.rootApiClient()
+        clients.basicAuthApiClient()
                 .withBasicAuth("admin", "password")
                 .get()
-                .expectSuccessStatus()
-                .expectResponseTextToBe("My Example Blog")
+                .expectUnauthorisedStatus()
     }
 
     @Test
     fun `returns unauthorised status when not authenticated`() {
-        clients.rootApiClient()
+        clients.basicAuthApiClient()
                 .get()
-                .expectSuccessStatus()
-                .expectResponseTextToBe("My Example Blog")
+                .expectUnauthorisedStatus()
     }
 }

@@ -2,10 +2,10 @@ package com.harishkannarao.ktor.api.clients.factory
 
 import com.harishkannarao.ktor.api.clients.*
 import io.restassured.builder.RequestSpecBuilder
-import io.restassured.specification.RequestSpecification
 import io.restassured.filter.log.LogDetail
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
+import io.restassured.specification.RequestSpecification
 
 class ClientFactory(private val baseUrl: String) {
 
