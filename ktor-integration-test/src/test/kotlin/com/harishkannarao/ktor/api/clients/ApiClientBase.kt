@@ -40,6 +40,11 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return response!!
     }
 
+    fun expectResponseTextToBe(expectedValue: String): T {
+        assertThat(response().body().asString(), equalTo(expectedValue))
+        return this as T
+    }
+
     fun expectNotFoundStatus(): T {
         return expectStatusCodeToBe(404)
     }
@@ -50,6 +55,10 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
 
     fun expectBadRequestStatus(): T {
         return expectStatusCodeToBe(400)
+    }
+
+    fun expectUnauthorisedStatus(): T {
+        return expectStatusCodeToBe(401)
     }
 
     protected fun expectJsonString(jsonPath: String, value: String): T {
@@ -76,6 +85,11 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     private fun getJsonString(jsonPath: String): String {
         expectJsonPathNotToBeNull(jsonPath)
         return response!!.jsonPath().getString(jsonPath)
+    }
+
+    fun withBasicAuth(username: String, password: String): T {
+        requestSpecification.auth().preemptive().basic(username, password)
+        return this as T
     }
 
 }

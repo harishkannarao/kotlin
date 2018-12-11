@@ -21,10 +21,6 @@ class FileEchoApiClient(requestSpecification: RequestSpecification) : ApiClientB
         return doPost()
     }
 
-    fun expectResponseTextToBe(expectedText: String) {
-        assertThat(response().asString(), equalTo(expectedText))
-    }
-
     data class FileEchoRequestDto(
             val title: String? = null,
             val fileContent: String? = null

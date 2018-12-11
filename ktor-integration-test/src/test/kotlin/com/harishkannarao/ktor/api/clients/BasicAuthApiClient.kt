@@ -2,16 +2,15 @@ package com.harishkannarao.ktor.api.clients
 
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
-import org.hamcrest.Matchers.equalTo
-import org.junit.Assert.assertThat
 
-class RootApiClient(
+class BasicAuthApiClient(
         requestSpecification: RequestSpecification
-): ApiClientBase<RootApiClient>(requestSpecification) {
+): ApiClientBase<BasicAuthApiClient>(requestSpecification) {
 
-    fun get(): RootApiClient {
-        requestSpecification.basePath("/")
+    fun get(): BasicAuthApiClient {
+        requestSpecification.basePath("/basic-auth-get")
         requestSpecification.accept(ContentType.TEXT)
         return doGet()
     }
+
 }

@@ -10,6 +10,6 @@ class RootPathIntegrationTest : AbstractBaseIntegration() {
         clients.rootApiClient()
                 .get()
                 .expectSuccessStatus()
-                .expectTextToBe("My Example Blog")
+                .expectResponseTextToBe("My Example Blog")
     }
 }

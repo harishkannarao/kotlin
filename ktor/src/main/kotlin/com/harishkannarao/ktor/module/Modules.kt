@@ -6,6 +6,10 @@ import com.harishkannarao.ktor.route.Routes
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
+import io.ktor.auth.Authentication
+import io.ktor.auth.UserIdPrincipal
+import io.ktor.auth.authenticate
+import io.ktor.auth.basic
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
@@ -38,12 +42,32 @@ class Modules(
                 }
             }
         }
+        install(Authentication) {
+            basic(name = BASIC_AUTH) {
+                realm = BASIC_AUTH_REALM
+                validate { credentials ->
+                    if (credentials.name == credentials.password) {
+                        UserIdPrincipal(credentials.name)
+                    } else {
+                        null
+                    }
+                }
+            }
+        }
         install(Routing) {
             routes.rootPath(this)
             if (config.enableSnippetsApi) {
                 routes.snippetsPath(this)
             }
             routes.fileEchoPath(this)
+            authenticate(BASIC_AUTH) {
+                routes.basicAuthProtected(this)
+            }
         }
+    }
+
+    companion object {
+        const val BASIC_AUTH = "my-basic-auth"
+        const val BASIC_AUTH_REALM = "Ktor Server - Basic Auth"
     }
 }

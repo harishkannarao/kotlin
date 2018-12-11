@@ -4,7 +4,6 @@ import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.dependency.Dependencies
 import io.ktor.application.call
 import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
@@ -13,7 +12,7 @@ import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
 import io.ktor.response.respondText
-import io.ktor.routing.Routing
+import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
@@ -23,14 +22,19 @@ import java.nio.charset.StandardCharsets
 class Routes(
         private val dependencies: Dependencies
 ) {
+    val basicAuthProtected: Route.() -> Unit = {
+        get("/basic-auth-get") {
+            call.respondText("Successfully authenticated with basic auth", ContentType.Text.Plain)
+        }
+    }
 
-    val rootPath: Routing.() -> Unit = {
+    val rootPath: Route.() -> Unit = {
         get("/") {
             call.respondText("My Example Blog", ContentType.Text.Plain)
         }
     }
 
-    val snippetsPath: Routing.() -> Unit = {
+    val snippetsPath: Route.() -> Unit = {
         route("/snippets") {
             get {
                 call.respond(dependencies.snippetsApi.getDefaultSnippets())
@@ -42,7 +46,7 @@ class Routes(
         }
     }
 
-    val fileEchoPath: Routing.() -> Unit = {
+    val fileEchoPath: Route.() -> Unit = {
         route("/file-echo") {
             post {
                 var title = ""

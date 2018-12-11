@@ -1,11 +1,8 @@
 package com.harishkannarao.ktor.api.clients.factory
 
-import com.harishkannarao.ktor.api.clients.ListSnippetsApiClient
+import com.harishkannarao.ktor.api.clients.*
 import io.restassured.builder.RequestSpecBuilder
 import io.restassured.specification.RequestSpecification
-import com.harishkannarao.ktor.api.clients.CreateSnippetApiClient
-import com.harishkannarao.ktor.api.clients.FileEchoApiClient
-import com.harishkannarao.ktor.api.clients.RootApiClient
 import io.restassured.filter.log.LogDetail
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
@@ -26,6 +23,10 @@ class ClientFactory(private val baseUrl: String) {
 
     fun rootApiClient(): RootApiClient {
         return RootApiClient(createRequestSpec())
+    }
+
+    fun basicAuthApiClient(): BasicAuthApiClient {
+        return BasicAuthApiClient(createRequestSpec())
     }
 
     private fun createRequestSpec(): RequestSpecification {
