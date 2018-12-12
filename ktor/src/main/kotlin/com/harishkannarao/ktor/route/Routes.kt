@@ -17,11 +17,14 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
 import org.apache.commons.io.IOUtils
+import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
 
 class Routes(
         private val dependencies: Dependencies
 ) {
+    private val logger = LoggerFactory.getLogger(Routes::class.java)
+
     val basicAuthProtected: Route.() -> Unit = {
         get("/basic-auth-get") {
             call.respondText("Successfully authenticated with basic auth", ContentType.Text.Plain)
@@ -30,6 +33,7 @@ class Routes(
 
     val rootPath: Route.() -> Unit = {
         get("/") {
+            logger.info("sample log message to test MDC param")
             call.respondText("My Example Blog", ContentType.Text.Plain)
         }
     }

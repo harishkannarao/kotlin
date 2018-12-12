@@ -10,14 +10,18 @@ import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.authenticate
 import io.ktor.auth.basic
+import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
+import io.ktor.request.header
+import io.ktor.request.path
 import io.ktor.request.uri
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import org.slf4j.LoggerFactory
+import org.slf4j.event.Level
 
 class Modules(
         private val config: KtorApplicationConfig,
@@ -30,6 +34,16 @@ class Modules(
         install(ContentNegotiation) {
             jackson {
             }
+        }
+        install(CallLogging) {
+            level = Level.INFO
+            filter(
+                    predicate = { call -> call.request.path().startsWith("/") }
+            )
+            mdc(
+                    name = "requestId",
+                    provider = { call -> call.request.header("X-Request-Id") }
+            )
         }
         install(StatusPages) {
             exception<Throwable> { error ->
