@@ -15,7 +15,7 @@ import java.util.*
 
 class LogbackTestAppenderRule(
         loggerName: String,
-        loggingPattern: String = "%X{requestId} %-5level %message%n"
+        loggingPattern: String = "[%X{requestId}] %-5level %message%n"
 ) : ExternalResource() {
 
     private val logFileLocation: String = "build/logs"
@@ -28,7 +28,7 @@ class LogbackTestAppenderRule(
     private lateinit var logFile: String
 
     override fun before() {
-        logFile = "$logFileLocation/$logFilePrefix-${UUID.randomUUID()}"
+        logFile = "$logFileLocation/$logFilePrefix-${UUID.randomUUID()}.log"
 
         testAppender = FileAppender()
         testAppender.file = logFile

@@ -92,4 +92,9 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return this as T
     }
 
+    fun withRequestIdHeader(requestId: String): T {
+        requestSpecification.header("X-Request-Id", requestId)
+        return this as T
+    }
+
 }

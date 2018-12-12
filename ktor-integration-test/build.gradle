@@ -1,4 +1,5 @@
 dependencies {
     testImplementation(project(":ktor"))
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+    testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
 }
