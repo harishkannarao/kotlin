@@ -2,14 +2,22 @@ package com.harishkannarao.ktor.server
 
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.module.Modules
+import io.ktor.application.Application
+import io.ktor.application.ApplicationStopped
 import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
+import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 open class KtorApplicationServer(
         private val config: KtorApplicationConfig,
         modules: Modules
 ) {
+
+    private val logger = LoggerFactory.getLogger(KtorApplicationServer::class.java)
+    private val stoppedEventHandler: (Application) -> Unit = {
+        logger.info("Ktor Application stopped")
+    }
 
     private val server = embeddedServer(
             factory = CIO,
@@ -18,6 +26,10 @@ open class KtorApplicationServer(
     )
 
     fun start(wait: Boolean = true) {
+        server.environment.monitor.subscribe(
+                definition = ApplicationStopped,
+                handler = stoppedEventHandler
+        )
         server.start(wait)
     }
 
