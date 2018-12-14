@@ -3,6 +3,7 @@ package com.harishkannarao.ktor.api
 import com.harishkannarao.ktor.AbstractBaseIntegration
 import com.harishkannarao.ktor.util.TestDataUtil
 import org.junit.Test
+import java.net.ConnectException
 
 
 class SnippetsIntegrationTest : AbstractBaseIntegration() {
@@ -46,12 +47,19 @@ class SnippetsIntegrationTest : AbstractBaseIntegration() {
                 )
         )
 
-        clients.listSnippetsApiClient()
-                .get()
-                .expectNotFoundStatus()
+        try {
+            clients.listSnippetsApiClient()
+                    .get()
+                    .expectNotFoundStatus()
 
-        clients.createSnippetsApiClient()
-                .post()
-                .expectNotFoundStatus()
+        } catch (exception: ConnectException) {
+        }
+
+        try {
+            clients.createSnippetsApiClient()
+                    .post()
+                    .expectNotFoundStatus()
+        } catch (exception: ConnectException) {
+        }
     }
 }
