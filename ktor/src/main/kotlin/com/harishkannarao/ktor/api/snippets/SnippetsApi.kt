@@ -12,7 +12,7 @@ class SnippetsApi(private val config: KtorApplicationConfig) {
         )
     }
 
-    fun createSnippet(input: SnippetDto): SnippetDto {
+    fun createSnippet(input: List<SnippetDto>): List<SnippetDto> {
         return input
     }
 }

@@ -44,7 +44,7 @@ class Routes(
                 call.respond(dependencies.snippetsApi.getDefaultSnippets())
             }
             post {
-                val input = call.receive<SnippetDto>()
+                val input = call.receive<List<SnippetDto>>()
                 call.respond(dependencies.snippetsApi.createSnippet(input))
             }
         }

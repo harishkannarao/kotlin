@@ -1,6 +1,6 @@
 package com.harishkannarao.ktor.module
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
+import com.fasterxml.jackson.databind.JsonMappingException
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.route.Routes
 import io.ktor.application.Application
@@ -47,7 +47,7 @@ class Modules(
         }
         install(StatusPages) {
             exception<Throwable> { error ->
-                if (error is MissingKotlinParameterException) {
+                if (error is JsonMappingException) {
                     logger.warn(call.request.uri, error)
                     call.respond(HttpStatusCode.BadRequest)
                 } else {
