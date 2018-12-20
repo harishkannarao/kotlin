@@ -4,5 +4,7 @@ data class KtorApplicationConfig(
         val port: Int = 8080,
         val shutdownGracePeriodInMillis: Long = 0L,
         val shutdownTimeoutInSeconds: Long = 0L,
-        val enableSnippetsApi: Boolean = true
+        val enableSnippetsApi: Boolean = true,
+        val redirectToHttps: Boolean = false,
+        val httpsPort: Int = 8443
 )

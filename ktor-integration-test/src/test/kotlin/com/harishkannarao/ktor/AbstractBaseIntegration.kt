@@ -29,7 +29,8 @@ abstract class AbstractBaseIntegration {
         private var runningWithDefaultConfig = true
         val defaultConfig = KtorApplicationConfig()
         private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
-        val clients: ClientFactory = ClientFactory("http://localhost:8080")
+        const val baseUrl = "http://localhost:8080"
+        val clients: ClientFactory = ClientFactory(baseUrl)
 
         private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
             val dependencies = Dependencies(config = config)

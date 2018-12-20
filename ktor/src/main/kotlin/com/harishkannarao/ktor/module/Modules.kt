@@ -10,9 +10,7 @@ import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.authenticate
 import io.ktor.auth.basic
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.StatusPages
+import io.ktor.features.*
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.request.header
@@ -33,6 +31,13 @@ class Modules(
     val myModule: Application.() -> Unit = {
         install(ContentNegotiation) {
             jackson {
+            }
+        }
+        if(config.redirectToHttps) {
+            install(XForwardedHeaderSupport)
+            install(HttpsRedirect) {
+                sslPort = config.httpsPort
+                permanentRedirect = true
             }
         }
         install(CallLogging) {

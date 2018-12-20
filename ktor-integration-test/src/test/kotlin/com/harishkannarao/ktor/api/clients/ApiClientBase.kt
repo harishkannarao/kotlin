@@ -1,6 +1,8 @@
 package com.harishkannarao.ktor.api.clients
 
 import io.restassured.RestAssured
+import io.restassured.config.RedirectConfig
+import io.restassured.config.RestAssuredConfig
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.hamcrest.Matchers
@@ -49,6 +51,10 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return expectStatusCodeToBe(404)
     }
 
+    fun expectPermanentlyMovedStatus(): T {
+        return expectStatusCodeToBe(301)
+    }
+
     fun expectSuccessStatus(): T {
         return expectStatusCodeToBe(200)
     }
@@ -59,6 +65,11 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
 
     fun expectUnauthorisedStatus(): T {
         return expectStatusCodeToBe(401)
+    }
+
+    fun expectLocationResponseHeader(value: String): T {
+        assertThat(response().headers.get("Location").value, equalTo(value))
+        return this as T
     }
 
     protected fun expectJsonString(jsonPath: String, value: String): T {
@@ -94,6 +105,26 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
 
     fun withRequestIdHeader(requestId: String): T {
         requestSpecification.header("X-Request-Id", requestId)
+        return this as T
+    }
+
+    fun notFollowRedirect(): T {
+        requestSpecification.config(
+                RestAssuredConfig.config().redirect(
+                        RedirectConfig.redirectConfig()
+                                .followRedirects(false)
+                )
+        )
+        return this as T
+    }
+
+    fun withXForwadedProtoHeaderAsHttps(): T {
+        requestSpecification.header("X-Forwarded-Proto", "https")
+        return this as T
+    }
+
+    fun withXForwadedProtoHeaderAsHttp(): T {
+        requestSpecification.header("X-Forwarded-Proto", "http")
         return this as T
     }
 
