@@ -7,6 +7,7 @@ import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.junit.Assert.assertThat
 
 @Suppress("UNCHECKED_CAST")
@@ -42,6 +43,16 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return response!!
     }
 
+    fun withCookie(name: String, value: String): T {
+        requestSpecification.cookie(name, value)
+        return this as T
+    }
+
+    fun withRequestHeader(name: String, value: String): T {
+        requestSpecification.header(name, value)
+        return this as T
+    }
+
     fun expectResponseTextToBe(expectedValue: String): T {
         assertThat(response().body().asString(), equalTo(expectedValue))
         return this as T
@@ -68,7 +79,16 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     }
 
     fun expectLocationResponseHeader(value: String): T {
-        assertThat(response().headers.get("Location").value, equalTo(value))
+        return expectResponseHeader("Location", value)
+    }
+
+    fun expectResponseHeader(name:String, value: String): T {
+        assertThat(response().headers.get(name).value, equalTo(value))
+        return this as T
+    }
+
+    fun expectNoResponseHeader(name:String): T {
+        assertThat(response().headers.get(name), nullValue())
         return this as T
     }
 

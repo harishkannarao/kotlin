@@ -29,6 +29,14 @@ class ClientFactory(private val baseUrl: String) {
         return BasicAuthApiClient(createRequestSpec())
     }
 
+    fun cookieSessionClient(): CookieSessionClient {
+        return CookieSessionClient(createRequestSpec())
+    }
+
+    fun headerSessionClient(): HeaderSessionClient {
+        return HeaderSessionClient(createRequestSpec())
+    }
+
     private fun createRequestSpec(): RequestSpecification {
         return RequestSpecBuilder()
                 .addFilter(RequestLoggingFilter(LogDetail.ALL))

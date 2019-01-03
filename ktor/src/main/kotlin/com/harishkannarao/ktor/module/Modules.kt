@@ -1,6 +1,8 @@
 package com.harishkannarao.ktor.module
 
 import com.fasterxml.jackson.databind.JsonMappingException
+import com.harishkannarao.ktor.api.session.CookieSession
+import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.route.Routes
 import io.ktor.application.Application
@@ -18,8 +20,13 @@ import io.ktor.request.path
 import io.ktor.request.uri
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import io.ktor.sessions.SessionStorageMemory
+import io.ktor.sessions.Sessions
+import io.ktor.sessions.cookie
+import io.ktor.sessions.header
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
+import java.util.*
 
 class Modules(
         private val config: KtorApplicationConfig,
@@ -31,6 +38,21 @@ class Modules(
     val myModule: Application.() -> Unit = {
         install(ContentNegotiation) {
             jackson {
+            }
+        }
+        install(Sessions) {
+            cookie<CookieSession>(
+                    "COOKIE_NAME",
+                    SessionStorageMemory()
+            ) {
+                identity { UUID.randomUUID().toString() }
+                cookie.path = "/"
+            }
+            header<HeaderSession>(
+                    "HEADER_NAME",
+                    SessionStorageMemory()
+            ) {
+                identity { UUID.randomUUID().toString() }
             }
         }
         if(config.redirectToHttps) {
@@ -78,6 +100,8 @@ class Modules(
             if (config.enableSnippetsApi) {
                 routes.snippetsPath(this)
             }
+            routes.cookieSessionPath(this)
+            routes.headerSessionPath(this)
             routes.fileEchoPath(this)
             authenticate(BASIC_AUTH) {
                 routes.basicAuthProtected(this)

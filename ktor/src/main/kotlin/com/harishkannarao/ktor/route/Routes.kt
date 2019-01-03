@@ -1,5 +1,7 @@
 package com.harishkannarao.ktor.route
 
+import com.harishkannarao.ktor.api.session.CookieSession
+import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.dependency.Dependencies
 import io.ktor.application.call
@@ -16,6 +18,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
+import io.ktor.sessions.*
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
@@ -46,6 +49,45 @@ class Routes(
             post {
                 val input = call.receive<List<SnippetDto>>()
                 call.respond(dependencies.snippetsApi.createSnippet(input))
+            }
+        }
+    }
+
+    val cookieSessionPath: Route.() -> Unit = {
+        route("/cookie-session") {
+            get {
+                val session: CookieSession = call.sessions.getOrSet(
+                        generator = { CookieSession(0) }
+                )
+                val updatedSession = session.copy(value = session.value + 1)
+                call.sessions.set(updatedSession)
+                val sessionCookie: String? = call.request.cookies["COOKIE_NAME"]
+                call.respondText("SessionId: $sessionCookie, counter: ${updatedSession.value}")
+            }
+        }
+    }
+
+    val headerSessionPath: Route.() -> Unit = {
+        route("/header-session") {
+            get {
+                val existingSession = call.sessions.get<HeaderSession>()
+                val session: HeaderSession = when {
+                    existingSession != null -> existingSession
+                    else -> {
+                        call.sessions.clear<HeaderSession>()
+                        HeaderSession(0)
+                    }
+                }
+                val updatedSession = session.copy(value = session.value + 1)
+                if (updatedSession.value > 9) {
+                    call.sessions.clear<HeaderSession>()
+                    call.respondText("Session invalidated")
+                } else {
+                    call.sessions.clear<HeaderSession>()
+                    call.sessions.set(updatedSession)
+                    val sessionHeader: String? = call.request.headers["HEADER_NAME"]
+                    call.respondText("SessionId: $sessionHeader, counter: ${updatedSession.value}")
+                }
             }
         }
     }
