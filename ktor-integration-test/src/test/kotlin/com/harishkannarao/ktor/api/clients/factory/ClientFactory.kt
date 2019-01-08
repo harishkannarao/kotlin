@@ -37,6 +37,10 @@ class ClientFactory(private val baseUrl: String) {
         return HeaderSessionClient(createRequestSpec())
     }
 
+    fun interceptCookieClient(): InterceptCookieClient {
+        return InterceptCookieClient(createRequestSpec())
+    }
+
     private fun createRequestSpec(): RequestSpecification {
         return RequestSpecBuilder()
                 .addFilter(RequestLoggingFilter(LogDetail.ALL))

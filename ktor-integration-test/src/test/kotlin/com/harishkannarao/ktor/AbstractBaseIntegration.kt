@@ -34,7 +34,7 @@ abstract class AbstractBaseIntegration {
 
         private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
             val dependencies = Dependencies(config = config)
-            val routes = Routes(dependencies)
+            val routes = Routes(dependencies, config)
             val modules = Modules(config, routes)
             val localServer = KtorApplicationServer(config, modules)
             localServer.start(wait = false)

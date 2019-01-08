@@ -6,6 +6,7 @@ import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.route.Routes
 import io.ktor.application.Application
+import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
@@ -55,7 +56,7 @@ class Modules(
                 identity { UUID.randomUUID().toString() }
             }
         }
-        if(config.redirectToHttps) {
+        if (config.redirectToHttps) {
             install(XForwardedHeaderSupport)
             install(HttpsRedirect) {
                 sslPort = config.httpsPort
@@ -97,15 +98,6 @@ class Modules(
         }
         install(Routing) {
             routes.rootPath(this)
-            if (config.enableSnippetsApi) {
-                routes.snippetsPath(this)
-            }
-            routes.cookieSessionPath(this)
-            routes.headerSessionPath(this)
-            routes.fileEchoPath(this)
-            authenticate(BASIC_AUTH) {
-                routes.basicAuthProtected(this)
-            }
         }
     }
 
