@@ -1,8 +1,7 @@
 package com.harishkannarao.ktor.api.clients
 
+import com.harishkannarao.ktor.api.clients.factory.RestAssuredUtil
 import io.restassured.RestAssured
-import io.restassured.config.RedirectConfig
-import io.restassured.config.RestAssuredConfig
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.hamcrest.Matchers
@@ -82,12 +81,12 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return expectResponseHeader("Location", value)
     }
 
-    fun expectResponseHeader(name:String, value: String): T {
+    fun expectResponseHeader(name: String, value: String): T {
         assertThat(response().headers.get(name).value, equalTo(value))
         return this as T
     }
 
-    fun expectNoResponseHeader(name:String): T {
+    fun expectNoResponseHeader(name: String): T {
         assertThat(response().headers.get(name), nullValue())
         return this as T
     }
@@ -130,10 +129,7 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
 
     fun notFollowRedirect(): T {
         requestSpecification.config(
-                RestAssuredConfig.config().redirect(
-                        RedirectConfig.redirectConfig()
-                                .followRedirects(false)
-                )
+                RestAssuredUtil.createConfig(followRedirect = false)
         )
         return this as T
     }

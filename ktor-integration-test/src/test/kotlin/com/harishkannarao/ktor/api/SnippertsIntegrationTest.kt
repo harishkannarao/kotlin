@@ -47,19 +47,13 @@ class SnippetsIntegrationTest : AbstractBaseIntegration() {
                 )
         )
 
-        try {
-            clients.listSnippetsApiClient()
-                    .get()
-                    .expectNotFoundStatus()
+        clients.listSnippetsApiClient()
+                .get()
+                .expectNotFoundStatus()
 
-        } catch (exception: ConnectException) {
-        }
+        clients.createSnippetsApiClient()
+                .post()
+                .expectNotFoundStatus()
 
-        try {
-            clients.createSnippetsApiClient()
-                    .post()
-                    .expectNotFoundStatus()
-        } catch (exception: ConnectException) {
-        }
     }
 }
