@@ -47,6 +47,7 @@ class ClientFactory(private val baseUrl: String) {
                 .addFilter(ResponseLoggingFilter(LogDetail.ALL))
                 .setBaseUri(baseUrl)
                 .setConfig(RestAssuredUtil.createConfig())
+                .addHeader("Connection", "close")
                 .build()
     }
 }
