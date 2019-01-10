@@ -1,7 +1,9 @@
 package com.harishkannarao.ktor.api.clients
 
-import com.harishkannarao.ktor.api.clients.factory.RestAssuredUtil
 import io.restassured.RestAssured
+import io.restassured.config.ConnectionConfig
+import io.restassured.config.RedirectConfig
+import io.restassured.config.RestAssuredConfig
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.hamcrest.Matchers
@@ -13,8 +15,10 @@ import org.junit.Assert.assertThat
 abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecification: RequestSpecification) {
 
     private var response: Response? = null
+    private var followRedirect: Boolean = true
 
     protected fun doGet(): T {
+        requestSpecification.config(createRestAssuredConfig())
         response = RestAssured.given()
                 .spec(requestSpecification)
                 .`when`()
@@ -27,6 +31,7 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     }
 
     protected fun doPost(): T {
+        requestSpecification.config(createRestAssuredConfig())
         response = RestAssured.given()
                 .spec(requestSpecification)
                 .`when`()
@@ -132,9 +137,7 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     }
 
     fun notFollowRedirect(): T {
-        requestSpecification.config(
-                RestAssuredUtil.createConfig(followRedirect = false)
-        )
+        followRedirect = false
         return this as T
     }
 
@@ -146,6 +149,20 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     fun withXForwadedProtoHeaderAsHttp(): T {
         requestSpecification.header("X-Forwarded-Proto", "http")
         return this as T
+    }
+
+    private fun createRestAssuredConfig(): RestAssuredConfig {
+        return RestAssuredConfig.config()
+                .connectionConfig(createConnectionConfig())
+                .redirect(createRedirectConfig())
+    }
+
+    private fun createConnectionConfig(): ConnectionConfig {
+        return ConnectionConfig.connectionConfig().closeIdleConnectionsAfterEachResponse()
+    }
+
+    private fun createRedirectConfig(): RedirectConfig {
+        return RedirectConfig.redirectConfig().followRedirects(followRedirect)
     }
 
 }
