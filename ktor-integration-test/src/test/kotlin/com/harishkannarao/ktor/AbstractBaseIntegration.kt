@@ -6,7 +6,10 @@ import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.module.Modules
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.server.KtorApplicationServer
+import org.awaitility.kotlin.await
 import org.junit.Before
+import java.net.ConnectException
+import java.util.concurrent.TimeUnit
 
 abstract class AbstractBaseIntegration {
 
@@ -23,6 +26,19 @@ abstract class AbstractBaseIntegration {
         server.stop()
         server = createAndStartServerWithConfig(config)
         runningWithDefaultConfig = false
+
+        await.alias("Wait for server to start")
+                .atMost(4L, TimeUnit.SECONDS)
+                .pollInterval(100L, TimeUnit.MILLISECONDS)
+                .ignoreExceptionsMatching { throwable: Throwable ->
+                    throwable is ConnectException
+                }
+                .until {
+                    clients.rootApiClient()
+                            .withXForwadedProtoHeaderAsHttps()
+                            .get()
+                            .isSuccessStatus()
+                }
     }
 
     companion object {

@@ -65,6 +65,10 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return expectStatusCodeToBe(301)
     }
 
+    fun isSuccessStatus(): Boolean {
+        return response().statusCode == 200
+    }
+
     fun expectSuccessStatus(): T {
         return expectStatusCodeToBe(200)
     }
