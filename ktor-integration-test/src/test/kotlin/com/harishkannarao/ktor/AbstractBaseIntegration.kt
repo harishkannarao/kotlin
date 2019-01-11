@@ -5,6 +5,7 @@ import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.module.Modules
 import com.harishkannarao.ktor.route.Routes
+import com.harishkannarao.ktor.route.StaticRoutes
 import com.harishkannarao.ktor.server.KtorApplicationServer
 import org.awaitility.kotlin.await
 import org.junit.Before
@@ -51,7 +52,8 @@ abstract class AbstractBaseIntegration {
         private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
             val dependencies = Dependencies(config = config)
             val routes = Routes(dependencies, config)
-            val modules = Modules(config, routes)
+            val staticRoutes = StaticRoutes()
+            val modules = Modules(config, routes, staticRoutes)
             val localServer = KtorApplicationServer(config, modules)
             localServer.start(wait = false)
             return localServer

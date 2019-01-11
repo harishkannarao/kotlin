@@ -1,14 +1,13 @@
 package com.harishkannarao.ktor.api.clients
 
 import io.restassured.RestAssured
-import io.restassured.config.ConnectionConfig
 import io.restassured.config.RedirectConfig
 import io.restassured.config.RestAssuredConfig
+import io.restassured.http.ContentType
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.hamcrest.Matchers
-import org.hamcrest.Matchers.equalTo
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.*
 import org.junit.Assert.assertThat
 
 @Suppress("UNCHECKED_CAST")
@@ -23,6 +22,19 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
                 .spec(requestSpecification)
                 .`when`()
                 .get()
+                .then()
+                .extract()
+                .response()
+
+        return this as T
+    }
+
+    protected fun doHead(): T {
+        requestSpecification.config(createRestAssuredConfig())
+        response = RestAssured.given()
+                .spec(requestSpecification)
+                .`when`()
+                .head()
                 .then()
                 .extract()
                 .response()
@@ -57,9 +69,28 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return this as T
     }
 
+    fun expectResponseTextToContain(expectedValue: String): T {
+        assertThat(response().body().asString(), containsString(expectedValue))
+        return this as T
+    }
+
     fun expectResponseTextToBe(expectedValue: String): T {
         assertThat(response().body().asString(), equalTo(expectedValue))
         return this as T
+    }
+
+    private fun expectContentType(contentType: ContentType): T {
+        val result = ContentType.fromContentType(response().contentType)
+        assertThat(result, equalTo(contentType))
+        return this as T
+    }
+
+    fun expectHtmlContentType(): T {
+        return expectContentType(ContentType.HTML)
+    }
+
+    fun expectJsonContentType(): T {
+        return expectContentType(ContentType.JSON)
     }
 
     fun expectNotFoundStatus(): T {
@@ -153,12 +184,7 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
 
     private fun createRestAssuredConfig(): RestAssuredConfig {
         return RestAssuredConfig.config()
-                .connectionConfig(createConnectionConfig())
                 .redirect(createRedirectConfig())
-    }
-
-    private fun createConnectionConfig(): ConnectionConfig {
-        return ConnectionConfig.connectionConfig().closeIdleConnectionsAfterEachResponse()
     }
 
     private fun createRedirectConfig(): RedirectConfig {

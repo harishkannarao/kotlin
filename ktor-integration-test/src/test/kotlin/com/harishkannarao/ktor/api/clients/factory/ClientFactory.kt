@@ -41,12 +41,15 @@ class ClientFactory(private val baseUrl: String) {
         return InterceptCookieClient(createRequestSpec())
     }
 
+    fun staticContentClient(): StaticContentClient {
+        return StaticContentClient(createRequestSpec())
+    }
+
     private fun createRequestSpec(): RequestSpecification {
         return RequestSpecBuilder()
                 .addFilter(RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(ResponseLoggingFilter(LogDetail.ALL))
                 .setBaseUri(baseUrl)
-                .addHeader("Connection", "close")
                 .build()
     }
 }

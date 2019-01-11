@@ -5,15 +5,19 @@ import com.harishkannarao.ktor.api.session.CookieSession
 import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.route.Routes
+import com.harishkannarao.ktor.route.StaticRoutes
 import io.ktor.application.Application
-import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.authenticate
 import io.ktor.auth.basic
-import io.ktor.features.*
+import io.ktor.features.AutoHeadResponse
+import io.ktor.features.CallLogging
+import io.ktor.features.ContentNegotiation
+import io.ktor.features.HttpsRedirect
+import io.ktor.features.StatusPages
+import io.ktor.features.XForwardedHeaderSupport
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.request.header
@@ -31,7 +35,8 @@ import java.util.*
 
 class Modules(
         private val config: KtorApplicationConfig,
-        private val routes: Routes
+        private val routes: Routes,
+        private val staticRoutes: StaticRoutes
 ) {
 
     private val logger = LoggerFactory.getLogger(Modules::class.java)
@@ -41,6 +46,7 @@ class Modules(
             jackson {
             }
         }
+        install(AutoHeadResponse)
         install(Sessions) {
             cookie<CookieSession>(
                     "COOKIE_NAME",
@@ -98,6 +104,7 @@ class Modules(
         }
         install(Routing) {
             routes.rootPath(this)
+            staticRoutes.staticPath(this)
         }
     }
 
