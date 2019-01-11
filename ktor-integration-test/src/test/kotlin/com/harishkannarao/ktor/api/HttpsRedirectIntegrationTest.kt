@@ -40,6 +40,27 @@ class HttpsRedirectIntegrationTest : AbstractBaseIntegration() {
     }
 
     @Test
+    fun `redirects to https without port number when https port is 443 (default port)`() {
+        restartServerWithConfig(
+                defaultConfig.copy(
+                        redirectToHttps = true,
+                        httpsPort = 443
+                )
+        )
+
+        val expectedRedirectUrl = "$baseUrl/snippets"
+                .replace("http", "https")
+                .replace(":${defaultConfig.port}", "")
+
+        clients.listSnippetsApiClient()
+                .notFollowRedirect()
+                .withXForwadedProtoHeaderAsHttp()
+                .get()
+                .expectPermanentlyMovedStatus()
+                .expectLocationResponseHeader(expectedRedirectUrl)
+    }
+
+    @Test
     fun `serves content on http when redirect feature is enabled and X-Forwarded-Proto header is https`() {
         restartServerWithConfig(
                 defaultConfig.copy(
