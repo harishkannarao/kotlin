@@ -9,6 +9,7 @@ import com.harishkannarao.ktor.module.Modules
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.auth.authenticate
+import io.ktor.html.respondHtmlTemplate
 import io.ktor.http.ContentType
 import io.ktor.http.Cookie
 import io.ktor.http.content.PartData
@@ -140,6 +141,12 @@ class Routes(
                 get {
                     val knownCookie = call.attributes[KNOWN_COOKIE_ATTRIBUTE_KEY]
                     call.respond(TextContent("Known Cookie: $knownCookie", ContentType.Text.Plain))
+                }
+            }
+
+            route("user") {
+                get {
+                    call.respond(dependencies.userWeb.displayUser())
                 }
             }
         }

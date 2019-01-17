@@ -6,6 +6,7 @@ import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
+import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -18,6 +19,7 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.HttpsRedirect
 import io.ktor.features.StatusPages
 import io.ktor.features.XForwardedHeaderSupport
+import io.ktor.freemarker.FreeMarker
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.request.header
@@ -47,6 +49,9 @@ class Modules(
             }
         }
         install(AutoHeadResponse)
+        install(FreeMarker) {
+            templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
+        }
         install(Sessions) {
             cookie<CookieSession>(
                     "COOKIE_NAME",

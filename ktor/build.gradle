@@ -17,6 +17,7 @@ dependencies {
     implementation("io.ktor:ktor-html-builder:$ktorVersion")
     implementation("io.ktor:ktor-jackson:$ktorVersion")
     implementation("io.ktor:ktor-auth:$ktorVersion")
+    implementation("io.ktor:ktor-freemarker:$ktorVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
