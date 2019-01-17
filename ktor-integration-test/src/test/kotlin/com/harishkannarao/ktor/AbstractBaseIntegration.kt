@@ -21,6 +21,8 @@ abstract class AbstractBaseIntegration {
             server.stop()
             server = createAndStartServerWithConfig(defaultConfig)
             runningWithDefaultConfig = true
+
+            waitForServerToStart()
         }
     }
 
@@ -29,6 +31,10 @@ abstract class AbstractBaseIntegration {
         server = createAndStartServerWithConfig(config)
         runningWithDefaultConfig = false
 
+        waitForServerToStart()
+    }
+
+    private fun waitForServerToStart() {
         await.alias("Wait for server to start")
                 .atMost(4L, TimeUnit.SECONDS)
                 .pollInterval(100L, TimeUnit.MILLISECONDS)
