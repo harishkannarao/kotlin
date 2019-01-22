@@ -31,6 +31,7 @@ import io.ktor.sessions.SessionStorageMemory
 import io.ktor.sessions.Sessions
 import io.ktor.sessions.cookie
 import io.ktor.sessions.header
+import io.ktor.webjars.Webjars
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import java.util.*
@@ -48,6 +49,7 @@ class Modules(
             jackson {
             }
         }
+        install(Webjars)
         install(AutoHeadResponse)
         install(FreeMarker) {
             templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")

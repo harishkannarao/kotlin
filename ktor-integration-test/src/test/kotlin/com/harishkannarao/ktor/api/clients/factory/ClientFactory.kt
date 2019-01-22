@@ -45,6 +45,10 @@ class ClientFactory(private val baseUrl: String) {
         return StaticContentClient(createRequestSpec())
     }
 
+    fun webjarClient(): WebjarClient {
+        return WebjarClient(createRequestSpec())
+    }
+
     private fun createRequestSpec(): RequestSpecification {
         return RequestSpecBuilder()
                 .addFilter(RequestLoggingFilter(LogDetail.ALL))
