@@ -11,6 +11,7 @@ import com.harishkannarao.ktor.web.clients.factory.WebClientFactory
 import org.awaitility.kotlin.await
 import org.junit.Before
 import java.net.ConnectException
+import java.nio.channels.ClosedChannelException
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractBaseIntegration {
@@ -39,7 +40,11 @@ abstract class AbstractBaseIntegration {
                 .atMost(4L, TimeUnit.SECONDS)
                 .pollInterval(100L, TimeUnit.MILLISECONDS)
                 .ignoreExceptionsMatching { throwable: Throwable ->
-                    throwable is ConnectException
+                    when (throwable) {
+                        is ConnectException -> true
+                        is ClosedChannelException -> true
+                        else -> false
+                    }
                 }
                 .until {
                     clients.rootApiClient()
