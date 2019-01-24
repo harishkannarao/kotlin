@@ -9,7 +9,6 @@ import com.harishkannarao.ktor.module.Modules
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.auth.authenticate
-import io.ktor.html.respondHtmlTemplate
 import io.ktor.http.ContentType
 import io.ktor.http.Cookie
 import io.ktor.http.content.PartData
@@ -20,16 +19,18 @@ import io.ktor.request.contentType
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
-import io.ktor.response.respondText
 import io.ktor.routing.Route
 import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.route
-import io.ktor.sessions.*
+import io.ktor.sessions.clear
+import io.ktor.sessions.get
+import io.ktor.sessions.getOrSet
+import io.ktor.sessions.sessions
+import io.ktor.sessions.set
 import io.ktor.util.AttributeKey
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
-import java.lang.IllegalStateException
 import java.nio.charset.StandardCharsets
 import java.util.*
 
@@ -44,13 +45,13 @@ class Routes(
 
             get {
                 logger.info("sample log message to test MDC param")
-                call.respondText("My Example Blog", ContentType.Text.Plain)
+                call.respond(TextContent("My Example Blog", ContentType.Text.Plain))
             }
 
             route("basic-auth-get") {
                 authenticate(Modules.BASIC_AUTH) {
                     get {
-                        call.respondText("Successfully authenticated with basic auth", ContentType.Text.Plain)
+                        call.respond(TextContent("Successfully authenticated with basic auth", ContentType.Text.Plain))
                     }
                 }
             }
@@ -75,7 +76,7 @@ class Routes(
                     val updatedSession = session.copy(value = session.value + 1)
                     call.sessions.set(updatedSession)
                     val sessionCookie: String? = call.request.cookies["COOKIE_NAME"]
-                    call.respondText("SessionId: $sessionCookie, counter: ${updatedSession.value}")
+                    call.respond(TextContent("SessionId: $sessionCookie, counter: ${updatedSession.value}", ContentType.Text.Plain))
                 }
             }
 
@@ -92,12 +93,12 @@ class Routes(
                     val updatedSession = session.copy(value = session.value + 1)
                     if (updatedSession.value > 9) {
                         call.sessions.clear<HeaderSession>()
-                        call.respondText("Session invalidated")
+                        call.respond(TextContent("Session invalidated", ContentType.Text.Plain))
                     } else {
                         call.sessions.clear<HeaderSession>()
                         call.sessions.set(updatedSession)
                         val sessionHeader: String? = call.request.headers["HEADER_NAME"]
-                        call.respondText("SessionId: $sessionHeader, counter: ${updatedSession.value}")
+                        call.respond(TextContent("SessionId: $sessionHeader, counter: ${updatedSession.value}", ContentType.Text.Plain))
                     }
                 }
             }
@@ -124,7 +125,7 @@ class Routes(
                             part.dispose()
                         }
                     }
-                    call.respondText("title: $title, lines: $fileLines", ContentType.Text.Plain)
+                    call.respond(TextContent("title: $title, lines: $fileLines", ContentType.Text.Plain))
                 }
             }
 
