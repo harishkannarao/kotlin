@@ -1,5 +1,7 @@
 package com.harishkannarao.ktor
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import com.harishkannarao.ktor.api.clients.factory.ClientFactory
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
@@ -55,6 +57,7 @@ abstract class AbstractBaseIntegration {
     }
 
     companion object {
+        val wireMockServer = createAndStartWireMock()
         private var runningWithDefaultConfig = true
         val defaultConfig = KtorApplicationConfig()
         private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
@@ -70,6 +73,16 @@ abstract class AbstractBaseIntegration {
             val localServer = KtorApplicationServer(config, modules)
             localServer.start(wait = false)
             return localServer
+        }
+
+        private fun createAndStartWireMock(): WireMockServer {
+            val wireMockServer = WireMockServer(
+                    options()
+                            .port(8089)
+                            .maxRequestJournalEntries(100)
+            )
+            wireMockServer.start()
+            return wireMockServer
         }
     }
 }

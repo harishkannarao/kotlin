@@ -1,0 +1,17 @@
+plugins {
+    id "application"
+    id "com.github.johnrengelman.shadow"
+}
+
+mainClassName = "com.harishkannarao.ktor.stub.wiremock.WiremockStubRunner"
+
+shadowJar {
+    baseName = "wiremock-runner"
+    classifier = "exec"
+    version = null
+}
+
+dependencies {
+    implementation(project(":wiremock-stub").sourceSets.test.output)
+    implementation("com.github.tomakehurst:wiremock-standalone:$wiremockVersion")
+}

@@ -22,11 +22,13 @@ To print the http request and response during integration test execution
 
 #### Using gradle
 
-    ./gradlew :ktor:run
+    ./gradlew --parallel :ktor:run :wiremock-runner:run
     
 #### Using Java
 
     ./gradlew clean assemble
+    
+    java -jar wiremock-runner/build/libs/wiremock-runner-exec.jar
     
     java -jar ktor/build/libs/ktor-exec.jar
     

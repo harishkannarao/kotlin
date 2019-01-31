@@ -1,7 +1,9 @@
 dependencies {
     testImplementation(project(":ktor"))
+    testImplementation(project(":wiremock-stub").sourceSets.test.output)
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
     testImplementation("net.sourceforge.htmlunit:htmlunit:$htmlUnitVersion")
     testImplementation("org.awaitility:awaitility-kotlin:$awaitilityVersion")
+    testImplementation("com.github.tomakehurst:wiremock-standalone:$wiremockVersion")
 }

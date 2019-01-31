@@ -14,4 +14,6 @@ pluginManagement {
 rootProject.name = "kotlin"
 
 include ":ktor"
+include ":wiremock-stub"
+include ":wiremock-runner"
 include ":ktor-integration-test"
