@@ -13,5 +13,6 @@ shadowJar {
 
 dependencies {
     implementation(project(":wiremock-stub").sourceSets.test.output)
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.github.tomakehurst:wiremock-standalone:$wiremockVersion")
 }

@@ -1,6 +1,6 @@
 package com.harishkannarao.ktor.module
 
-import com.fasterxml.jackson.databind.JsonMappingException
+import com.fasterxml.jackson.core.JsonProcessingException
 import com.harishkannarao.ktor.api.session.CookieSession
 import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
@@ -88,7 +88,7 @@ class Modules(
         }
         install(StatusPages) {
             exception<Throwable> { error ->
-                if (error is JsonMappingException) {
+                if (error is JsonProcessingException) {
                     logger.warn(call.request.uri, error)
                     call.respond(HttpStatusCode.BadRequest)
                 } else {
