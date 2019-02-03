@@ -5,12 +5,12 @@ import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
+import com.harishkannarao.ktor.intercept.Interceptor
 import com.harishkannarao.ktor.module.Modules
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.ContentType
-import io.ktor.http.Cookie
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
 import io.ktor.http.content.forEachPart
@@ -28,11 +28,9 @@ import io.ktor.sessions.get
 import io.ktor.sessions.getOrSet
 import io.ktor.sessions.sessions
 import io.ktor.sessions.set
-import io.ktor.util.AttributeKey
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
-import java.util.*
 
 class Routes(
         private val dependencies: Dependencies,
@@ -130,17 +128,9 @@ class Routes(
             }
 
             route("intercept-cookie") {
-                intercept(ApplicationCallPipeline.Features) {
-                    val knownCookie = call.request.cookies["KNOWN_COOKIE"]
-                    val value = knownCookie ?: UUID.randomUUID().toString()
-                    if (knownCookie == null) {
-                        val cookie = Cookie("KNOWN_COOKIE", value)
-                        call.response.cookies.append(cookie)
-                    }
-                    call.attributes.put(KNOWN_COOKIE_ATTRIBUTE_KEY, value)
-                }
+                intercept(ApplicationCallPipeline.Features, dependencies.interceptor.knownCookieInterceptor(Interceptor.KNOWN_COOKIE, Interceptor.KNOWN_COOKIE_ATTRIBUTE_KEY))
                 get {
-                    val knownCookie = call.attributes[KNOWN_COOKIE_ATTRIBUTE_KEY]
+                    val knownCookie = call.attributes[Interceptor.KNOWN_COOKIE_ATTRIBUTE_KEY]
                     call.respond(TextContent("Known Cookie: $knownCookie", ContentType.Text.Plain))
                 }
             }
@@ -151,9 +141,5 @@ class Routes(
                 }
             }
         }
-    }
-
-    companion object {
-        val KNOWN_COOKIE_ATTRIBUTE_KEY = AttributeKey<String>("KNOWN_COOKIE")
     }
 }
