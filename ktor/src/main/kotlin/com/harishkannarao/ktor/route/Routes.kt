@@ -11,6 +11,7 @@ import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.ContentType
+import io.ktor.http.charset
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
 import io.ktor.http.content.forEachPart
@@ -116,7 +117,10 @@ class Routes(
                                 }
                                 is PartData.FileItem -> {
                                     if (part.name == "text_file") {
-                                        fileLines = IOUtils.readLines(part.streamProvider(), StandardCharsets.UTF_8)
+                                        val charset = part.contentType?.charset() ?: StandardCharsets.UTF_8
+                                        part.streamProvider().use { inputStream ->
+                                            fileLines = IOUtils.readLines(inputStream, charset)
+                                        }
                                     }
                                 }
                             }
