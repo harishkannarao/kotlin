@@ -18,11 +18,11 @@ class WireMockStub(private val wireMock: WireMock) {
         )
     }
 
-    fun setUpCreateCustomers(request: List<Customer>, response: Response, status: Int) {
+    fun setUpCreateMultipleCustomers(request: List<Customer>, response: Response, status: Int) {
         val requestJson = WireMockJson.objectMapper.writeValueAsString(request)
         val responseJson = WireMockJson.objectMapper.writeValueAsString(response)
         wireMock.register(
-                WireMock.post(WireMock.urlPathMatching("/create-customers"))
+                WireMock.post(WireMock.urlPathMatching("/create-multiple-customers"))
                         .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
                         .withRequestBody(WireMock.equalToJson(requestJson, true, false))
                         .willReturn(
@@ -30,6 +30,20 @@ class WireMockStub(private val wireMock: WireMock) {
                                         .withStatus(status)
                                         .withHeader(ContentTypeHeader.KEY, ContentType.APPLICATION_JSON.mimeType)
                                         .withBody(responseJson)
+                        )
+        )
+    }
+
+    fun setUpCreateSingleCustomer(request: Customer, status: Int) {
+        val requestJson = WireMockJson.objectMapper.writeValueAsString(request)
+        wireMock.register(
+                WireMock.post(WireMock.urlPathMatching("/create-single-customer"))
+                        .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
+                        .withRequestBody(WireMock.equalToJson(requestJson, true, false))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(status)
+                                        .withHeader(ContentTypeHeader.KEY, ContentType.APPLICATION_JSON.mimeType)
                         )
         )
     }

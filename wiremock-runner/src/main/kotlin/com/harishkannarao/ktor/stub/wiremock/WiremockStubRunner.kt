@@ -21,7 +21,8 @@ object WiremockStubRunner {
         val customer1 = WireMockStub.Customer.newCustomer().copy(firstName = "Test 1", lastName = "Test 2")
         val customer2 = WireMockStub.Customer.newCustomer().copy(firstName = "Test 3", lastName = "Test 4")
         val response = WireMockStub.Response.newResponse()
-        wireMockStub.setUpCreateCustomers(listOf(customer1, customer2), response, 200)
+        wireMockStub.setUpCreateMultipleCustomers(listOf(customer1, customer2), response, 200)
+        wireMockStub.setUpCreateSingleCustomer(customer1, 204)
         println("Wiremock running at http://localhost:8089")
     }
 }
