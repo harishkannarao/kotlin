@@ -18,6 +18,34 @@ class WireMockStub(private val wireMock: WireMock) {
         )
     }
 
+    fun setUpGetSingleCustomer(customerId: String, response: Customer, status: Int) {
+        val responseJson = WireMockJson.objectMapper.writeValueAsString(response)
+        wireMock.register(
+                WireMock.get(WireMock.urlPathMatching("/get-single-customer"))
+                        .withQueryParam("customerId", WireMock.matching(customerId))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(status)
+                                        .withHeader(ContentTypeHeader.KEY, ContentType.APPLICATION_JSON.mimeType)
+                                        .withBody(responseJson)
+                        )
+        )
+    }
+
+    fun setUpGetMultipleCustomers(name: String, response: List<Customer>, status: Int) {
+        val responseJson = WireMockJson.objectMapper.writeValueAsString(response)
+        wireMock.register(
+                WireMock.get(WireMock.urlPathMatching("/get-multiple-customers"))
+                        .withQueryParam("name", WireMock.matching(name))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(status)
+                                        .withHeader(ContentTypeHeader.KEY, ContentType.APPLICATION_JSON.mimeType)
+                                        .withBody(responseJson)
+                        )
+        )
+    }
+
     fun setUpCreateMultipleCustomers(request: List<Customer>, response: Response, status: Int) {
         val requestJson = WireMockJson.objectMapper.writeValueAsString(request)
         val responseJson = WireMockJson.objectMapper.writeValueAsString(response)

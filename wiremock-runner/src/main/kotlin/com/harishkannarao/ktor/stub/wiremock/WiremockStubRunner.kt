@@ -23,6 +23,8 @@ object WiremockStubRunner {
         val response = WireMockStub.Response.newResponse()
         wireMockStub.setUpCreateMultipleCustomers(listOf(customer1, customer2), response, 200)
         wireMockStub.setUpCreateSingleCustomer(customer1, 204)
+        wireMockStub.setUpGetMultipleCustomers("Test", listOf(customer1, customer2), 200)
+        wireMockStub.setUpGetSingleCustomer("1234", customer1, 200)
         println("Wiremock running at http://localhost:8089")
     }
 }
