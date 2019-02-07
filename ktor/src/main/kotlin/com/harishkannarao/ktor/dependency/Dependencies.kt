@@ -7,9 +7,9 @@ import com.harishkannarao.ktor.web.user.UserWeb
 
 class Dependencies(
         config: KtorApplicationConfig,
-        overriddenSnippetsApi: SnippetsApi? = null
+        overriddenDependencies: OverriddenDependencies = OverriddenDependencies()
 ) {
     val interceptor = Interceptor()
-    val snippetsApi: SnippetsApi = overriddenSnippetsApi ?: SnippetsApi(config)
+    val snippetsApi: SnippetsApi = overriddenDependencies.overriddenSnippetsApi ?: SnippetsApi(config)
     val userWeb: UserWeb = UserWeb()
 }
