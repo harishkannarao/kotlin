@@ -6,5 +6,6 @@ data class KtorApplicationConfig(
         val shutdownTimeoutInSeconds: Long = 0L,
         val enableSnippetsApi: Boolean = true,
         val redirectToHttps: Boolean = false,
-        val httpsPort: Int = 8443
+        val httpsPort: Int = 8443,
+        val thirdPartyCustomerServiceUrl: String = "http://localhost:8089"
 )

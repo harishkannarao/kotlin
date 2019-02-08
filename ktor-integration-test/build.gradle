@@ -3,6 +3,7 @@ dependencies {
     testImplementation(project(":wiremock-stub").sourceSets.test.output)
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     testImplementation("net.sourceforge.htmlunit:htmlunit:$htmlUnitVersion")
     testImplementation("org.awaitility:awaitility-kotlin:$awaitilityVersion")
     testImplementation("com.github.tomakehurst:wiremock-standalone:$wiremockVersion")

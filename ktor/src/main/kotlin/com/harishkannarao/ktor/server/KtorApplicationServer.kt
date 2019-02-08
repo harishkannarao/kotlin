@@ -1,6 +1,7 @@
 package com.harishkannarao.ktor.server
 
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.module.Modules
 import io.ktor.application.Application
 import io.ktor.application.ApplicationStopped
@@ -11,11 +12,13 @@ import java.util.concurrent.TimeUnit
 
 open class KtorApplicationServer(
         private val config: KtorApplicationConfig,
-        modules: Modules
+        modules: Modules,
+        dependencies: Dependencies
 ) {
 
     private val logger = LoggerFactory.getLogger(KtorApplicationServer::class.java)
     private val stoppedEventHandler: (Application) -> Unit = {
+        dependencies.client.close()
         logger.info("Ktor Application stopped")
     }
 

@@ -1,6 +1,7 @@
 package com.harishkannarao.ktor
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import com.harishkannarao.ktor.api.clients.factory.ClientFactory
 import com.harishkannarao.ktor.config.KtorApplicationConfig
@@ -9,6 +10,7 @@ import com.harishkannarao.ktor.module.Modules
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import com.harishkannarao.ktor.server.KtorApplicationServer
+import com.harishkannarao.ktor.stub.wiremock.WireMockStub
 import com.harishkannarao.ktor.web.clients.factory.WebClientFactory
 import org.awaitility.kotlin.await
 import org.junit.Before
@@ -57,7 +59,9 @@ abstract class AbstractBaseIntegration {
     }
 
     companion object {
-        val wireMockServer = createAndStartWireMock()
+        private val wireMockServer = createAndStartWireMock()
+        private val wireMockClient = WireMock(wireMockServer)
+        val wireMockStub = WireMockStub(wireMockClient)
         private var runningWithDefaultConfig = true
         val defaultConfig = KtorApplicationConfig()
         private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
@@ -70,7 +74,7 @@ abstract class AbstractBaseIntegration {
             val routes = Routes(dependencies, config)
             val staticRoutes = StaticRoutes()
             val modules = Modules(config, routes, staticRoutes)
-            val localServer = KtorApplicationServer(config, modules)
+            val localServer = KtorApplicationServer(config, modules, dependencies)
             localServer.start(wait = false)
             return localServer
         }

@@ -17,6 +17,10 @@ class ClientFactory(private val baseUrl: String) {
         return CreateSnippetApiClient(createRequestSpec())
     }
 
+    fun customerLookupByIdApiClient(): CustomerLookupByIdApiClient {
+        return CustomerLookupByIdApiClient(createRequestSpec())
+    }
+
     fun fileEchoApiClient(): FileEchoApiClient {
         return FileEchoApiClient(createRequestSpec())
     }
