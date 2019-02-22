@@ -74,6 +74,13 @@ class Routes(
                 }
             }
 
+            route("customers-by-name") {
+                get {
+                    val name = call.request.queryParameters["name"] ?: ""
+                    call.respond(dependencies.customerApi.getCustomersByName(name))
+                }
+            }
+
             route("cookie-session") {
                 get {
                     val session: CookieSession = call.sessions.getOrSet(

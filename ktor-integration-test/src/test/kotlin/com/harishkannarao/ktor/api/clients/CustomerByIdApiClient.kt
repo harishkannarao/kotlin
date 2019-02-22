@@ -2,20 +2,21 @@ package com.harishkannarao.ktor.api.clients
 
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.harishkannarao.ktor.api.clients.json.RestAssuredJson
+import com.harishkannarao.ktor.api.clients.verifier.Customer
 import com.harishkannarao.ktor.api.clients.verifier.CustomerVerifier
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 
-class CustomerLookupByIdApiClient(requestSpecification: RequestSpecification): ApiClientBase<CustomerLookupByIdApiClient>(requestSpecification) {
+class CustomerByIdApiClient(requestSpecification: RequestSpecification): ApiClientBase<CustomerByIdApiClient>(requestSpecification) {
 
     private var request: Request = Request.newRequest()
 
-    fun withRequest(input: Request): CustomerLookupByIdApiClient {
+    fun withRequest(input: Request): CustomerByIdApiClient {
         request = input
         return this
     }
 
-    fun get(): CustomerLookupByIdApiClient {
+    fun get(): CustomerByIdApiClient {
         requestSpecification.basePath("/customer-by-id")
         requestSpecification.queryParam("id", request.id)
         requestSpecification.accept(ContentType.JSON)
@@ -23,7 +24,7 @@ class CustomerLookupByIdApiClient(requestSpecification: RequestSpecification): A
     }
 
     fun extractResponseEntity(): CustomerVerifier {
-        val customer = RestAssuredJson.objectMapper.readValue<CustomerVerifier.Customer>(response().asString())
+        val customer = RestAssuredJson.objectMapper.readValue<Customer>(response().asString())
         return CustomerVerifier(customer)
     }
 

@@ -9,9 +9,9 @@ class CustomerVerifier(private val customer: Customer) {
         return customer
     }
 
-    fun expectEntity(expectedResponse: Customer) {
+    fun expectEntity(expectedResponse: Customer): CustomerVerifier {
         assertThat(customer, equalTo(expectedResponse))
+        return this
     }
 
-    data class Customer(val firstName: String, val lastName: String)
 }

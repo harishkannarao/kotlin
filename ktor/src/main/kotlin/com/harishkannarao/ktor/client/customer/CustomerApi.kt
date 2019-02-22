@@ -7,4 +7,8 @@ class CustomerApi(
     suspend fun getCustomerById(id: String): CustomerDto {
         return customerClient.getCustomerById(id)
     }
+
+    suspend fun getCustomersByName(name: String): List<CustomerDto> {
+        return customerClient.getCustomersByName(name)
+    }
 }
