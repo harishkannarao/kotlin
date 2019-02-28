@@ -3,6 +3,7 @@ package com.harishkannarao.ktor.route
 import com.harishkannarao.ktor.api.session.CookieSession
 import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.api.snippets.SnippetDto
+import com.harishkannarao.ktor.client.customer.CustomerDto
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.intercept.Interceptor
@@ -11,6 +12,7 @@ import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.auth.authenticate
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.charset
 import io.ktor.http.content.PartData
 import io.ktor.http.content.TextContent
@@ -78,6 +80,14 @@ class Routes(
                 get {
                     val name = call.request.queryParameters["name"] ?: ""
                     call.respond(dependencies.customerApi.getCustomersByName(name))
+                }
+            }
+
+            route("create-customer") {
+                post {
+                    val input = call.receive<CustomerDto>()
+                    dependencies.customerApi.createCustomer(input)
+                    call.respond(HttpStatusCode.NoContent, Unit)
                 }
             }
 

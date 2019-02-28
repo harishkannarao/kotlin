@@ -1,6 +1,7 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.api.clients.CreateSingleCustomerApiClient
 import com.harishkannarao.ktor.api.clients.CustomerByIdApiClient
 import com.harishkannarao.ktor.api.clients.CustomersByNameApiClient
 import com.harishkannarao.ktor.api.clients.verifier.Customer
@@ -29,7 +30,7 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
     }
 
     @Test
-    fun `should return customers by`() {
+    fun `should search customers by name`() {
         val name = "some-name"
         val customer1 = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
         val customer2 = WireMockStub.Customer.newCustomer().copy("name 3", "name 4")
@@ -49,5 +50,24 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
                 .expectTotalCustomersToBe(2)
                 .expectCustomerAtIndex(0, expectedCustomer1)
                 .expectCustomerAtIndex(1, expectedCustomer2)
+    }
+
+    @Test
+    fun `should create single customer`() {
+        val customer = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
+        wireMockStub.setUpCreateSingleCustomer(customer, 204)
+
+        val request = CreateSingleCustomerApiClient.Request.newRequest()
+                .copy(
+                        firstName = customer.firstName,
+                        lastName = customer.lastName
+                )
+
+        clients.createSingleCustomerApiClient()
+                .withRequest(request)
+                .post()
+                .expectNoContentStatus()
+
+        wireMockStub.verifyCreateSingleCustomer(customer, 1)
     }
 }

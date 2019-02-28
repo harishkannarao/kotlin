@@ -109,6 +109,10 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return expectStatusCodeToBe(200)
     }
 
+    fun expectNoContentStatus(): T {
+        return expectStatusCodeToBe(204)
+    }
+
     fun expectBadRequestStatus(): T {
         return expectStatusCodeToBe(400)
     }

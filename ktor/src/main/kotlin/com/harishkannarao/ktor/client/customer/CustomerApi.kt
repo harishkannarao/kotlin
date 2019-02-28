@@ -11,4 +11,8 @@ class CustomerApi(
     suspend fun getCustomersByName(name: String): List<CustomerDto> {
         return customerClient.getCustomersByName(name)
     }
+
+    suspend fun createCustomer(customer: CustomerDto) {
+        customerClient.createCustomer(customer)
+    }
 }

@@ -21,6 +21,13 @@ import java.util.concurrent.TimeUnit
 abstract class AbstractBaseIntegration {
 
     @Before
+    fun resetWireMock() {
+        wireMockClient.resetMappings()
+        wireMockClient.resetRequests()
+        wireMockClient.resetScenarios()
+    }
+
+    @Before
     fun restartServerWithDefaultConfig() {
         if (!runningWithDefaultConfig) {
             server.stop()
