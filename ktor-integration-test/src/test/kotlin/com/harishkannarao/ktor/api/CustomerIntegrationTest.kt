@@ -55,7 +55,6 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
     @Test
     fun `should create single customer`() {
         val customer = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
-        wireMockStub.setUpCreateSingleCustomer(customer, 204)
 
         val request = CreateSingleCustomerApiClient.Request.newRequest()
                 .copy(
