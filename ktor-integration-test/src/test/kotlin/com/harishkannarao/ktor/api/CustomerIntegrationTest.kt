@@ -1,6 +1,7 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.api.clients.CreateMultipleCustomersApiClient
 import com.harishkannarao.ktor.api.clients.CreateSingleCustomerApiClient
 import com.harishkannarao.ktor.api.clients.CustomerByIdApiClient
 import com.harishkannarao.ktor.api.clients.CustomersByNameApiClient
@@ -68,5 +69,24 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
                 .expectNoContentStatus()
 
         wireMockStub.verifyCreateSingleCustomer(customer, 1)
+    }
+
+    @Test
+    fun `should create multiple customers`() {
+        val customer1 = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
+        val customer2 = WireMockStub.Customer.newCustomer().copy("name 3", "name 4")
+
+        val customerList = listOf(customer1, customer2)
+
+        val request = customerList.map {
+            CreateMultipleCustomersApiClient.Customer(firstName = it.firstName, lastName = it.lastName)
+        }
+
+        clients.createMultipleCustomersApiClient()
+                .withRequest(request)
+                .post()
+                .expectNoContentStatus()
+
+        wireMockStub.verifyCreateMultipleCustomers(customerList, 1)
     }
 }

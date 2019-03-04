@@ -62,6 +62,16 @@ class WireMockStub(private val wireMock: WireMock) {
         )
     }
 
+    fun verifyCreateMultipleCustomers(request: List<Customer>, count: Int = 1) {
+        val requestJson = WireMockJson.objectMapper.writeValueAsString(request)
+        wireMock.verifyThat(
+                count,
+                WireMock.postRequestedFor(WireMock.urlPathMatching("/create-multiple-customers"))
+                        .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
+                        .withRequestBody(WireMock.equalToJson(requestJson, true, false))
+        )
+    }
+
     fun verifyCreateSingleCustomer(request: Customer, count: Int = 1) {
         val requestJson = WireMockJson.objectMapper.writeValueAsString(request)
         wireMock.verifyThat(

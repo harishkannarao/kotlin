@@ -15,4 +15,8 @@ class CustomerApi(
     suspend fun createCustomer(customer: CustomerDto) {
         customerClient.createCustomer(customer)
     }
+
+    suspend fun createCustomers(customers: List<CustomerDto>) {
+        customerClient.createCustomers(customers)
+    }
 }

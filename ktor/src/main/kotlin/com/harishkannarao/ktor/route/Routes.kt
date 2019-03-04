@@ -91,6 +91,14 @@ class Routes(
                 }
             }
 
+            route("create-customers") {
+                post {
+                    val input = call.receive<List<CustomerDto>>()
+                    dependencies.customerApi.createCustomers(input)
+                    call.respond(HttpStatusCode.NoContent, Unit)
+                }
+            }
+
             route("cookie-session") {
                 get {
                     val session: CookieSession = call.sessions.getOrSet(

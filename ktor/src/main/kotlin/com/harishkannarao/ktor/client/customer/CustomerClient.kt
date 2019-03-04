@@ -54,10 +54,23 @@ class CustomerClient(
         client.request<HttpResponse>(request)
     }
 
+    suspend fun createCustomers(customers: List<CustomerDto>) {
+        val url = URIBuilder(baseUrl)
+                .setPath(CREATE_MULTIPLE_CUSTOMERS_PATH)
+                .toString()
+        val request: HttpRequestBuilder.() -> Unit = {
+            this.url(url)
+            this.method = HttpMethod.Post
+            this.body = json.toJsonTextContent(customers)
+        }
+        client.request<HttpResponse>(request)
+    }
+
     companion object {
         private const val GET_CUSTOMER_BY_ID_PATH = "get-single-customer"
         private const val GET_CUSTOMERS_BY_NAME_PATH = "get-multiple-customers"
         private const val CREATE_SINGLE_CUSTOMER_PATH = "create-single-customer"
+        private const val CREATE_MULTIPLE_CUSTOMERS_PATH = "create-multiple-customers"
         private const val CUSTOMER_ID = "customerId"
         private const val CUSTOMER_NAME = "name"
     }
