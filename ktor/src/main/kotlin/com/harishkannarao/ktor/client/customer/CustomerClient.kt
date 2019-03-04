@@ -7,8 +7,6 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.client.response.HttpResponse
-import io.ktor.content.TextContent
-import io.ktor.http.ContentType
 import io.ktor.http.HttpMethod
 import org.apache.http.client.utils.URIBuilder
 
@@ -19,11 +17,12 @@ class CustomerClient(
 ) {
 
     suspend fun getCustomerById(id: String): CustomerDto {
-        val builder = URIBuilder(baseUrl)
-        builder.path = GET_CUSTOMER_BY_ID_PATH
-        builder.addParameter(CUSTOMER_ID, id)
+        val url = URIBuilder(baseUrl)
+                .setPath(GET_CUSTOMER_BY_ID_PATH)
+                .addParameter(CUSTOMER_ID, id)
+                .toString()
         val request: HttpRequestBuilder.() -> Unit = {
-            this.url(builder.toString())
+            this.url(url)
             this.method = HttpMethod.Get
         }
         val response = client.request<HttpResponse>(request)
@@ -31,11 +30,12 @@ class CustomerClient(
     }
 
     suspend fun getCustomersByName(name: String): List<CustomerDto> {
-        val builder = URIBuilder(baseUrl)
-        builder.path = GET_CUSTOMERS_BY_NAME_PATH
-        builder.addParameter(CUSTOMER_NAME, name)
+        val url = URIBuilder(baseUrl)
+                .setPath(GET_CUSTOMERS_BY_NAME_PATH)
+                .addParameter(CUSTOMER_NAME, name)
+                .toString()
         val request: HttpRequestBuilder.() -> Unit = {
-            this.url(builder.toString())
+            this.url(url)
             this.method = HttpMethod.Get
         }
         val response = client.request<HttpResponse>(request)
@@ -43,12 +43,13 @@ class CustomerClient(
     }
 
     suspend fun createCustomer(customer: CustomerDto) {
-        val builder = URIBuilder(baseUrl)
-        builder.path = CREATE_SINGLE_CUSTOMER_PATH
+        val url = URIBuilder(baseUrl)
+                .setPath(CREATE_SINGLE_CUSTOMER_PATH)
+                .toString()
         val request: HttpRequestBuilder.() -> Unit = {
-            this.url(builder.toString())
+            this.url(url)
             this.method = HttpMethod.Post
-            this.body = TextContent(json.toJson(customer), contentType = ContentType.Application.Json)
+            this.body = json.toJsonTextContent(customer)
         }
         client.request<HttpResponse>(request)
     }
