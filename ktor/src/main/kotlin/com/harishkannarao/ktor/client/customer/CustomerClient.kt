@@ -4,6 +4,7 @@ import com.harishkannarao.ktor.client.json.ClientJsonUtil
 import com.harishkannarao.ktor.client.util.readTextAsUTF8
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.header
 import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.client.response.HttpResponse
@@ -25,7 +26,7 @@ class CustomerClient(
             this.url(url)
             this.method = HttpMethod.Get
         }
-        val response = client.request<HttpResponse>(request)
+        val response = execute(request)
         return json.fromJson(response.readTextAsUTF8())
     }
 
@@ -38,7 +39,7 @@ class CustomerClient(
             this.url(url)
             this.method = HttpMethod.Get
         }
-        val response = client.request<HttpResponse>(request)
+        val response = execute(request)
         return json.fromJson(response.readTextAsUTF8())
     }
 
@@ -51,7 +52,7 @@ class CustomerClient(
             this.method = HttpMethod.Post
             this.body = json.toJsonTextContent(customer)
         }
-        client.request<HttpResponse>(request)
+        execute(request)
     }
 
     suspend fun createCustomers(customers: List<CustomerDto>) {
@@ -63,10 +64,21 @@ class CustomerClient(
             this.method = HttpMethod.Post
             this.body = json.toJsonTextContent(customers)
         }
-        client.request<HttpResponse>(request)
+        execute(request)
+    }
+
+    private suspend fun execute(request: HttpRequestBuilder.() -> Unit): HttpResponse {
+        val originalRequestBuilder = HttpRequestBuilder().apply(request)
+        val modifiedRequest: HttpRequestBuilder.() -> Unit = {
+            this.takeFrom(originalRequestBuilder)
+            this.header(CUSTOM_HEADER_KEY, CUSTOM_HEADER_VALUE)
+        }
+        return client.request(modifiedRequest)
     }
 
     companion object {
+        private const val CUSTOM_HEADER_KEY = "X-Custom-Header"
+        private const val CUSTOM_HEADER_VALUE = "SECRET_VALUE"
         private const val GET_CUSTOMER_BY_ID_PATH = "get-single-customer"
         private const val GET_CUSTOMERS_BY_NAME_PATH = "get-multiple-customers"
         private const val CREATE_SINGLE_CUSTOMER_PATH = "create-single-customer"

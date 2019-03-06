@@ -23,6 +23,7 @@ class WireMockStub(private val wireMock: WireMock) {
         wireMock.register(
                 WireMock.get(WireMock.urlPathMatching("/get-single-customer"))
                         .withQueryParam("customerId", WireMock.matching(customerId))
+                        .withHeader(CUSTOM_HEADER_KEY, WireMock.matching(CUSTOM_HEADER_VALUE))
                         .willReturn(
                                 WireMock.aResponse()
                                         .withStatus(status)
@@ -37,6 +38,7 @@ class WireMockStub(private val wireMock: WireMock) {
         wireMock.register(
                 WireMock.get(WireMock.urlPathMatching("/get-multiple-customers"))
                         .withQueryParam("name", WireMock.matching(name))
+                        .withHeader(CUSTOM_HEADER_KEY, WireMock.matching(CUSTOM_HEADER_VALUE))
                         .willReturn(
                                 WireMock.aResponse()
                                         .withStatus(status)
@@ -51,6 +53,7 @@ class WireMockStub(private val wireMock: WireMock) {
         val responseJson = WireMockJson.objectMapper.writeValueAsString(response)
         wireMock.register(
                 WireMock.post(WireMock.urlPathMatching("/create-multiple-customers"))
+                        .withHeader(CUSTOM_HEADER_KEY, WireMock.matching(CUSTOM_HEADER_VALUE))
                         .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
                         .withRequestBody(WireMock.equalToJson(requestJson, true, false))
                         .willReturn(
@@ -67,6 +70,7 @@ class WireMockStub(private val wireMock: WireMock) {
         wireMock.verifyThat(
                 count,
                 WireMock.postRequestedFor(WireMock.urlPathMatching("/create-multiple-customers"))
+                        .withHeader(CUSTOM_HEADER_KEY, WireMock.matching(CUSTOM_HEADER_VALUE))
                         .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
                         .withRequestBody(WireMock.equalToJson(requestJson, true, false))
         )
@@ -77,6 +81,7 @@ class WireMockStub(private val wireMock: WireMock) {
         wireMock.verifyThat(
                 count,
                 WireMock.postRequestedFor(WireMock.urlPathMatching("/create-single-customer"))
+                        .withHeader(CUSTOM_HEADER_KEY, WireMock.matching(CUSTOM_HEADER_VALUE))
                         .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
                         .withRequestBody(WireMock.equalToJson(requestJson, true, false))
         )
@@ -86,6 +91,7 @@ class WireMockStub(private val wireMock: WireMock) {
         val requestJson = WireMockJson.objectMapper.writeValueAsString(request)
         wireMock.register(
                 WireMock.post(WireMock.urlPathMatching("/create-single-customer"))
+                        .withHeader(CUSTOM_HEADER_KEY, WireMock.matching(CUSTOM_HEADER_VALUE))
                         .withHeader(ContentTypeHeader.KEY, WireMock.containing(ContentType.APPLICATION_JSON.mimeType))
                         .withRequestBody(WireMock.equalToJson(requestJson, true, false))
                         .willReturn(
@@ -94,6 +100,11 @@ class WireMockStub(private val wireMock: WireMock) {
                                         .withHeader(ContentTypeHeader.KEY, ContentType.APPLICATION_JSON.mimeType)
                         )
         )
+    }
+
+    companion object {
+        const val CUSTOM_HEADER_KEY = "X-Custom-Header"
+        const val CUSTOM_HEADER_VALUE = "SECRET_VALUE"
     }
 
     data class Customer(val firstName: String, val lastName: String) {
