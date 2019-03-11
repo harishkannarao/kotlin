@@ -9,13 +9,17 @@ import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.HttpMethod
+import io.ktor.http.fullPath
 import org.apache.http.client.utils.URIBuilder
+import org.slf4j.LoggerFactory
 
 class CustomerClient(
         private val json: ClientJsonUtil,
         private val client: HttpClient,
         private val baseUrl: String
 ) {
+
+    private val logger = LoggerFactory.getLogger(CustomerClient::class.java)
 
     suspend fun getCustomerById(id: String): CustomerDto {
         val url = URIBuilder(baseUrl)
@@ -73,7 +77,15 @@ class CustomerClient(
             this.takeFrom(originalRequestBuilder)
             this.header(CUSTOM_HEADER_KEY, CUSTOM_HEADER_VALUE)
         }
-        return client.request(modifiedRequest)
+        val response = client.request<HttpResponse>(modifiedRequest)
+
+        if (logger.isDebugEnabled) {
+            val requestPathWithQuery = response.call.request.url.fullPath
+            val requestMethod = response.call.request.method.value
+            val elapsedTimeInMillis = response.responseTime.timestamp - response.requestTime.timestamp
+            logger.debug("[$requestMethod] [$requestPathWithQuery] [$elapsedTimeInMillis]")
+        }
+        return response
     }
 
     companion object {

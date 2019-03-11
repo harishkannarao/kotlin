@@ -6,11 +6,18 @@ import com.harishkannarao.ktor.api.clients.CreateSingleCustomerApiClient
 import com.harishkannarao.ktor.api.clients.CustomerByIdApiClient
 import com.harishkannarao.ktor.api.clients.CustomersByNameApiClient
 import com.harishkannarao.ktor.api.clients.verifier.Customer
+import com.harishkannarao.ktor.client.customer.CustomerClient
+import com.harishkannarao.ktor.rule.LogbackTestAppenderRule
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
+import org.junit.Rule
 import org.junit.Test
 
 
 class CustomerIntegrationTest : AbstractBaseIntegration() {
+
+    @Rule
+    @JvmField
+    val customerClientLogger = LogbackTestAppenderRule(CustomerClient::class.java.name)
 
     @Test
     fun `should return customer by id`() {
@@ -88,5 +95,27 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
                 .expectNoContentStatus()
 
         wireMockStub.verifyCreateMultipleCustomers(customerList, 1)
+    }
+
+    @Test
+    fun `should log client requests`() {
+        val id = "1234"
+
+        val customer = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
+        wireMockStub.setUpGetSingleCustomer(id, customer, 200)
+
+        val expectedCustomer = Customer(customer.firstName, customer.lastName)
+        val request = CustomerByIdApiClient.Request.newRequest().copy(id = id)
+
+        clients.customerByIdApiClient()
+                .withRequest(request)
+                .get()
+                .expectSuccessStatus()
+                .extractResponseEntity()
+                .expectEntity(expectedCustomer)
+
+        val expectedApplicationLogMessage = "[GET] [/get-single-customer?customerId=$id]"
+
+        customerClientLogger.assertLogEntry(expectedApplicationLogMessage)
     }
 }
