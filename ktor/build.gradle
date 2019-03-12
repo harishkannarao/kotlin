@@ -25,4 +25,6 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
+
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
