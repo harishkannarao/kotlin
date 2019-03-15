@@ -83,7 +83,7 @@ class CustomerClient(
             val requestPathWithQuery = response.call.request.url.fullPath
             val requestMethod = response.call.request.method.value
             val elapsedTimeInMillis = response.responseTime.timestamp - response.requestTime.timestamp
-            logger.debug("[$requestMethod] [$requestPathWithQuery] [$elapsedTimeInMillis]")
+            logger.debug("[${response.status.value}] [$requestMethod] [$requestPathWithQuery] [$elapsedTimeInMillis]")
         }
         return response
     }

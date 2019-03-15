@@ -98,7 +98,7 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
     }
 
     @Test
-    fun `should log client requests`() {
+    fun `should log client requests for successful calls`() {
         val id = "1234"
 
         val customer = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
@@ -114,7 +114,29 @@ class CustomerIntegrationTest : AbstractBaseIntegration() {
                 .extractResponseEntity()
                 .expectEntity(expectedCustomer)
 
-        val expectedApplicationLogMessage = "[GET] [/get-single-customer?customerId=$id]"
+        val expectedApplicationLogMessage = "[200] [GET] [/get-single-customer?customerId=$id]"
+
+        customerClientLogger.assertLogEntry(expectedApplicationLogMessage)
+    }
+
+    @Test
+    fun `should log client requests for failure calls`() {
+        val id = "1234"
+
+        val customer = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
+        wireMockStub.setUpGetSingleCustomer(id, customer, 500)
+
+        val expectedCustomer = Customer(customer.firstName, customer.lastName)
+        val request = CustomerByIdApiClient.Request.newRequest().copy(id = id)
+
+        clients.customerByIdApiClient()
+                .withRequest(request)
+                .get()
+                .expectSuccessStatus()
+                .extractResponseEntity()
+                .expectEntity(expectedCustomer)
+
+        val expectedApplicationLogMessage = "[500] [GET] [/get-single-customer?customerId=$id]"
 
         customerClientLogger.assertLogEntry(expectedApplicationLogMessage)
     }
