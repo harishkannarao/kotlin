@@ -5,7 +5,7 @@ import com.harishkannarao.ktor.client.json.ClientJsonUtil
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasItem
-import org.junit.Test
+import org.testng.annotations.Test
 
 class ClientJsonUtilTest {
 
@@ -26,7 +26,7 @@ class ClientJsonUtilTest {
         assertThat(testClasses, hasItem(testClass2))
     }
 
-    @Test(expected = ClientJsonException::class)
+    @Test(expectedExceptions = [ClientJsonException::class])
     fun `jackson kotlin data deserialization with malformed json array`() {
         val jsonObject = """
             {"id":"abc","name":"123"}

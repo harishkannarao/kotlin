@@ -1,9 +1,9 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.Assert.assertThat
-import org.junit.Test
+import org.testng.annotations.Test
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.util.*

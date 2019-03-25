@@ -1,9 +1,10 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
-import org.junit.Test
+import org.testng.annotations.Test
 
 class FileEchoIntegrationTest : AbstractBaseIntegration() {
+
     @Test
     fun `should echo title and file content`() {
         clients.fileEchoApiClient()

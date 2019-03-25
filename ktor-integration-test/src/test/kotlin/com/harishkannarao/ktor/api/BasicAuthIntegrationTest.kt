@@ -1,7 +1,7 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
-import org.junit.Test
+import org.testng.annotations.Test
 
 class BasicAuthIntegrationTest : AbstractBaseIntegration() {
 

@@ -1,8 +1,6 @@
 package com.harishkannarao.ktor.api.clients
 
 import io.restassured.specification.RequestSpecification
-import org.hamcrest.Matchers.equalTo
-import org.junit.Assert.assertThat
 
 class FileEchoApiClient(requestSpecification: RequestSpecification) : ApiClientBase<FileEchoApiClient>(requestSpecification) {
 

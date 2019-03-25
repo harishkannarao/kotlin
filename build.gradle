@@ -33,9 +33,27 @@ allprojects {
     kotlin {
     }
 
+    configurations {
+        implementation {
+            exclude group: 'junit', module: 'junit'
+        }
+        testImplementation {
+            exclude group: 'junit', module: 'junit'
+        }
+    }
+
+    test {
+        useTestNG()
+        
+        systemProperties = System.properties.stringPropertyNames().collectEntries {
+            [(it): System.getProperty(it)]
+        }
+    }
+
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion")
         implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
-        testImplementation("junit:junit:$junitVersion")
+        testImplementation("org.testng:testng:$testNgVersion")
+        testImplementation("org.hamcrest:hamcrest:$hamcrestVersion")
     }
 }

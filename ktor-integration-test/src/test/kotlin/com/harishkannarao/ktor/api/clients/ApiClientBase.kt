@@ -6,9 +6,9 @@ import io.restassured.config.RestAssuredConfig
 import io.restassured.http.ContentType
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
-import org.junit.Assert.assertThat
 
 @Suppress("UNCHECKED_CAST")
 abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecification: RequestSpecification) {

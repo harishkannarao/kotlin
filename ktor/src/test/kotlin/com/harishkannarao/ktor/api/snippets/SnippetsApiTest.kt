@@ -5,7 +5,7 @@ import io.mockk.every
 import io.mockk.mockk
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Test
+import org.testng.annotations.Test
 
 class SnippetsApiTest {
 

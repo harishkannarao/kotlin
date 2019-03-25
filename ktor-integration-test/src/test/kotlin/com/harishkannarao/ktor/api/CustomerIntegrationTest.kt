@@ -7,17 +7,26 @@ import com.harishkannarao.ktor.api.clients.CustomerByIdApiClient
 import com.harishkannarao.ktor.api.clients.CustomersByNameApiClient
 import com.harishkannarao.ktor.api.clients.verifier.Customer
 import com.harishkannarao.ktor.client.customer.CustomerClient
-import com.harishkannarao.ktor.rule.LogbackTestAppenderRule
+import com.harishkannarao.ktor.rule.LogbackTestUtil
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
-import org.junit.Rule
-import org.junit.Test
+import org.testng.annotations.AfterMethod
+import org.testng.annotations.BeforeMethod
+import org.testng.annotations.Test
 
 
 class CustomerIntegrationTest : AbstractBaseIntegration() {
 
-    @Rule
-    @JvmField
-    val customerClientLogger = LogbackTestAppenderRule(CustomerClient::class.java.name)
+    private val customerClientLogger = LogbackTestUtil(CustomerClient::class.java.name)
+
+    @BeforeMethod
+    fun setUpTestLogger() {
+        customerClientLogger.setUp()
+    }
+
+    @AfterMethod
+    fun tearDownTestLogger() {
+        customerClientLogger.tearDown()
+    }
 
     @Test
     fun `should return customer by id`() {

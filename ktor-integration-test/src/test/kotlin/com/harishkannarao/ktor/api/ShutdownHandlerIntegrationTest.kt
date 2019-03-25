@@ -1,16 +1,25 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
-import com.harishkannarao.ktor.rule.LogbackTestAppenderRule
+import com.harishkannarao.ktor.rule.LogbackTestUtil
 import com.harishkannarao.ktor.server.KtorApplicationServer
-import org.junit.Rule
-import org.junit.Test
+import org.testng.annotations.AfterMethod
+import org.testng.annotations.BeforeMethod
+import org.testng.annotations.Test
 
 class ShutdownHandlerIntegrationTest : AbstractBaseIntegration() {
 
-    @Rule
-    @JvmField
-    val ktorApplicationServerLogger = LogbackTestAppenderRule(KtorApplicationServer::class.java.name)
+    private val ktorApplicationServerLogger = LogbackTestUtil(KtorApplicationServer::class.java.name)
+
+    @BeforeMethod
+    fun setUpTestLogger() {
+        ktorApplicationServerLogger.setUp()
+    }
+
+    @AfterMethod
+    fun tearDownTestLogger() {
+        ktorApplicationServerLogger.tearDown()
+    }
 
     @Test
     fun `should execute shutdown handler`() {

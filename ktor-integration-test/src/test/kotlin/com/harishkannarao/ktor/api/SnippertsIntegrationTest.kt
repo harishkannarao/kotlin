@@ -2,8 +2,7 @@ package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseIntegration
 import com.harishkannarao.ktor.util.TestDataUtil
-import org.junit.Test
-import java.net.ConnectException
+import org.testng.annotations.Test
 
 
 class SnippetsIntegrationTest : AbstractBaseIntegration() {

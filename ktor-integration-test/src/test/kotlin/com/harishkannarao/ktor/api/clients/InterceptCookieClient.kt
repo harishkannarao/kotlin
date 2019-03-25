@@ -1,8 +1,8 @@
 package com.harishkannarao.ktor.api.clients
 
 import io.restassured.specification.RequestSpecification
+import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.nullValue
-import org.junit.Assert.assertThat
 import java.net.URLDecoder
 
 class InterceptCookieClient(requestSpecification: RequestSpecification) : ApiClientBase<InterceptCookieClient>(requestSpecification) {

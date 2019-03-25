@@ -13,21 +13,22 @@ import com.harishkannarao.ktor.server.KtorApplicationServer
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
 import com.harishkannarao.ktor.web.clients.factory.WebClientFactory
 import org.awaitility.kotlin.await
-import org.junit.Before
+import org.testng.annotations.AfterSuite
+import org.testng.annotations.BeforeMethod
 import java.net.ConnectException
 import java.nio.channels.ClosedChannelException
 import java.util.concurrent.TimeUnit
 
 abstract class AbstractBaseIntegration {
 
-    @Before
+    @BeforeMethod
     fun resetWireMock() {
         wireMockClient.resetMappings()
         wireMockClient.resetRequests()
         wireMockClient.resetScenarios()
     }
 
-    @Before
+    @BeforeMethod
     fun restartServerWithDefaultConfig() {
         if (!runningWithDefaultConfig) {
             server.stop()
@@ -36,6 +37,12 @@ abstract class AbstractBaseIntegration {
 
             waitForServerToStart()
         }
+    }
+
+    @AfterSuite
+    fun globalTearDown() {
+        server.stop()
+        wireMockServer.stop()
     }
 
     protected fun restartServerWithConfig(config: KtorApplicationConfig) {

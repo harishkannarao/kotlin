@@ -7,16 +7,15 @@ import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.FileAppender
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
-import org.junit.rules.ExternalResource
 import org.slf4j.LoggerFactory
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.util.*
 
-class LogbackTestAppenderRule(
+class LogbackTestUtil(
         loggerName: String,
         loggingPattern: String = "[%X{requestId}] %-5level %message%n"
-) : ExternalResource() {
+) {
 
     private val logFileLocation: String = "build/logs"
     private val logFilePrefix: String = "test-log"
@@ -27,11 +26,11 @@ class LogbackTestAppenderRule(
     private lateinit var testAppender: FileAppender<ILoggingEvent>
     private lateinit var logFile: String
 
-    override fun before() {
+    fun setUp() {
         logFile = "$logFileLocation/$logFilePrefix-${UUID.randomUUID()}.log"
 
         testAppender = FileAppender()
-        testAppender.file = logFile
+        testAppender.file = Paths.get(logFile).toAbsolutePath().toString()
         testAppender.name = "TEST_APPENDER_${UUID.randomUUID()}"
         testAppender.context = context
         testAppender.encoder = encoder
@@ -40,13 +39,13 @@ class LogbackTestAppenderRule(
         logger.addAppender(testAppender)
     }
 
-    override fun after() {
+    fun tearDown() {
         logger.detachAppender(testAppender)
     }
 
     fun assertLogEntry(expectedString: String) {
-        val matchFound = Files.lines(Paths.get(logFile)).anyMatch { s -> s.contains(expectedString) }
-        assertThat("Log file: $logFile does not contain expected string $expectedString", matchFound, equalTo(true))
+        val matchFound = Files.lines(Paths.get(logFile).toAbsolutePath()).anyMatch { s -> s.contains(expectedString) }
+        assertThat("Log file: ${Paths.get(logFile).toAbsolutePath()} does not contain expected string $expectedString", matchFound, equalTo(true))
     }
 
     private fun createPatternLayoutEncoder(loggingPattern: String, context: LoggerContext): PatternLayoutEncoder {
