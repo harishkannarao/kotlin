@@ -6,7 +6,7 @@ This repository is to play with kotlin programming language and related framewor
 [![Build Status](https://travis-ci.org/harishkannarao/kotlin.svg?branch=master)](https://travis-ci.org/harishkannarao/kotlin)
 
 ## Required Softwares, Tools and Version
-* Java JDK Version: 8 Oracle or OpenJDK (`java -version`)
+* Java JDK Version: 11 Adopt OpenJDK (`java -version`)
 * Git Client: Any latest version (`git --version`)
 * Integrated Development Environment: Any version of IntelliJ Idea or Eclipse
 
