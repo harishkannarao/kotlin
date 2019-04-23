@@ -8,3 +8,14 @@ dependencies {
     testImplementation("org.awaitility:awaitility-kotlin:$awaitilityVersion")
     testImplementation("com.github.tomakehurst:wiremock-standalone:$wiremockVersion")
 }
+
+task('nonAuthIntegrationTest', type:Test) {
+    useTestNG {
+        includeGroups = ["WEB_INTEGRATION_TEST","API_INTEGRATION_TEST"]
+        excludeGroups = ["AUTH_API_INTEGRATION_TEST"]
+    }
+
+    systemProperties = System.properties.stringPropertyNames().collectEntries {
+        [(it): System.getProperty(it)]
+    }
+}

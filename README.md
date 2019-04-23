@@ -58,3 +58,7 @@ Change logback configuration
 #### Include and Exclude Groups
 
     ./gradlew clean :ktor-integration-test:test -DtestNgIncludeGroups=API_INTEGRATION_TEST,WEB_INTEGRATION_TEST -DtestNgExcludeGroups=AUTH_API_INTEGRATION_TEST
+    
+#### Non Auth Integration tests
+
+    ./gradlew clean :ktor-integration-test:nonAuthIntegrationTest
