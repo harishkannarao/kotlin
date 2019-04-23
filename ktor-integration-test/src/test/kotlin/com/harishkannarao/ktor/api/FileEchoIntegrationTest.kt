@@ -1,9 +1,9 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import org.testng.annotations.Test
 
-class FileEchoIntegrationTest : AbstractBaseIntegration() {
+class FileEchoIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `should echo title and file content`() {

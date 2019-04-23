@@ -18,11 +18,16 @@ To print the http request and response during integration test execution
 
     ./gradlew clean build --info
     
+
 ## To run ktor application
 
 #### Using gradle
 
-    ./gradlew --parallel :ktor:run :wiremock-runner:run
+    ./gradlew --parallel --quiet :ktor:run :wiremock-runner:run
+    
+Change logback configuration
+
+    ./gradlew --parallel --quiet :ktor:run :wiremock-runner:run -Dlogback.configurationFile=logback-cloud.xml
     
 #### Using Java
 
@@ -31,7 +36,25 @@ To print the http request and response during integration test execution
     java -jar wiremock-runner/build/libs/wiremock-runner-exec.jar
     
     java -jar ktor/build/libs/ktor-exec.jar
-    
+
 Change logback configuration
 
-    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar
+    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar    
+    
+## Test filtering
+
+#### Specific test class(es)
+
+    ./gradlew clean :ktor-integration-test:test --tests "com.harishkannarao.ktor.api.BasicAuthIntegrationTest" --tests "com.harishkannarao.ktor.api.CustomerIntegrationTest"
+
+#### Specific test method(s)
+
+    ./gradlew clean :ktor-integration-test:test --tests "com.harishkannarao.ktor.api.BasicAuthIntegrationTest.returns message when authenticated"
+
+#### Specific package (recursively)
+
+    ./gradlew clean :ktor-integration-test:test --tests "com.harishkannarao.ktor.api*"
+
+#### Include and Exclude Groups
+
+    ./gradlew clean :ktor-integration-test:test -DtestNgIncludeGroups=API_INTEGRATION_TEST,WEB_INTEGRATION_TEST -DtestNgExcludeGroups=AUTH_API_INTEGRATION_TEST

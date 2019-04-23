@@ -1,22 +1,22 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.rule.LogbackTestUtil
 import com.harishkannarao.ktor.server.KtorApplicationServer
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
-class ShutdownHandlerIntegrationTest : AbstractBaseIntegration() {
+class ShutdownHandlerIntegrationTest : AbstractBaseApiIntegration() {
 
     private val ktorApplicationServerLogger = LogbackTestUtil(KtorApplicationServer::class.java.name)
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     fun setUpTestLogger() {
         ktorApplicationServerLogger.setUp()
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     fun tearDownTestLogger() {
         ktorApplicationServerLogger.tearDown()
     }

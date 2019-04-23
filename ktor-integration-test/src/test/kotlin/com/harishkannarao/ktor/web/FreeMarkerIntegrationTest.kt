@@ -1,9 +1,9 @@
 package com.harishkannarao.ktor.web
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseWebIntegration
 import org.testng.annotations.Test
 
-class FreeMarkerIntegrationTest : AbstractBaseIntegration() {
+class FreeMarkerIntegrationTest : AbstractBaseWebIntegration() {
 
     @Test
     fun `displays user details`() {

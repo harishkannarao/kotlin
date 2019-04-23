@@ -1,11 +1,11 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.util.TestDataUtil
 import org.testng.annotations.Test
 
 
-class SnippetsIntegrationTest : AbstractBaseIntegration() {
+class SnippetsIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `should list default snippets as json`() {

@@ -1,6 +1,6 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.api.clients.CreateMultipleCustomersApiClient
 import com.harishkannarao.ktor.api.clients.CreateSingleCustomerApiClient
 import com.harishkannarao.ktor.api.clients.CustomerByIdApiClient
@@ -14,16 +14,16 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 
-class CustomerIntegrationTest : AbstractBaseIntegration() {
+class CustomerIntegrationTest : AbstractBaseApiIntegration() {
 
     private val customerClientLogger = LogbackTestUtil(CustomerClient::class.java.name)
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     fun setUpTestLogger() {
         customerClientLogger.setUp()
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     fun tearDownTestLogger() {
         customerClientLogger.tearDown()
     }

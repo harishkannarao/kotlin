@@ -1,9 +1,9 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import org.testng.annotations.Test
 
-class WebjarsIntegrationTest : AbstractBaseIntegration() {
+class WebjarsIntegrationTest : AbstractBaseApiIntegration() {
     @Test
     fun `returns webjars without versions`() {
         clients.webjarClient()

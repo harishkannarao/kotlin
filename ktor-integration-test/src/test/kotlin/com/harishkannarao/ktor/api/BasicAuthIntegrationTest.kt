@@ -1,11 +1,12 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
+import com.harishkannarao.ktor.TestGroups
 import org.testng.annotations.Test
 
-class BasicAuthIntegrationTest : AbstractBaseIntegration() {
+@Test(groups = [TestGroups.AUTH_API_INTEGRATION_TEST])
+class BasicAuthIntegrationTest : AbstractBaseApiIntegration() {
 
-    @Test
     fun `returns message when authenticated`() {
         clients.basicAuthApiClient()
                 .withBasicAuth("admin", "admin")
@@ -14,7 +15,6 @@ class BasicAuthIntegrationTest : AbstractBaseIntegration() {
                 .expectResponseTextToBe("Successfully authenticated with basic auth")
     }
 
-    @Test
     fun `returns unauthorised status with bad credentials`() {
         clients.basicAuthApiClient()
                 .withBasicAuth("admin", "password")
@@ -22,7 +22,6 @@ class BasicAuthIntegrationTest : AbstractBaseIntegration() {
                 .expectUnauthorisedStatus()
     }
 
-    @Test
     fun `returns unauthorised status when not authenticated`() {
         clients.basicAuthApiClient()
                 .get()

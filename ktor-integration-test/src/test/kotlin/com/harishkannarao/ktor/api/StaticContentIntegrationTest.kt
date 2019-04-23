@@ -1,9 +1,9 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import org.testng.annotations.Test
 
-class StaticContentIntegrationTest : AbstractBaseIntegration() {
+class StaticContentIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `servers static html content`() {

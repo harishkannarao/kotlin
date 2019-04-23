@@ -15,20 +15,22 @@ import com.harishkannarao.ktor.web.clients.factory.WebClientFactory
 import org.awaitility.kotlin.await
 import org.testng.annotations.AfterSuite
 import org.testng.annotations.BeforeMethod
+import org.testng.annotations.Test
 import java.net.ConnectException
 import java.nio.channels.ClosedChannelException
 import java.util.concurrent.TimeUnit
 
+@Test(alwaysRun = true, groups = [TestGroups.INTEGRATION_TEST])
 abstract class AbstractBaseIntegration {
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     fun resetWireMock() {
         wireMockClient.resetMappings()
         wireMockClient.resetRequests()
         wireMockClient.resetScenarios()
     }
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     fun restartServerWithDefaultConfig() {
         if (!runningWithDefaultConfig) {
             server.stop()
@@ -39,7 +41,7 @@ abstract class AbstractBaseIntegration {
         }
     }
 
-    @AfterSuite
+    @AfterSuite(alwaysRun = true)
     fun globalTearDown() {
         server.stop()
         wireMockServer.stop()

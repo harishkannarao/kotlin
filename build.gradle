@@ -43,8 +43,11 @@ allprojects {
     }
 
     test {
-        useTestNG()
-        
+        useTestNG() {
+            includeGroups = System.getProperty("testNgIncludeGroups", "").split(",").toList().toSet()
+            excludeGroups = System.getProperty("testNgExcludeGroups", "").split(",").toList().toSet()
+        }
+
         systemProperties = System.properties.stringPropertyNames().collectEntries {
             [(it): System.getProperty(it)]
         }

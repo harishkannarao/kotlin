@@ -1,6 +1,6 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.testng.annotations.Test
@@ -8,7 +8,7 @@ import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-class SessionIntegrationTest : AbstractBaseIntegration() {
+class SessionIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `interaction based on cookie session`() {

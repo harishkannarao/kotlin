@@ -1,9 +1,9 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import org.testng.annotations.Test
 
-class HttpsRedirectIntegrationTest : AbstractBaseIntegration() {
+class HttpsRedirectIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `serves content on http when redirect feature is disabled`() {

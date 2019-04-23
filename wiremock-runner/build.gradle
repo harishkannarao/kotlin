@@ -5,6 +5,12 @@ plugins {
 
 mainClassName = "com.harishkannarao.ktor.stub.wiremock.WiremockStubRunner"
 
+run {
+    systemProperties = System.properties.stringPropertyNames().collectEntries {
+        [(it): System.getProperty(it)]
+    }
+}
+
 shadowJar {
     baseName = "wiremock-runner"
     classifier = "exec"

@@ -1,6 +1,6 @@
 package com.harishkannarao.ktor.api
 
-import com.harishkannarao.ktor.AbstractBaseIntegration
+import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.rule.LogbackTestUtil
 import org.testng.annotations.AfterMethod
@@ -8,16 +8,16 @@ import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 import java.util.*
 
-class MdcParamIntegrationTest : AbstractBaseIntegration() {
+class MdcParamIntegrationTest : AbstractBaseApiIntegration() {
 
     private val routesLogger = LogbackTestUtil(Routes::class.java.name)
 
-    @BeforeMethod
+    @BeforeMethod(alwaysRun = true)
     fun setUpTestLogger() {
         routesLogger.setUp()
     }
 
-    @AfterMethod
+    @AfterMethod(alwaysRun = true)
     fun tearDownTestLogger() {
         routesLogger.tearDown()
     }
