@@ -9,5 +9,14 @@ jdk:
 services:
   - docker
 
+before_script:
+  - docker --version
+  - docker-compose --version
+  - docker-compose -f docker_local/docker-compose.yml pull
+  - docker-compose -f docker_local/docker-compose.yml up --build -d
+
 script:
   - ./gradlew clean build
+
+after_script:
+  - docker-compose -f docker_local/docker-compose.yml down -v

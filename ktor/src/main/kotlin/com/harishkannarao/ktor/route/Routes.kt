@@ -176,6 +176,16 @@ class Routes(
                     call.respond(dependencies.userWeb.displayUser())
                 }
             }
+
+            route("jdbi") {
+                route("simple-entity") {
+                    route("get-all") {
+                        get {
+                            call.respond(dependencies.entityApi.getAll())
+                        }
+                    }
+                }
+            }
         }
     }
 }

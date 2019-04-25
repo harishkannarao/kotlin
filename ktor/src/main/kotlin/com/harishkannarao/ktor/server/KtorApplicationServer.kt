@@ -19,6 +19,7 @@ open class KtorApplicationServer(
     private val logger = LoggerFactory.getLogger(KtorApplicationServer::class.java)
     private val stoppedEventHandler: (Application) -> Unit = {
         dependencies.client.close()
+        dependencies.dataSource.close()
         logger.info("Ktor Application stopped")
     }
 

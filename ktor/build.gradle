@@ -31,6 +31,13 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("ch.qos.logback:logback-classic:$logbackVersion")
     implementation("commons-io:commons-io:$commonsIoVersion")
+    implementation("org.jdbi:jdbi3-core:$jdbiVersion")
+    implementation("org.jdbi:jdbi3-sqlobject:$jdbiVersion")
+    implementation("org.jdbi:jdbi3-kotlin:$jdbiVersion")
+    implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbiVersion")
+    implementation("org.jdbi:jdbi3-postgres:$jdbiVersion")
+    implementation("com.zaxxer:HikariCP:$hikariVersion")
+    implementation("org.postgresql:postgresql:$postgresqlVersion")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
 }

@@ -7,9 +7,28 @@ This repository is to play with kotlin programming language and related framewor
 
 ## Required Softwares, Tools and Version
 * Java JDK Version: 11 Adopt OpenJDK (`java -version`)
+* Docker Version: Docker version 18.09.2, build 6247962 (`docker --version`)
+* Docker Compose Version: docker-compose version 1.23.2, build 1110ad01 (`docker-compose --version`)
+
 * Git Client: Any latest version (`git --version`)
 * Integrated Development Environment: Any version of IntelliJ Idea or Eclipse
 
+## Docker dependencies
+Docker dependencies needs to be started using docker-compose before the build
+
+#### Pull the latest images of docker services
+
+    docker-compose -f docker_local/docker-compose.yml pull
+    
+#### Start docker services
+
+    docker-compose -f docker_local/docker-compose.yml up --build -d
+    
+#### Stop docker services
+
+    docker-compose -f docker_local/docker-compose.yml down -v
+  
+  
 ## To build
 
     ./gradlew clean build

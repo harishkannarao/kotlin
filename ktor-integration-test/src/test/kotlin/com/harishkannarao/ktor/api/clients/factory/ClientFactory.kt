@@ -65,6 +65,10 @@ class ClientFactory(private val baseUrl: String) {
         return WebjarClient(createRequestSpec())
     }
 
+    fun jdbiSimpleEntityClient(): JdbiSimpleEntityApiClient {
+        return JdbiSimpleEntityApiClient(createRequestSpec())
+    }
+
     private fun createRequestSpec(): RequestSpecification {
         return RequestSpecBuilder()
                 .addFilter(RequestLoggingFilter(LogDetail.ALL))

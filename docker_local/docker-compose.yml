@@ -1,0 +1,29 @@
+version: '2'
+networks:
+  main:
+
+services:
+  flyway:
+    image: boxfuse/flyway:latest-alpine
+    command: -url=jdbc:postgresql://ktor-jdbi-postgres:5432/myuser -user=myuser -password=superpassword -connectRetries=60 migrate
+    volumes:
+      - ../flyway/sql:/flyway/sql
+    depends_on:
+      - ktor-jdbi-postgres
+    networks:
+      main:
+        aliases:
+          - flyway
+
+  ktor-jdbi-postgres:
+    container_name: ktor-jdbi-postgres
+    image: "postgres:11-alpine"
+    ports:
+      - "25432:5432"
+    environment:
+      - "POSTGRES_USER=myuser"
+      - "POSTGRES_PASSWORD=superpassword"
+    networks:
+      main:
+        aliases:
+          - ktor-jdbi-postgres
