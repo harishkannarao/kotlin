@@ -2,12 +2,13 @@ package com.harishkannarao.ktor.jdbi
 
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dao.mapper.SimpleEntityRowMapper
-import com.zaxxer.hikari.HikariDataSource
 import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.postgres.PostgresPlugin
 import org.jdbi.v3.sqlobject.SqlObjectPlugin
+import org.jdbi.v3.sqlobject.kotlin.KotlinSqlObjectPlugin
 
 object JdbiFactory {
 
@@ -28,6 +29,7 @@ object JdbiFactory {
         val jdbi = Jdbi.create(dataSource)
         jdbi.installPlugin(SqlObjectPlugin())
         jdbi.installPlugin(KotlinPlugin())
+        jdbi.installPlugin(KotlinSqlObjectPlugin())
         jdbi.installPlugin(PostgresPlugin())
 
         jdbi.registerRowMapper(SimpleEntityRowMapper())

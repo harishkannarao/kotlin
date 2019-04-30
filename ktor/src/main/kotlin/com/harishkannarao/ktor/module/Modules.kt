@@ -1,6 +1,9 @@
 package com.harishkannarao.ktor.module
 
 import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.harishkannarao.ktor.api.session.CookieSession
 import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
@@ -35,6 +38,10 @@ import io.ktor.webjars.Webjars
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import java.util.*
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
+import com.harishkannarao.ktor.dao.DbEntityConflictException
+import com.harishkannarao.ktor.dao.DbEntityNotFoundException
+
 
 class Modules(
         private val config: KtorApplicationConfig,
@@ -47,6 +54,10 @@ class Modules(
     val myModule: Application.() -> Unit = {
         install(ContentNegotiation) {
             jackson {
+                this.registerModule(ParameterNamesModule())
+                this.registerModule(Jdk8Module())
+                this.registerModule(JavaTimeModule())
+                this.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             }
         }
         install(Webjars)
@@ -88,12 +99,23 @@ class Modules(
         }
         install(StatusPages) {
             exception<Throwable> { error ->
-                if (error is JsonProcessingException) {
-                    logger.warn(call.request.uri, error)
-                    call.respond(HttpStatusCode.BadRequest)
-                } else {
-                    logger.error(call.request.uri, error)
-                    call.respond(HttpStatusCode.InternalServerError)
+                when (error) {
+                    is JsonProcessingException -> {
+                        logger.warn(call.request.uri, error)
+                        call.respond(HttpStatusCode.BadRequest)
+                    }
+                    is DbEntityConflictException -> {
+                        logger.warn(call.request.uri, error)
+                        call.respond(HttpStatusCode.Conflict)
+                    }
+                    is DbEntityNotFoundException -> {
+                        logger.warn(call.request.uri, error)
+                        call.respond(HttpStatusCode.NotFound)
+                    }
+                    else -> {
+                        logger.error(call.request.uri, error)
+                        call.respond(HttpStatusCode.InternalServerError)
+                    }
                 }
             }
         }

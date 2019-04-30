@@ -5,6 +5,7 @@ import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.client.customer.CustomerDto
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import com.harishkannarao.ktor.dao.entity.RelationalEntity
 import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.intercept.Interceptor
 import com.harishkannarao.ktor.module.Modules
@@ -22,15 +23,8 @@ import io.ktor.request.contentType
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
-import io.ktor.sessions.clear
-import io.ktor.sessions.get
-import io.ktor.sessions.getOrSet
-import io.ktor.sessions.sessions
-import io.ktor.sessions.set
+import io.ktor.routing.*
+import io.ktor.sessions.*
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 import java.nio.charset.StandardCharsets
@@ -182,6 +176,36 @@ class Routes(
                     route("get-all") {
                         get {
                             call.respond(dependencies.entityApi.getAll())
+                        }
+                    }
+                }
+
+                route("relational-entity") {
+                    get {
+                        val from = call.request.queryParameters["from"]!!
+                        val to = call.request.queryParameters["to"]!!
+                        call.respond(dependencies.relationEntityApi.getAllEntities(from, to))
+                    }
+                    post {
+                        val input = call.receive<RelationalEntity.Data>()
+                        val createdEntity = dependencies.relationEntityApi.createEntity(input)
+                        call.respond(HttpStatusCode.Created, createdEntity)
+                    }
+                    route("{id}") {
+                        get {
+                            val id = call.parameters["id"]!!
+                            call.respond(dependencies.relationEntityApi.readEntity(id))
+                        }
+                        put {
+                            val id = call.parameters["id"]!!
+                            val input = call.receive<RelationalEntity.Data>()
+                            dependencies.relationEntityApi.updateEntity(id, input)
+                            call.respond(HttpStatusCode.NoContent, Unit)
+                        }
+                        delete {
+                            val id = call.parameters["id"]!!
+                            dependencies.relationEntityApi.deleteEntity(id)
+                            call.respond(HttpStatusCode.NoContent, Unit)
                         }
                     }
                 }

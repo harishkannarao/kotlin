@@ -4,6 +4,7 @@ import io.restassured.RestAssured
 import io.restassured.config.RedirectConfig
 import io.restassured.config.RestAssuredConfig
 import io.restassured.http.ContentType
+import io.restassured.http.Method
 import io.restassured.response.Response
 import io.restassured.specification.RequestSpecification
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,37 +18,31 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     private var followRedirect: Boolean = true
 
     protected fun doGet(): T {
-        requestSpecification.config(createRestAssuredConfig())
-        response = RestAssured.given()
-                .spec(requestSpecification)
-                .`when`()
-                .get()
-                .then()
-                .extract()
-                .response()
-
-        return this as T
+        return request(Method.GET)
     }
 
     protected fun doHead(): T {
-        requestSpecification.config(createRestAssuredConfig())
-        response = RestAssured.given()
-                .spec(requestSpecification)
-                .`when`()
-                .head()
-                .then()
-                .extract()
-                .response()
-
-        return this as T
+        return request(Method.HEAD)
     }
 
     protected fun doPost(): T {
+        return request(Method.POST)
+    }
+
+    protected fun doPut(): T {
+        return request(Method.PUT)
+    }
+
+    protected fun doDelete(): T {
+        return request(Method.DELETE)
+    }
+
+    private fun request(method: Method): T {
         requestSpecification.config(createRestAssuredConfig())
         response = RestAssured.given()
                 .spec(requestSpecification)
                 .`when`()
-                .post()
+                .request(method)
                 .then()
                 .extract()
                 .response()
@@ -109,8 +104,16 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return expectStatusCodeToBe(200)
     }
 
+    fun expectCreatedStatus(): T {
+        return expectStatusCodeToBe(201)
+    }
+
     fun expectNoContentStatus(): T {
         return expectStatusCodeToBe(204)
+    }
+
+    fun expectConflictStatus(): T {
+        return expectStatusCodeToBe(409)
     }
 
     fun expectBadRequestStatus(): T {
