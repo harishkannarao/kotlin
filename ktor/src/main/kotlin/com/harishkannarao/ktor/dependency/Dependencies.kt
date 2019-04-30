@@ -1,6 +1,5 @@
 package com.harishkannarao.ktor.dependency
 
-import com.harishkannarao.ktor.api.entity.EntityApi
 import com.harishkannarao.ktor.api.entity.RelationalEntityApi
 import com.harishkannarao.ktor.api.snippets.SnippetsApi
 import com.harishkannarao.ktor.client.customer.CustomerApi
@@ -8,7 +7,6 @@ import com.harishkannarao.ktor.client.customer.CustomerClient
 import com.harishkannarao.ktor.client.json.ClientJsonUtil
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dao.RelationalEntityDao
-import com.harishkannarao.ktor.dao.SimpleEntityDao
 import com.harishkannarao.ktor.intercept.Interceptor
 import com.harishkannarao.ktor.jdbi.JdbiFactory
 import com.harishkannarao.ktor.web.user.UserWeb
@@ -43,8 +41,6 @@ class Dependencies(
     val customerApi = CustomerApi(customerClient)
     val snippetsApi: SnippetsApi = overriddenDependencies.overriddenSnippetsApi ?: SnippetsApi(config)
     val userWeb: UserWeb = UserWeb()
-    private val simpleEntityDao = SimpleEntityDao(jdbi)
     private val relationalEntityDao = RelationalEntityDao(jdbi)
-    val entityApi = EntityApi(simpleEntityDao)
     val relationEntityApi = RelationalEntityApi(relationalEntityDao)
 }

@@ -172,14 +172,6 @@ class Routes(
             }
 
             route("jdbi") {
-                route("simple-entity") {
-                    route("get-all") {
-                        get {
-                            call.respond(dependencies.entityApi.getAll())
-                        }
-                    }
-                }
-
                 route("relational-entity") {
                     get {
                         val from = call.request.queryParameters["from"]!!

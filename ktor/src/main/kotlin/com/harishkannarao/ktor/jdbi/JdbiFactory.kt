@@ -1,7 +1,6 @@
 package com.harishkannarao.ktor.jdbi
 
 import com.harishkannarao.ktor.config.KtorApplicationConfig
-import com.harishkannarao.ktor.dao.mapper.SimpleEntityRowMapper
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jdbi.v3.core.Jdbi
@@ -31,8 +30,6 @@ object JdbiFactory {
         jdbi.installPlugin(KotlinPlugin())
         jdbi.installPlugin(KotlinSqlObjectPlugin())
         jdbi.installPlugin(PostgresPlugin())
-
-        jdbi.registerRowMapper(SimpleEntityRowMapper())
 
         return jdbi
     }
