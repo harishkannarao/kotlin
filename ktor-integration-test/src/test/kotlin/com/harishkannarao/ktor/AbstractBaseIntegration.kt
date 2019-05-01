@@ -7,6 +7,7 @@ import com.harishkannarao.ktor.api.clients.factory.ClientFactory
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.module.Modules
+import com.harishkannarao.ktor.route.LocationRoutes
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import com.harishkannarao.ktor.server.KtorApplicationServer
@@ -89,7 +90,8 @@ abstract class AbstractBaseIntegration {
             val dependencies = Dependencies(config = config)
             val routes = Routes(dependencies, config)
             val staticRoutes = StaticRoutes()
-            val modules = Modules(config, routes, staticRoutes)
+            val locationRoutes = LocationRoutes(dependencies)
+            val modules = Modules(config, routes, staticRoutes, locationRoutes)
             val localServer = KtorApplicationServer(config, modules, dependencies)
             localServer.start(wait = false)
             return localServer

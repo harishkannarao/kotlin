@@ -41,12 +41,15 @@ import java.util.*
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
 import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
+import com.harishkannarao.ktor.route.LocationRoutes
+import io.ktor.locations.Locations
 
 
 class Modules(
         private val config: KtorApplicationConfig,
         private val routes: Routes,
-        private val staticRoutes: StaticRoutes
+        private val staticRoutes: StaticRoutes,
+        private val locationRoutes: LocationRoutes
 ) {
 
     private val logger = LoggerFactory.getLogger(Modules::class.java)
@@ -131,9 +134,11 @@ class Modules(
                 }
             }
         }
+        install(Locations)
         install(Routing) {
             routes.rootPath(this)
             staticRoutes.staticPath(this)
+            locationRoutes.locations(this)
         }
     }
 

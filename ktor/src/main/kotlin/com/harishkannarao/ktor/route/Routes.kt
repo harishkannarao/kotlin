@@ -170,38 +170,6 @@ class Routes(
                     call.respond(dependencies.userWeb.displayUser())
                 }
             }
-
-            route("jdbi") {
-                route("relational-entity") {
-                    get {
-                        val from = call.request.queryParameters["from"]!!
-                        val to = call.request.queryParameters["to"]!!
-                        call.respond(dependencies.relationEntityApi.getAllEntities(from, to))
-                    }
-                    post {
-                        val input = call.receive<RelationalEntity.Data>()
-                        val createdEntity = dependencies.relationEntityApi.createEntity(input)
-                        call.respond(HttpStatusCode.Created, createdEntity)
-                    }
-                    route("{id}") {
-                        get {
-                            val id = call.parameters["id"]!!
-                            call.respond(dependencies.relationEntityApi.readEntity(id))
-                        }
-                        put {
-                            val id = call.parameters["id"]!!
-                            val input = call.receive<RelationalEntity.Data>()
-                            dependencies.relationEntityApi.updateEntity(id, input)
-                            call.respond(HttpStatusCode.NoContent, Unit)
-                        }
-                        delete {
-                            val id = call.parameters["id"]!!
-                            dependencies.relationEntityApi.deleteEntity(id)
-                            call.respond(HttpStatusCode.NoContent, Unit)
-                        }
-                    }
-                }
-            }
         }
     }
 }
