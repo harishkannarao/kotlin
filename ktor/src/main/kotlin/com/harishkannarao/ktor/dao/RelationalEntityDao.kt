@@ -1,11 +1,13 @@
 package com.harishkannarao.ktor.dao
 
 import com.harishkannarao.ktor.dao.entity.RelationalEntity
+import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
+import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
+import com.harishkannarao.ktor.util.DateTimeUtil.toUtcZoneOffset
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.statement.StatementContext
 import java.sql.ResultSet
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
 import java.util.*
 
 class RelationalEntityDao(
@@ -69,7 +71,7 @@ class RelationalEntityDao(
         return mapOf(
                 COLUMN_ID to entity.id,
                 COLUMN_USERNAME to entity.data.username,
-                COLUMN_DATE_FIELD to entity.data.dateField.withOffsetSameInstant(ZoneOffset.UTC),
+                COLUMN_DATE_FIELD to toUtcZoneOffset(entity.data.dateField),
                 COLUMN_LONG_FIELD to entity.data.longField,
                 COLUMN_INT_FIELD to entity.data.intField,
                 COLUMN_DOUBLE_FIELD to entity.data.doubleField,
@@ -81,7 +83,7 @@ class RelationalEntityDao(
     private fun fromResultSet(rs: ResultSet): RelationalEntity {
         val id = UUID.fromString(rs.getString(COLUMN_ID))
         val username = rs.getString(COLUMN_USERNAME)
-        val dateField = rs.getObject(COLUMN_DATE_FIELD, OffsetDateTime::class.java).withOffsetSameInstant(ZoneOffset.UTC)
+        val dateField = toUtcZoneOffset(rs.getObject(COLUMN_DATE_FIELD, OffsetDateTime::class.java))
         val longField = rs.getLong(COLUMN_LONG_FIELD)
         val intField = rs.getInt(COLUMN_INT_FIELD)
         val doubleField = rs.getDouble(COLUMN_DOUBLE_FIELD)

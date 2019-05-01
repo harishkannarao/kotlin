@@ -2,11 +2,11 @@ package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.api.clients.JdbiRelationalEntityApiClient
+import com.harishkannarao.ktor.util.TestDataUtil.currentUtcOffsetDateTime
+import com.harishkannarao.ktor.util.TestDataUtil.randomString
 import org.testng.annotations.Test
 import java.math.BigDecimal
 import java.time.OffsetDateTime
-import java.time.ZoneOffset
-import java.util.*
 
 
 class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
@@ -14,8 +14,8 @@ class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
     @Test
     fun `can perform CRUD operations`() {
         val initialData = JdbiRelationalEntityApiClient.Entity.Data(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC),
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime(),
                 longField = 12345L,
                 intField = 789,
                 booleanField = true,
@@ -53,8 +53,8 @@ class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
     @Test
     fun `post returns 409 for conflict on create`() {
         val initialData = JdbiRelationalEntityApiClient.Entity.Data(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC),
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime(),
                 longField = 12345L,
                 intField = 789,
                 booleanField = true,
@@ -74,8 +74,8 @@ class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
     @Test
     fun `put returns 404 for id and username mismatch on update`() {
         val firstData = JdbiRelationalEntityApiClient.Entity.Data(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC),
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime(),
                 longField = 12345L,
                 intField = 789,
                 booleanField = true,
@@ -84,8 +84,8 @@ class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
         )
 
         val secondData = JdbiRelationalEntityApiClient.Entity.Data(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC),
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime(),
                 longField = 12345L,
                 intField = 789,
                 booleanField = true,
@@ -115,8 +115,8 @@ class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
     @Test
     fun `can perform search operation`() {
         val first = JdbiRelationalEntityApiClient.Entity.Data(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().minusDays(2).withOffsetSameInstant(ZoneOffset.UTC),
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime().minusDays(2),
                 longField = 12345L,
                 intField = 789,
                 booleanField = true,
@@ -125,18 +125,18 @@ class JdbiRelationalEntityIntegrationTest : AbstractBaseApiIntegration() {
         )
 
         val second = first.copy(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().minusDays(1).withOffsetSameInstant(ZoneOffset.UTC)
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime().minusDays(1)
         )
 
         val third = first.copy(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC)
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime()
         )
 
         val fourth = first.copy(
-                username = "testUser-${UUID.randomUUID()}",
-                dateField = OffsetDateTime.now().plusDays(1).withOffsetSameInstant(ZoneOffset.UTC)
+                username = "testUser-${randomString()}",
+                dateField = currentUtcOffsetDateTime().plusDays(1)
         )
 
         clients.jdbiRelationalEntityClient()

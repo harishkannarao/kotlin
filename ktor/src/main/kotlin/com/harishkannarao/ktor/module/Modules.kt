@@ -39,8 +39,8 @@ import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import java.util.*
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
-import com.harishkannarao.ktor.dao.DbEntityConflictException
-import com.harishkannarao.ktor.dao.DbEntityNotFoundException
+import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
+import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
 
 
 class Modules(
