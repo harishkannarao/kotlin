@@ -20,7 +20,7 @@ class LocationRoutes(
                     get<SearchRelationalEntity> { searchRelationalEntity ->
                         call.respond(dependencies.relationEntityApi.getAllEntities(searchRelationalEntity.from, searchRelationalEntity.to))
                     }
-                    post<CreateRelationalEntity> {
+                    post<Unit> {
                         val input = call.receive<RelationalEntity.Data>()
                         val createdEntity = dependencies.relationEntityApi.createEntity(input)
                         call.respond(HttpStatusCode.Created, createdEntity)
@@ -42,7 +42,6 @@ class LocationRoutes(
         }
     }
 
-    @Location("") data class CreateRelationalEntity(val placeholder: String = "")
     @Location("") data class SearchRelationalEntity(val from: String, val to: String)
     @Location("{id}") data class RelationalEntityWithId(val id: String)
 }
