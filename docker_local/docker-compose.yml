@@ -4,6 +4,7 @@ networks:
 
 services:
   flyway:
+    container_name: ktor-flyway-db-schema
     image: boxfuse/flyway:latest-alpine
     command: -url=jdbc:postgresql://ktor-jdbi-postgres:5432/myuser -user=myuser -password=superpassword -connectRetries=60 migrate
     volumes:

@@ -18,24 +18,24 @@ Docker dependencies needs to be started using docker-compose before the build
 
 #### Pull the latest images of docker services
 
-    docker-compose -f docker_local/docker-compose.yml pull
+    ./gradlew pullDocker
     
 #### Start docker services
 
-    docker-compose -f docker_local/docker-compose.yml up --build -d
+    ./gradlew startDocker
     
 #### Stop docker services
 
-    docker-compose -f docker_local/docker-compose.yml down -v
+    ./gradlew stopDocker
   
   
 ## To build
 
-    ./gradlew clean build
+    ./gradlew stopDocker pullDocker clean startDocker build
     
 To print the http request and response during integration test execution
 
-    ./gradlew clean build --info
+    ./gradlew stopDocker pullDocker clean startDocker build --info
     
 
 ## To run ktor application
