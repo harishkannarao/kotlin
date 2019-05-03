@@ -12,11 +12,11 @@ services:
 before_script:
   - docker --version
   - docker-compose --version
-  - docker-compose -f docker_local/docker-compose.yml -p kotlin pull
-  - docker-compose -f docker_local/docker-compose.yml -p kotlin up --build -d
+  - docker-compose -f docker_local/docker-compose.yml -p kotlin_project pull
+  - docker-compose -f docker_local/docker-compose.yml -p kotlin_project up --build -d
 
 script:
   - ./gradlew clean build
 
 after_script:
-  - docker-compose -f docker_local/docker-compose.yml -p kotlin down -v
+  - docker-compose -f docker_local/docker-compose.yml -p kotlin_project down -v

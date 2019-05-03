@@ -13,18 +13,18 @@ plugins {
 
 task pullDocker(type: Exec) {
     ignoreExitValue=false
-    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin', 'pull'
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'pull'
 }
 
 task startDocker(type: Exec) {
     ignoreExitValue=false
-    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin', 'up', '--build', '-d'
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'up', '--build', '-d'
     mustRunAfter tasks.pullDocker
 }
 
 task stopDocker(type: Exec) {
     ignoreExitValue=false
-    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin', 'down', '-v'
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'down', '-v'
 }
 
 allprojects {
