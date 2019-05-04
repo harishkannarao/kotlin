@@ -3,7 +3,7 @@ plugins {
 }
 
 application {
-    mainClassName = 'com.harishkannarao.ktor.db.test.data.DbTestDataRunner'
+    mainClassName = "com.harishkannarao.ktor.db.test.data.DbTestDataRunner"
 }
 
 run {

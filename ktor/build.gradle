@@ -3,7 +3,9 @@ plugins {
     id "com.github.johnrengelman.shadow"
 }
 
-mainClassName = "com.harishkannarao.ktor.KtorApplication"
+application {
+    mainClassName = "com.harishkannarao.ktor.KtorApplication"
+}
 
 run {
     systemProperties = System.properties.stringPropertyNames().collectEntries {
