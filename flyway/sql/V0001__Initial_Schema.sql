@@ -1,6 +1,6 @@
 CREATE TABLE sample_table (
     id UUID PRIMARY KEY,
-    username TEXT UNIQUE NOT NULL,
+    username TEXT NOT NULL,
     date_field timestamptz,
     long_field BIGINT,
     int_field INTEGER,
@@ -8,3 +8,7 @@ CREATE TABLE sample_table (
     boolean_field BOOLEAN,
     decimal_field numeric
 );
+
+CREATE UNIQUE INDEX unique_index_username ON sample_table (username);
+
+CREATE INDEX index_date_field ON sample_table (date_field);
