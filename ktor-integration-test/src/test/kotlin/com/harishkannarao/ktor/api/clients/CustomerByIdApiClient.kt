@@ -23,7 +23,7 @@ class CustomerByIdApiClient(requestSpecification: RequestSpecification): ApiClie
         return doGet()
     }
 
-    fun extractResponseEntity(): CustomerVerifier {
+    fun extractCustomerVerifier(): CustomerVerifier {
         val customer = RestAssuredJson.objectMapper.readValue<Customer>(response().asString())
         return CustomerVerifier(customer)
     }

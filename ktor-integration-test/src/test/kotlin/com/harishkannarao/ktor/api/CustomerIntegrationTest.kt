@@ -42,7 +42,7 @@ class CustomerIntegrationTest : AbstractBaseApiIntegration() {
                 .withRequest(request)
                 .get()
                 .expectSuccessStatus()
-                .extractResponseEntity()
+                .extractCustomerVerifier()
                 .expectEntity(expectedCustomer)
     }
 
@@ -120,7 +120,7 @@ class CustomerIntegrationTest : AbstractBaseApiIntegration() {
                 .withRequest(request)
                 .get()
                 .expectSuccessStatus()
-                .extractResponseEntity()
+                .extractCustomerVerifier()
                 .expectEntity(expectedCustomer)
 
         val expectedApplicationLogMessage = "[200] [GET] [/get-single-customer?customerId=$id]"
@@ -142,7 +142,7 @@ class CustomerIntegrationTest : AbstractBaseApiIntegration() {
                 .withRequest(request)
                 .get()
                 .expectSuccessStatus()
-                .extractResponseEntity()
+                .extractCustomerVerifier()
                 .expectEntity(expectedCustomer)
 
         val expectedApplicationLogMessage = "[500] [GET] [/get-single-customer?customerId=$id]"
