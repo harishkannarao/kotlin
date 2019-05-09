@@ -37,10 +37,13 @@ class JsonEntityMapperTest {
         assertThat(result.timeStampInEpochMillis, equalTo(input.data.timeStampInEpochMillis))
         assertThat(result.tags, containsInAnyOrder(*input.data.tags.toTypedArray()))
         assertThat(result.nestedData.size, equalTo(input.data.nestedData.size))
-        input.data.nestedData.forEach { inputNestedData ->
-            val found = result.nestedData.find { it.stringField == inputNestedData.stringField }
-            assertThat(found, notNullValue())
-            assertThat(found!!.tags, containsInAnyOrder(*inputNestedData.tags.toTypedArray()))
+
+        val resultNestedData = result.nestedData.associateBy { it.stringField }
+        val inputNestedData = input.data.nestedData.associateBy { it.stringField }
+
+        assertThat(resultNestedData.keys, containsInAnyOrder(*inputNestedData.keys.toTypedArray()))
+        inputNestedData.forEach { (key, value) ->
+            assertThat(resultNestedData.getValue(key).tags, containsInAnyOrder(*value.tags.toTypedArray()))
         }
     }
 
@@ -67,11 +70,13 @@ class JsonEntityMapperTest {
         assertThat(result.data.intField, equalTo(input.intField))
         assertThat(result.data.timeStampInEpochMillis, equalTo(input.timeStampInEpochMillis))
         assertThat(result.data.tags, containsInAnyOrder(*input.tags.toTypedArray()))
-        assertThat(result.data.nestedData.size, equalTo(input.nestedData.size))
-        input.nestedData.forEach { inputNestedData ->
-            val found = result.data.nestedData.find { it.stringField == inputNestedData.stringField }
-            assertThat(found, notNullValue())
-            assertThat(found!!.tags, containsInAnyOrder(*inputNestedData.tags.toTypedArray()))
+
+        val resultNestedData = result.data.nestedData.associateBy { it.stringField }
+        val inputNestedData = input.nestedData.associateBy { it.stringField }
+
+        assertThat(resultNestedData.keys, containsInAnyOrder(*inputNestedData.keys.toTypedArray()))
+        inputNestedData.forEach { (key, value) ->
+            assertThat(resultNestedData.getValue(key).tags, containsInAnyOrder(*value.tags.toTypedArray()))
         }
     }
 }
