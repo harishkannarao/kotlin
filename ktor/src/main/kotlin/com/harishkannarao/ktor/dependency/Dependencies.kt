@@ -1,11 +1,14 @@
 package com.harishkannarao.ktor.dependency
 
+import com.harishkannarao.ktor.api.entity.JsonEntityApi
+import com.harishkannarao.ktor.api.entity.JsonEntityMapper
 import com.harishkannarao.ktor.api.entity.RelationalEntityApi
 import com.harishkannarao.ktor.api.snippets.SnippetsApi
 import com.harishkannarao.ktor.client.customer.CustomerApi
 import com.harishkannarao.ktor.client.customer.CustomerClient
 import com.harishkannarao.ktor.client.json.ClientJsonUtil
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import com.harishkannarao.ktor.dao.JsonEntityDao
 import com.harishkannarao.ktor.dao.RelationalEntityDao
 import com.harishkannarao.ktor.dao.json.DbJsonUtil
 import com.harishkannarao.ktor.http.HttpClientFactory
@@ -28,6 +31,7 @@ class Dependencies(
     private val jdbi = JdbiFactory.createJdbi(dataSource)
     private val dbJsonUtil = DbJsonUtil()
     private val relationalEntityDao = RelationalEntityDao(jdbi)
+    private val jsonEntityDao = JsonEntityDao(jdbi, dbJsonUtil)
 
     // interceptors
     val interceptor = Interceptor()
@@ -36,6 +40,8 @@ class Dependencies(
     val customerApi = CustomerApi(customerClient)
     val snippetsApi: SnippetsApi = overriddenDependencies.overriddenSnippetsApi ?: SnippetsApi(config)
     val relationEntityApi = RelationalEntityApi(relationalEntityDao)
+    private val jsonEntityMapper = JsonEntityMapper()
+    val jsonEntityApi = JsonEntityApi(jsonEntityDao, jsonEntityMapper)
 
     // http web
     val userWeb: UserWeb = UserWeb()
