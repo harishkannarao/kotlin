@@ -215,4 +215,257 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
                 .expectSuccessStatus()
                 .expectEntities(expectedEntities)
     }
+
+    @Test
+    fun `can perform search operation by date`() {
+        val first = JdbiJsonEntityApiClient.Entity.Data(
+                username = "testUser-${randomString()}",
+                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
+                intField = 789,
+                booleanField = true,
+                decimalField = "2.5999".toBigDecimal(),
+                date = LocalDate.now().minusDays(2),
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val second = first.copy(
+                username = "testUser-${randomString()}",
+                date = LocalDate.now().minusDays(1)
+        )
+
+        val third = first.copy(
+                username = "testUser-${randomString()}",
+                date = LocalDate.now()
+        )
+
+        val fourth = first.copy(
+                username = "testUser-${randomString()}",
+                date = LocalDate.now().plusDays(1)
+        )
+
+        clients.jdbiJsonEntityClient()
+                .searchByDate(
+                        second.date,
+                        third.date
+                )
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+                            .expectNoContentStatus()
+                }
+
+        clients.jdbiJsonEntityClient()
+                .post(first)
+                .expectCreatedStatus()
+
+        val secondId = clients.jdbiJsonEntityClient()
+                .post(second)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val thirdId = clients.jdbiJsonEntityClient()
+                .post(third)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        clients.jdbiJsonEntityClient()
+                .post(fourth)
+                .expectCreatedStatus()
+
+        val expectedEntities = listOf(
+                JdbiJsonEntityApiClient.Entity(secondId, second),
+                JdbiJsonEntityApiClient.Entity(thirdId, third)
+        )
+
+        clients.jdbiJsonEntityClient()
+                .searchByDate(
+                        second.date,
+                        third.date
+                )
+                .expectSuccessStatus()
+                .expectEntities(expectedEntities)
+    }
+
+    @Test
+    fun `can perform search operation by decimal`() {
+        val first = JdbiJsonEntityApiClient.Entity.Data(
+                username = "testUser-${randomString()}",
+                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
+                intField = 789,
+                booleanField = true,
+                decimalField = "0.5999".toBigDecimal(),
+                date = LocalDate.now(),
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val second = first.copy(
+                username = "testUser-${randomString()}",
+                decimalField = "1.5999".toBigDecimal()
+        )
+
+        val third = first.copy(
+                username = "testUser-${randomString()}",
+                decimalField = "2.5999".toBigDecimal()
+        )
+
+        val fourth = first.copy(
+                username = "testUser-${randomString()}",
+                decimalField = "3.5999".toBigDecimal()
+        )
+
+        clients.jdbiJsonEntityClient()
+                .searchByDecimal(
+                        second.decimalField,
+                        third.decimalField
+                )
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+                            .expectNoContentStatus()
+                }
+
+        clients.jdbiJsonEntityClient()
+                .post(first)
+                .expectCreatedStatus()
+
+        val secondId = clients.jdbiJsonEntityClient()
+                .post(second)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val thirdId = clients.jdbiJsonEntityClient()
+                .post(third)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        clients.jdbiJsonEntityClient()
+                .post(fourth)
+                .expectCreatedStatus()
+
+        val expectedEntities = listOf(
+                JdbiJsonEntityApiClient.Entity(secondId, second),
+                JdbiJsonEntityApiClient.Entity(thirdId, third)
+        )
+
+        clients.jdbiJsonEntityClient()
+                .searchByDecimal(
+                        second.decimalField,
+                        third.decimalField
+                )
+                .expectSuccessStatus()
+                .expectEntities(expectedEntities)
+    }
+
+
+    @Test
+    fun `can perform search operation by tags`() {
+        val first = JdbiJsonEntityApiClient.Entity.Data(
+                username = "testUser-${randomString()}",
+                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
+                intField = 789,
+                booleanField = true,
+                decimalField = "0.5999".toBigDecimal(),
+                date = LocalDate.now(),
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val second = first.copy(
+                username = "testUser-${randomString()}",
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val third = first.copy(
+                username = "testUser-${randomString()}",
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val fourth = first.copy(
+                username = "testUser-${randomString()}",
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val searchTags = listOf(second.tags.shuffled().first(), third.nestedData.shuffled().first().tags.shuffled().first())
+
+        clients.jdbiJsonEntityClient()
+                .searchByTags(
+                        searchTags
+                )
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+                            .expectNoContentStatus()
+                }
+
+        clients.jdbiJsonEntityClient()
+                .post(first)
+                .expectCreatedStatus()
+
+        val secondId = clients.jdbiJsonEntityClient()
+                .post(second)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val thirdId = clients.jdbiJsonEntityClient()
+                .post(third)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        clients.jdbiJsonEntityClient()
+                .post(fourth)
+                .expectCreatedStatus()
+
+        val expectedEntities = listOf(
+                JdbiJsonEntityApiClient.Entity(secondId, second),
+                JdbiJsonEntityApiClient.Entity(thirdId, third)
+        )
+
+        clients.jdbiJsonEntityClient()
+                .searchByTags(
+                        searchTags
+                )
+                .expectSuccessStatus()
+                .expectEntities(expectedEntities)
+    }
 }
