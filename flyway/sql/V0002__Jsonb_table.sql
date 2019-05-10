@@ -12,4 +12,4 @@ CREATE INDEX index_jsonb_date_field on jsonb_table using btree ((cast(jsonb_doc-
 
 CREATE INDEX index_jsonb_decimal_field on jsonb_table using btree ((cast(jsonb_doc->>'decimalField' as numeric)));
 
-create index index_jsonb_all_tags on jsonb_table using gin ((jsonb_doc->'index_field_all_tags'));
+create index index_jsonb_all_tags on jsonb_table using gin ((jsonb_doc->'metaData'->'allTags'));

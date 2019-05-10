@@ -372,7 +372,6 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
                 .expectEntities(expectedEntities)
     }
 
-
     @Test
     fun `can perform search operation by tags`() {
         val first = JdbiJsonEntityApiClient.Entity.Data(

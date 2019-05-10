@@ -13,27 +13,28 @@ data class JsonDbEntity(
         val booleanField: Boolean,
         val decimalField: BigDecimal,
         val tags: List<String> = emptyList(),
-        val nestedData: List<NestedData> = emptyList(),
-        @field:JsonProperty(value = "version", access = JsonProperty.Access.WRITE_ONLY) private val internalDbVersion: Int? = null,
-        @field:JsonProperty(value = "index_field_all_tags", access = JsonProperty.Access.WRITE_ONLY) private val internalAllTags: List<String> = emptyList()
+        val nestedData: List<NestedData> = emptyList()
 ) {
-    @JsonProperty(value = "version", access = JsonProperty.Access.READ_ONLY)
-    fun currentVersion(): Int {
-        return CURRENT_VERSION
-    }
 
-    @JsonProperty(value = "index_field_all_tags", access = JsonProperty.Access.READ_ONLY)
-    fun allTags(): List<String> {
-        return nestedData.flatMap { it.tags } + tags
-    }
-
-    companion object {
-        const val CURRENT_VERSION = 1
+    @JsonProperty(value = "metaData", access = JsonProperty.Access.READ_ONLY)
+    fun computeMetaData(): JsonDbEntityMetaData {
+        return JsonDbEntityMetaData(
+                allTags = nestedData.flatMap { it.tags } + tags
+        )
     }
 
     data class NestedData(
             val stringField: String,
             val tags: List<String> = emptyList()
     )
+
+    data class JsonDbEntityMetaData(
+            val version: Int = CURRENT_VERSION,
+            val allTags: List<String> = emptyList()
+    ) {
+        companion object {
+            const val CURRENT_VERSION = 1
+        }
+    }
 }
 
