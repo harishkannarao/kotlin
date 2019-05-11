@@ -9,6 +9,11 @@ jdk:
 services:
   - docker
 
+install:
+  - sudo apt-get -qq update
+  - sudo apt-get -qq install -y chromium-browser
+  - sudo apt-get -qq install -y chromium-chromedriver
+
 before_script:
   - docker --version
   - docker-compose --version
@@ -16,7 +21,7 @@ before_script:
   - docker-compose -f docker_local/docker-compose.yml -p kotlin_project up --build -d
 
 script:
-  - ./gradlew clean build
+  - ./gradlew clean build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
 
 after_script:
   - docker-compose -f docker_local/docker-compose.yml -p kotlin_project down -v

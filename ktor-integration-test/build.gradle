@@ -7,9 +7,9 @@ dependencies {
     testImplementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
     testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    testImplementation("net.sourceforge.htmlunit:htmlunit:$htmlUnitVersion")
     testImplementation("org.awaitility:awaitility-kotlin:$awaitilityVersion")
     testImplementation("com.github.tomakehurst:wiremock-standalone:$wiremockVersion")
+    testImplementation("org.seleniumhq.selenium:selenium-java:${seleniumVersion}")
 }
 
 task('nonAuthIntegrationTest', type:Test) {

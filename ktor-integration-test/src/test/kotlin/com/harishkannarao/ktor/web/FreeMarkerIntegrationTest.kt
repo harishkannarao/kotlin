@@ -7,11 +7,10 @@ class FreeMarkerIntegrationTest : AbstractBaseWebIntegration() {
 
     @Test
     fun `displays user details`() {
-        webClients.newWebClient().use { webClient ->
-            webClients.userWebClient(webClient)
-                    .get()
-                    .expectNameToBe("user name")
-                    .expectEmailToBe("user@example.com")
-        }
+        val webDriver = newWebDriver()
+        webPages.userWebPage(webDriver)
+                .get()
+                .expectNameToBe("user name")
+                .expectEmailToBe("user@example.com")
     }
 }

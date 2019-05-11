@@ -12,11 +12,11 @@ import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import com.harishkannarao.ktor.server.KtorApplicationServer
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
-import com.harishkannarao.ktor.web.clients.factory.WebClientFactory
+import com.harishkannarao.ktor.web.clients.factory.WebDriverFactory
+import com.harishkannarao.ktor.web.clients.factory.WebPageFactory
 import org.awaitility.kotlin.await
-import org.testng.annotations.AfterSuite
-import org.testng.annotations.BeforeMethod
-import org.testng.annotations.Test
+import org.openqa.selenium.WebDriver
+import org.testng.annotations.*
 import java.net.ConnectException
 import java.nio.channels.ClosedChannelException
 import java.util.concurrent.TimeUnit
@@ -42,10 +42,20 @@ abstract class AbstractBaseIntegration {
         }
     }
 
+    @BeforeSuite(alwaysRun = true)
+    fun globalSetup() {
+        WebDriverFactory.startChromeDriverService()
+    }
+
     @AfterSuite(alwaysRun = true)
     fun globalTearDown() {
         server.stop()
         wireMockServer.stop()
+        WebDriverFactory.stopChromeDriverService()
+    }
+
+    fun newWebDriver(): WebDriver {
+        return WebDriverFactory.newWebDriver()
     }
 
     protected fun restartServerWithConfig(config: KtorApplicationConfig) {
@@ -84,7 +94,7 @@ abstract class AbstractBaseIntegration {
         private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
         const val baseUrl = "http://localhost:8080"
         val clients: ClientFactory = ClientFactory(baseUrl)
-        val webClients: WebClientFactory = WebClientFactory(baseUrl)
+        val webPages = WebPageFactory(baseUrl)
 
         private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
             val dependencies = Dependencies(config = config)

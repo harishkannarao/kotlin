@@ -9,7 +9,8 @@ This repository is to play with kotlin programming language and related framewor
 * Java JDK Version: 11 Adopt OpenJDK (`java -version`)
 * Docker Version: Docker version 18.09.2, build 6247962 (`docker --version`)
 * Docker Compose Version: docker-compose version 1.23.2, build 1110ad01 (`docker-compose --version`)
-
+* Chrome (Windows & Mac OS) Browser / Chromium (Linux OS) Browser: 62
+* chromedriver: 2.32 [chromedriver installation steps](https://blogs.harishkannarao.com/2018/01/installing-chromedriver-for-selenium.html)
 * Git Client: Any latest version (`git --version`)
 * Integrated Development Environment: Any version of IntelliJ Idea or Eclipse
 
@@ -32,6 +33,10 @@ Docker dependencies needs to be started using docker-compose before the build
 ## To build
 
     ./gradlew stopDocker pullDocker clean startDocker build
+    
+To run web integration tests in head less mode
+
+    ./gradlew stopDocker pullDocker clean startDocker build -DchromeHeadless=true
     
 To print the http request and response during integration test execution
 
