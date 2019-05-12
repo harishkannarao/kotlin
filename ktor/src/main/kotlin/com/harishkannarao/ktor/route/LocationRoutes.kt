@@ -4,6 +4,7 @@ import com.harishkannarao.ktor.api.entity.JsonEntity
 import com.harishkannarao.ktor.dao.entity.RelationalEntity
 import com.harishkannarao.ktor.dependency.Dependencies
 import io.ktor.application.call
+import io.ktor.freemarker.FreeMarkerContent
 import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
 import io.ktor.request.receive
@@ -66,6 +67,13 @@ class LocationRoutes(
                 }
                 get<JsonEntitySearchByTags> { jsonEntitySearchByTags ->
                     call.respond(dependencies.jsonEntityApi.searchByTags(jsonEntitySearchByTags.tags))
+                }
+            }
+            route("react") {
+                route("like-button") {
+                    get<Unit> {
+                        call.respond(FreeMarkerContent("/react/like_button.ftl", null))
+                    }
                 }
             }
         }

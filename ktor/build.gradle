@@ -31,6 +31,8 @@ dependencies {
     implementation("io.ktor:ktor-freemarker:$ktorVersion")
     implementation("io.ktor:ktor-webjars:$ktorVersion")
     implementation("org.webjars:jquery:$jQueryVersion")
+    implementation("org.webjars.npm:react:$reactJsVersion")
+    implementation("org.webjars.npm:react-dom:$reactJsVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")

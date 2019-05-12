@@ -66,7 +66,8 @@ class Modules(
         install(Webjars)
         install(AutoHeadResponse)
         install(FreeMarker) {
-            templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
+            this.templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
+            this.setSharedVariable("reactJsVariant", config.reactJsVariant)
         }
         install(Sessions) {
             cookie<CookieSession>(

@@ -6,6 +6,6 @@ class UserWeb {
 
     fun displayUser(): FreeMarkerContent {
         val user = User("user name", "user@example.com")
-        return FreeMarkerContent("user.ftl", mapOf("user" to user))
+        return FreeMarkerContent("/user/user.ftl", mapOf("user" to user))
     }
 }

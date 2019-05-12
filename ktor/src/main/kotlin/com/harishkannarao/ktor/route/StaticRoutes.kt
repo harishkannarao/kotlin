@@ -17,6 +17,9 @@ class StaticRoutes {
                 resources("static/json")
                 defaultResource("static/json/defaultJson.json")
             }
+            static("js") {
+                resources("static/js")
+            }
         }
     }
 }

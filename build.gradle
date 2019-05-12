@@ -52,6 +52,7 @@ allprojects {
     configurations {
         implementation {
             exclude group: 'junit', module: 'junit'
+            exclude group: 'org.webjars.npm', module: 'loose-envify'
         }
         testImplementation {
             exclude group: 'junit', module: 'junit'
