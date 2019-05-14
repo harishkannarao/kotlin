@@ -32,6 +32,8 @@ Docker dependencies needs to be started using docker-compose before the build
   
 ## To build
 
+    ./minify-js-css.sh
+    
     ./gradlew stopDocker pullDocker clean startDocker build
     
 To run web integration tests in head less mode

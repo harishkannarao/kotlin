@@ -5,7 +5,7 @@
 <#include "/common/reactScripts.ftl">
 
 <!-- Load our React component. -->
-<script src="/static/js/react/like_button.js"></script>
+<script src="/static/js/react/like_button${javaScriptVariant}.js"></script>
 
 </body>
 </html>

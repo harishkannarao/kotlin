@@ -90,11 +90,18 @@ abstract class AbstractBaseIntegration {
         private val wireMockClient = WireMock(wireMockServer)
         val wireMockStub = WireMockStub(wireMockClient)
         private var runningWithDefaultConfig = true
-        val defaultConfig = KtorApplicationConfig()
+        val defaultConfig = createDefaultTestConfig()
         private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
         const val baseUrl = "http://localhost:8080"
         val clients: ClientFactory = ClientFactory(baseUrl)
         val webPages = WebPageFactory(baseUrl)
+
+        private fun createDefaultTestConfig(): KtorApplicationConfig {
+            return KtorApplicationConfig()
+                    .copy(
+                            useMinifiedJavaScript = System.getProperty("useMinifiedJavaScript", "false")!!.toBoolean()
+                    )
+        }
 
         private fun createAndStartServerWithConfig(config: KtorApplicationConfig): KtorApplicationServer {
             val dependencies = Dependencies(config = config)

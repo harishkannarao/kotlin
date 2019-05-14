@@ -22,6 +22,8 @@ before_script:
 
 script:
   - ./gradlew clean build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./minify-js-css.sh
+  - ./gradlew clean build -DuseMinifiedJavaScript=true -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
 
 after_script:
   - docker-compose -f docker_local/docker-compose.yml -p kotlin_project down -v

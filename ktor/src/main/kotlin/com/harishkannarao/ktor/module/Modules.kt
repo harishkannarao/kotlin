@@ -68,6 +68,11 @@ class Modules(
         install(FreeMarker) {
             this.templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
             this.setSharedVariable("reactJsVariant", config.reactJsVariant)
+            if (config.useMinifiedJavaScript) {
+                this.setSharedVariable("javaScriptVariant", ".min")
+            } else {
+                this.setSharedVariable("javaScriptVariant", "")
+            }
         }
         install(Sessions) {
             cookie<CookieSession>(

@@ -11,5 +11,6 @@ data class KtorApplicationConfig(
         val jdbcUrl: String = "jdbc:postgresql://localhost:25432/myuser",
         val jdbcUserName: String = "myuser",
         val jdbcPassword: String = "superpassword",
-        val reactJsVariant: String = ".production.min" // use '.development' for non prod
+        val reactJsVariant: String = ".production.min", // use '.development' for non prod,
+        val useMinifiedJavaScript: Boolean = false // use 'true' for prod
 )
