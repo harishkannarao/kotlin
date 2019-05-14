@@ -26,4 +26,4 @@ cp build/closure-compiler-$CLOSURE_COMPILER_VERSION/closure-compiler-v$CLOSURE_C
 
 find ktor/src -name '*.min.js' | xargs -n1 sh -c 'rm $1' sh
 
-find ktor/src -name '*.js' ! -name '*.min.js' -type f | sed -nE 's/.js$//p' | xargs -n1 sh -c 'java -version && java -jar build/closure-compiler.jar --js_output_file=$1.min.js $1.js' sh
+find ktor/src -name '*.js' ! -name '*.min.js' -type f | sed -nE 's/.js$//p' | xargs -n1 sh -c 'java -jar build/closure-compiler.jar --js_output_file=$1.min.js $1.js' sh
