@@ -1,5 +1,6 @@
 build/
 out/
+minifier_cache/
 .gradle
 .idea
 *.min.js
