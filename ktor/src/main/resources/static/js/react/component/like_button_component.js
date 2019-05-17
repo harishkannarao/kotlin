@@ -13,7 +13,7 @@ class LikeButton extends React.Component {
             return [
                 e('span', {
                     'className': className
-                }, 'You liked this.'),
+                }, this.props.postClickMessage),
                 ' Awesome !!!'
             ];
         }
@@ -25,7 +25,7 @@ class LikeButton extends React.Component {
                         liked: true
                     })
                 },
-                'Like'
+                this.props.preClickMessage
             )
         ];
     }

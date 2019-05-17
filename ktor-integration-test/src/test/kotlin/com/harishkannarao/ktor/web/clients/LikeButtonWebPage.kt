@@ -14,7 +14,7 @@ class LikeButtonWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<Lik
     fun expectLikeButton(): LikeButtonWebPage {
         val likeButton = getLikeButton()
         assertThat(likeButton.isDisplayed, equalTo(true))
-        assertThat(likeButton.text, equalTo("Like"))
+        assertThat(likeButton.text, equalTo("Click to 'Like'"))
         return this
     }
 
