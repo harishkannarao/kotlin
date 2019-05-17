@@ -20,6 +20,9 @@ class StaticRoutes {
             static("js") {
                 resources("static/js")
             }
+            static("css") {
+                resources("static/css")
+            }
         }
     }
 }

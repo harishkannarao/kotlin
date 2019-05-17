@@ -1,4 +1,8 @@
 <html>
+<head>
+    <#include "/common/cssStyles.ftl">
+    <title>React - Like button</title>
+</head>
 <body>
 <div id="like_button_container"></div>
 

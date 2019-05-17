@@ -4,3 +4,4 @@ minifier_cache/
 .gradle
 .idea
 *.min.js
+*.min.css
