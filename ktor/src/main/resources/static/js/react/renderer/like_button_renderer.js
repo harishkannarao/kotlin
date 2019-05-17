@@ -1,0 +1,1 @@
+ReactDOM.render(e(LikeButton, {}, []), document.querySelector('#like_button_container'));

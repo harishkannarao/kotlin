@@ -18,16 +18,15 @@ class LikeButton extends React.Component {
             ];
         }
 
-        return e(
-            'button', {
-                'className': "qa-like-button",
-                onClick: () => this.setState({
-                    liked: true
-                })
-            },
-            'Like'
-        );
+        return [
+            e('button', {
+                    'className': "qa-like-button",
+                    onClick: () => this.setState({
+                        liked: true
+                    })
+                },
+                'Like'
+            )
+        ];
     }
 }
-
-ReactDOM.render(e(LikeButton), document.querySelector('#like_button_container'));

@@ -11,7 +11,8 @@
     <#include "/common/reactScripts.ftl" />
 
     <!-- Load our React component. -->
-    <script src="/static/js/react/like_button${javaScriptVariant}.js"></script>
+    <script src="/static/js/react/component/like_button_component${javaScriptVariant}.js"></script>
+    <script src="/static/js/react/renderer/like_button_renderer${javaScriptVariant}.js"></script>
 
 </body>
 
