@@ -1,3 +1,7 @@
 body {
   background-color: lightblue;
 }
+
+.bold-message {
+  background-color: pink;
+}

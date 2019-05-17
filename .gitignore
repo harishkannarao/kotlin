@@ -1,7 +1,11 @@
 build/
 out/
+bin/
 minifier_cache/
 .gradle
 .idea
 *.min.js
 *.min.css
+.classpath
+.project
+.settings
