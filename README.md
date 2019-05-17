@@ -67,7 +67,11 @@ Change logback configuration
 
 Change logback configuration
 
-    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar    
+    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar   
+    
+## Formatting js, css, html and ftl files
+
+    ./gradlew formatFiles
     
 ## Test filtering
 

@@ -27,6 +27,12 @@ task stopDocker(type: Exec) {
     commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'down', '-v'
 }
 
+task formatFiles(type: Exec) {
+    ignoreExitValue=false
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-format-files.yml', '-p', 'format_files', 'up', '--build', '-d'
+    mustRunAfter tasks.pullDocker
+}
+
 allprojects {
     apply plugin: "java-library"
     apply plugin: "org.jetbrains.kotlin.jvm"
