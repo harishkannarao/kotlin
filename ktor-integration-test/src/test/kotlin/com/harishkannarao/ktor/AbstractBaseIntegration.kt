@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import com.harishkannarao.ktor.api.clients.factory.ClientFactory
+import com.harishkannarao.ktor.config.ConfigUtil
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.module.Modules
@@ -99,7 +100,7 @@ abstract class AbstractBaseIntegration {
         private fun createDefaultTestConfig(): KtorApplicationConfig {
             return KtorApplicationConfig()
                     .copy(
-                            useMinifiedJavaScript = System.getProperty("useMinifiedJavaScript", "false")!!.toBoolean()
+                            developmentMode = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE","app.development.mode", "true").toBoolean()
                     )
         }
 

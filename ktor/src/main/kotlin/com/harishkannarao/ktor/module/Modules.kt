@@ -67,11 +67,12 @@ class Modules(
         install(AutoHeadResponse)
         install(FreeMarker) {
             this.templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
-            this.setSharedVariable("reactJsVariant", config.reactJsVariant)
-            if (config.useMinifiedJavaScript) {
-                this.setSharedVariable("javaScriptVariant", ".min")
-            } else {
+            if (config.developmentMode) {
+                this.setSharedVariable("reactJsVariant", ".development")
                 this.setSharedVariable("javaScriptVariant", "")
+            } else {
+                this.setSharedVariable("reactJsVariant", ".production.min")
+                this.setSharedVariable("javaScriptVariant", ".min")
             }
         }
         install(Sessions) {

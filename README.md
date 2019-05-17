@@ -49,14 +49,16 @@ To print the http request and response during integration test execution
 
 #### Using gradle
 
-    ./gradlew --parallel --quiet :ktor:run :wiremock-runner:run
+    ./gradlew --parallel --quiet :ktor:run :wiremock-runner:run -Dapp.development.mode=true
     
 Change logback configuration
 
-    ./gradlew --parallel --quiet :ktor:run :wiremock-runner:run -Dlogback.configurationFile=logback-cloud.xml
+    ./gradlew --parallel --quiet :ktor:run :wiremock-runner:run -Dapp.development.mode=true -Dlogback.configurationFile=logback-cloud.xml
     
 #### Using Java
 
+    ./minify-js-css.sh
+    
     ./gradlew clean assemble
     
     java -jar wiremock-runner/build/libs/wiremock-runner-exec.jar

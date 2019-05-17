@@ -7,10 +7,9 @@ data class KtorApplicationConfig(
         val enableSnippetsApi: Boolean = true,
         val redirectToHttps: Boolean = false,
         val httpsPort: Int = 8443,
-        val thirdPartyCustomerServiceUrl: String = "http://localhost:8089",
-        val jdbcUrl: String = "jdbc:postgresql://localhost:25432/myuser",
-        val jdbcUserName: String = "myuser",
-        val jdbcPassword: String = "superpassword",
-        val reactJsVariant: String = ".production.min", // use '.development' for non prod,
-        val useMinifiedJavaScript: Boolean = false // use 'true' for prod
+        val thirdPartyCustomerServiceUrl: String = ConfigUtil.lookupValue("CUSTOMER_SERVICE_BASE_URL", "customer.service.base.url", "http://localhost:8089"),
+        val jdbcUrl: String = ConfigUtil.lookupValue("JDBC_URL","jdbc.url", "jdbc:postgresql://localhost:25432/myuser"),
+        val jdbcUserName: String = ConfigUtil.lookupValue("JDBC_USERNAME","jdbc.username", "myuser"),
+        val jdbcPassword: String = ConfigUtil.lookupValue("JDBC_PASSWORD","jdbc.password", "superpassword"),
+        val developmentMode: Boolean = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE","app.development.mode", "false").toBoolean()
 )
