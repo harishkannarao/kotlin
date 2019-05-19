@@ -76,6 +76,11 @@ class LocationRoutes(
                     }
                 }
             }
+            route("vue") {
+                get<VueTemplate> { vueTemplate ->
+                    call.respond(FreeMarkerContent("/vue/${vueTemplate.name}.ftl", null))
+                }
+            }
         }
     }
 
@@ -84,4 +89,5 @@ class LocationRoutes(
     @Location("{id}") data class JsonEntityWithId(val id: String)
     @Location("search-json-entity") data class JsonEntitySearch(val by: String, val from: String, val to: String)
     @Location("search-json-entity-by-tags") data class JsonEntitySearchByTags(val tags: String)
+    @Location("{name}") data class VueTemplate(val name: String)
 }

@@ -23,6 +23,9 @@ class StaticRoutes {
             static("css") {
                 resources("static/css")
             }
+            static("image") {
+                resources("static/image")
+            }
         }
     }
 }

@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import com.harishkannarao.ktor.api.session.CookieSession
 import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
+import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
+import com.harishkannarao.ktor.route.LocationRoutes
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import freemarker.cache.ClassTemplateLoader
@@ -16,15 +20,11 @@ import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.basic
-import io.ktor.features.AutoHeadResponse
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.HttpsRedirect
-import io.ktor.features.StatusPages
-import io.ktor.features.XForwardedHeaderSupport
+import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
+import io.ktor.locations.Locations
 import io.ktor.request.header
 import io.ktor.request.path
 import io.ktor.request.uri
@@ -38,11 +38,6 @@ import io.ktor.webjars.Webjars
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import java.util.*
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
-import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
-import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
-import com.harishkannarao.ktor.route.LocationRoutes
-import io.ktor.locations.Locations
 
 
 class Modules(
