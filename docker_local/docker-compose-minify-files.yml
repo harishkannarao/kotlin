@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  js-css-minifier:
+    container_name: js-css-minifier
+    image: adoptopenjdk/openjdk11:alpine
+    working_dir: /kotlin/
+    command: /bin/sh minify-js-css.sh
+    volumes:
+      - ..:/kotlin/

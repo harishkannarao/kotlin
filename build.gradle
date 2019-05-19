@@ -30,7 +30,11 @@ task stopDocker(type: Exec) {
 task formatFiles(type: Exec) {
     ignoreExitValue=false
     commandLine 'docker-compose', '-f', './docker_local/docker-compose-format-files.yml', '-p', 'format_files', 'up', '--build', '-d'
-    mustRunAfter tasks.pullDocker
+}
+
+task minifyFiles(type: Exec) {
+    ignoreExitValue=false
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-minify-files.yml', '-p', 'minify_files', 'up', '--build', '-d'
 }
 
 allprojects {

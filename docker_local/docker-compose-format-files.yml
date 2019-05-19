@@ -1,9 +1,10 @@
-version: '2'
+version: '3'
 
 services:
-  js-css-minifier:
+  format-files:
     container_name: format-files
     build: ./format-files
+    working_dir: /kotlin/
     command: /bin/sh format-files.sh
     volumes:
       - ..:/kotlin/

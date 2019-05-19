@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Make the script to abort if any command fails
 set -e

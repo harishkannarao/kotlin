@@ -32,9 +32,7 @@ Docker dependencies needs to be started using docker-compose before the build
   
 ## To build
 
-    ./minify-js-css.sh
-    
-    ./gradlew stopDocker pullDocker clean startDocker build
+    ./gradlew stopDocker pullDocker clean minifyFiles startDocker build
     
 To run web integration tests in head less mode
 
@@ -57,9 +55,7 @@ Change logback configuration
     
 #### Using Java
 
-    ./minify-js-css.sh
-    
-    ./gradlew clean assemble
+    ./gradlew clean minifyFiles assemble
     
     java -jar wiremock-runner/build/libs/wiremock-runner-exec.jar
     

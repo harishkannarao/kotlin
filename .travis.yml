@@ -17,13 +17,13 @@ install:
 before_script:
   - docker --version
   - docker-compose --version
-  - docker-compose -f docker_local/docker-compose.yml -p kotlin_project pull
-  - docker-compose -f docker_local/docker-compose.yml -p kotlin_project up --build -d
+  - ./gradlew pullDocker --info
+  - ./gradlew startDocker --info
 
 script:
-  - ./gradlew clean build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
-  - ./minify-js-css.sh
-  - ./gradlew clean build -Dapp.development.mode=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./gradlew clean minifyFiles assemble
+  - ./gradlew build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./gradlew build -Dapp.development.mode=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
 
 after_script:
-  - docker-compose -f docker_local/docker-compose.yml -p kotlin_project down -v
+  - ./gradlew stopDocker --info
