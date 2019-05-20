@@ -4,7 +4,7 @@ var app = new Vue({
         'loading': true,
         'message': 'Hello Vue!'
     },
-    mounted: function () {
+    mounted: function() {
         this.loading = false
     }
 });
