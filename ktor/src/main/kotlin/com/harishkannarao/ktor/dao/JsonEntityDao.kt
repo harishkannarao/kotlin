@@ -74,6 +74,16 @@ class JsonEntityDao(
         }
     }
 
+    fun allEntities(): List<JsonDbEntity> {
+        return jdbi.withHandle<List<JsonDbEntity>, Exception> { handle ->
+            handle.createQuery(SELECT_ALL_SQL)
+                    .map { rs: ResultSet, _: StatementContext ->
+                        dbJsonUtil.fromJson<JsonDbEntity>(rs.getString(COLUMN_JSONB_ENTITY))
+                    }
+                    .list()
+        }
+    }
+
     fun searchByTimeStamp(from: Long, to: Long): List<JsonDbEntity> {
         return jdbi.withHandle<List<JsonDbEntity>, Exception> { handle ->
             handle.createQuery(SELECT_BY_TIMESTAMP_SQL)
@@ -142,6 +152,8 @@ class JsonEntityDao(
         private const val DELETE_SQL = "delete from jsonb_table where (cast(jsonb_doc->>'id' as text)) = :$COLUMN_ID"
 
         private const val SELECT_BY_TIMESTAMP_SQL = "select (jsonb_doc - 'metaData') as $COLUMN_JSONB_ENTITY, (jsonb_doc->'metaData') as $COLUMN_JSONB_META_DATA from jsonb_table where (cast(jsonb_doc->>'timeStampInEpochMillis' as numeric)) >= :$PARAM_FROM and (cast(jsonb_doc->>'timeStampInEpochMillis' as numeric)) <= :$PARAM_TO"
+
+        private const val SELECT_ALL_SQL = "select (jsonb_doc - 'metaData') as $COLUMN_JSONB_ENTITY from jsonb_table"
 
         private const val SELECT_BY_DATE_SQL = "select (jsonb_doc - 'metaData') as $COLUMN_JSONB_ENTITY, (jsonb_doc->'metaData') as $COLUMN_JSONB_META_DATA from jsonb_table where (cast(jsonb_doc->>'dateInEpochDays' as numeric)) >= :$PARAM_FROM and (cast(jsonb_doc->>'dateInEpochDays' as numeric)) <= :$PARAM_TO"
 

@@ -13,6 +13,12 @@ import java.util.*
 
 class JdbiJsonEntityApiClient(requestSpecification: RequestSpecification) : ApiClientBase<JdbiJsonEntityApiClient>(requestSpecification) {
 
+    fun get(): JdbiJsonEntityApiClient {
+        requestSpecification.basePath(ENTITY_PATH)
+        requestSpecification.accept(ContentType.JSON)
+        return doGet()
+    }
+
     fun get(id: UUID): JdbiJsonEntityApiClient {
         requestSpecification.basePath(ENTITY_WITH_ID_PATH)
         requestSpecification.pathParam(PARAM_ID, id.toString())
@@ -151,7 +157,7 @@ class JdbiJsonEntityApiClient(requestSpecification: RequestSpecification) : ApiC
 
         private const val ENTITY_PATH = "/jdbi/json-entity"
         private const val ENTITY_WITH_ID_PATH = "$ENTITY_PATH/{$PARAM_ID}"
-        private const val SEARCH_PATH = "/jdbi/search-json-entity"
-        private const val SEARCH_BY_TAGS_PATH = "/jdbi/search-json-entity-by-tags"
+        private const val SEARCH_PATH = "/jdbi/json-entity/search"
+        private const val SEARCH_BY_TAGS_PATH = "/jdbi/json-entity/search-by-tags"
     }
 }

@@ -48,6 +48,9 @@ class LocationRoutes(
                         dependencies.jsonEntityApi.createEntity(jsonEntity)
                         call.respond(HttpStatusCode.Created, jsonEntity)
                     }
+                    get<Unit> {
+                        call.respond(dependencies.jsonEntityApi.allEntities())
+                    }
                     get<JsonEntityWithId> { jsonEntityWithId ->
                         call.respond(dependencies.jsonEntityApi.readEntity(jsonEntityWithId.id))
                     }
@@ -61,12 +64,16 @@ class LocationRoutes(
                         dependencies.jsonEntityApi.deleteEntity(jsonEntityWithId.id)
                         call.respond(HttpStatusCode.NoContent, Unit)
                     }
-                }
-                get<JsonEntitySearch> { jsonEntitySearch ->
-                    call.respond(dependencies.jsonEntityApi.search(jsonEntitySearch.by, jsonEntitySearch.from, jsonEntitySearch.to))
-                }
-                get<JsonEntitySearchByTags> { jsonEntitySearchByTags ->
-                    call.respond(dependencies.jsonEntityApi.searchByTags(jsonEntitySearchByTags.tags))
+                    route("search") {
+                        get<JsonEntitySearch> { jsonEntitySearch ->
+                            call.respond(dependencies.jsonEntityApi.search(jsonEntitySearch.by, jsonEntitySearch.from, jsonEntitySearch.to))
+                        }
+                    }
+                    route("search-by-tags") {
+                        get<JsonEntitySearchByTags> { jsonEntitySearchByTags ->
+                            call.respond(dependencies.jsonEntityApi.searchByTags(jsonEntitySearchByTags.tags))
+                        }
+                    }
                 }
             }
             route("react") {
@@ -87,7 +94,7 @@ class LocationRoutes(
     @Location("") data class SearchRelationalEntity(val from: String, val to: String)
     @Location("{id}") data class RelationalEntityWithId(val id: String)
     @Location("{id}") data class JsonEntityWithId(val id: String)
-    @Location("search-json-entity") data class JsonEntitySearch(val by: String, val from: String, val to: String)
-    @Location("search-json-entity-by-tags") data class JsonEntitySearchByTags(val tags: String)
+    @Location("") data class JsonEntitySearch(val by: String, val from: String, val to: String)
+    @Location("") data class JsonEntitySearchByTags(val tags: String)
     @Location("{name}") data class VueTemplate(val name: String)
 }

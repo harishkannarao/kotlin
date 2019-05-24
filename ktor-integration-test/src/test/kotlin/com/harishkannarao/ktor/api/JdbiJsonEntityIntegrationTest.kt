@@ -59,6 +59,83 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
     }
 
     @Test
+    fun `can perform list operation`() {
+        val first = JdbiJsonEntityApiClient.Entity.Data(
+                username = "testUser-${randomString()}",
+                timeStampInEpochMillis = currentUtcOffsetDateTime().minusDays(2).toInstant().toEpochMilli(),
+                intField = 789,
+                booleanField = true,
+                decimalField = "2.5999".toBigDecimal(),
+                date = LocalDate.now(),
+                tags = listOf(randomString(), randomString()),
+                nestedData = listOf(
+                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
+                                stringField = randomString(),
+                                tags = listOf(randomString(), randomString())
+                        )
+                )
+        )
+
+        val second = first.copy(
+                username = "testUser-${randomString()}"
+        )
+
+        val third = first.copy(
+                username = "testUser-${randomString()}"
+        )
+
+        clients.jdbiJsonEntityClient()
+                .get()
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+                            .expectNoContentStatus()
+                }
+
+        val firstId = clients.jdbiJsonEntityClient()
+                .post(first)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val secondId = clients.jdbiJsonEntityClient()
+                .post(second)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val thirdId = clients.jdbiJsonEntityClient()
+                .post(third)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val initialEntities = listOf(
+                JdbiJsonEntityApiClient.Entity(firstId, first),
+                JdbiJsonEntityApiClient.Entity(secondId, second),
+                JdbiJsonEntityApiClient.Entity(thirdId, third)
+        )
+
+        clients.jdbiJsonEntityClient()
+                .get()
+                .expectSuccessStatus()
+                .expectEntities(initialEntities)
+
+        clients.jdbiJsonEntityClient()
+                .delete(secondId)
+                .expectNoContentStatus()
+
+        val updatedEntities = listOf(
+                JdbiJsonEntityApiClient.Entity(firstId, first),
+                JdbiJsonEntityApiClient.Entity(thirdId, third)
+        )
+
+        clients.jdbiJsonEntityClient()
+                .get()
+                .expectSuccessStatus()
+                .expectEntities(updatedEntities)
+    }
+
+    @Test
     fun `post returns 409 for conflict on create`() {
         val initialData = JdbiJsonEntityApiClient.Entity.Data(
                 username = "testUser-${randomString()}",

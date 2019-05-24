@@ -1,6 +1,7 @@
 package com.harishkannarao.ktor.web.clients
 
 import org.hamcrest.Matchers.equalTo
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 
 class VueExampleWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueExampleWebPage>(baseUrl, webClient) {
@@ -9,6 +10,6 @@ class VueExampleWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<Vue
     }
 
     fun expectVueMessage(): VueExampleWebPage {
-        return expectElementTextToBe(".qa-vue-message", equalTo("Hello Vue!"))
+        return expectElementTextToMatch(By.className("qa-vue-message"), equalTo("Hello Vue!"))
     }
 }

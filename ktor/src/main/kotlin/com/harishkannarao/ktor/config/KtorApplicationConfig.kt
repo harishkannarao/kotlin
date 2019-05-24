@@ -11,5 +11,6 @@ data class KtorApplicationConfig(
         val jdbcUrl: String = ConfigUtil.lookupValue("JDBC_URL","jdbc.url", "jdbc:postgresql://localhost:25432/myuser"),
         val jdbcUserName: String = ConfigUtil.lookupValue("JDBC_USERNAME","jdbc.username", "myuser"),
         val jdbcPassword: String = ConfigUtil.lookupValue("JDBC_PASSWORD","jdbc.password", "superpassword"),
-        val developmentMode: Boolean = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE","app.development.mode", "false").toBoolean()
+        val developmentMode: Boolean = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE","app.development.mode", "false").toBoolean(),
+        val jsConfigProfile: String = "local"
 )

@@ -1,11 +1,14 @@
 package com.harishkannarao.ktor.route
 
+import com.harishkannarao.ktor.config.KtorApplicationConfig
 import io.ktor.http.content.defaultResource
 import io.ktor.http.content.resources
 import io.ktor.http.content.static
 import io.ktor.routing.Route
 
-class StaticRoutes {
+class StaticRoutes(
+        private val config: KtorApplicationConfig
+) {
 
     val staticPath: Route.() -> Unit = {
         static("static") {
@@ -19,6 +22,9 @@ class StaticRoutes {
             }
             static("js") {
                 resources("static/js")
+            }
+            static("config.js") {
+                defaultResource("static/config/${config.jsConfigProfile}.js")
             }
             static("css") {
                 resources("static/css")
