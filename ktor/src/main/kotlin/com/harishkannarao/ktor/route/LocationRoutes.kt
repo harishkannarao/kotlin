@@ -84,6 +84,12 @@ class LocationRoutes(
                 }
             }
             route("vue") {
+                get<VueCrudTemplate> { vueCrudTemplate ->
+                    val model = mapOf(
+                            "defaultIntField" to vueCrudTemplate.defaultIntValue
+                    )
+                    call.respond(FreeMarkerContent("/vue/vue_crud.ftl", model))
+                }
                 get<VueTemplate> { vueTemplate ->
                     call.respond(FreeMarkerContent("/vue/${vueTemplate.name}.ftl", null))
                 }
@@ -97,4 +103,5 @@ class LocationRoutes(
     @Location("") data class JsonEntitySearch(val by: String, val from: String, val to: String)
     @Location("") data class JsonEntitySearchByTags(val tags: String)
     @Location("{name}") data class VueTemplate(val name: String)
+    @Location("vue_crud") data class VueCrudTemplate(val defaultIntValue: Int = 1)
 }

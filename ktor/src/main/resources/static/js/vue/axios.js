@@ -1,4 +1,4 @@
-const axiosInstance = axios.create({
+var axiosInstance = axios.create({
     baseURL: config().baseURL,
     timeout: 1000
 });
