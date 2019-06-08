@@ -26,6 +26,12 @@ class JdbiJsonEntityApiClient(requestSpecification: RequestSpecification) : ApiC
         return doGet()
     }
 
+    fun getEntitiesCount(): JdbiJsonEntityApiClient {
+        requestSpecification.basePath(COUNT_PATH)
+        requestSpecification.accept(ContentType.JSON)
+        return doGet()
+    }
+
     fun searchByDate(from: LocalDate, to: LocalDate): JdbiJsonEntityApiClient {
         requestSpecification.basePath(SEARCH_PATH)
         requestSpecification.queryParam("by", "date")
@@ -131,6 +137,12 @@ class JdbiJsonEntityApiClient(requestSpecification: RequestSpecification) : ApiC
         return RestAssuredJson.objectMapper.readValue(response().asString())
     }
 
+    fun expectTotalCountToBe(value: Int): JdbiJsonEntityApiClient {
+        val entityCount = RestAssuredJson.objectMapper.readValue<EntityCount>(response().asString())
+        assertThat(entityCount.count, equalTo(value))
+        return this
+    }
+
     data class Entity(
             val id: UUID,
             val data: Data
@@ -152,11 +164,16 @@ class JdbiJsonEntityApiClient(requestSpecification: RequestSpecification) : ApiC
         }
     }
 
+    data class EntityCount(
+            val count: Int
+    )
+
     companion object {
         private const val PARAM_ID = "id"
 
         private const val ENTITY_PATH = "/jdbi/json-entity"
         private const val ENTITY_WITH_ID_PATH = "$ENTITY_PATH/{$PARAM_ID}"
+        private const val COUNT_PATH = "/jdbi/json-entity/count"
         private const val SEARCH_PATH = "/jdbi/json-entity/search"
         private const val SEARCH_BY_TAGS_PATH = "/jdbi/json-entity/search-by-tags"
     }

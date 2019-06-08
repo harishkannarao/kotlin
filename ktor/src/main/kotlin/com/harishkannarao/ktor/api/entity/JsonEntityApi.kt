@@ -28,6 +28,10 @@ class JsonEntityApi(
         return jsonEntityDao.allEntities().map { jsonEntityMapper.fromJsonDbEntity(it) }
     }
 
+    fun countEntities(): JsonEntityCount {
+        return JsonEntityCount(jsonEntityDao.countEntities())
+    }
+
     fun search(by: String, from: String, to: String): List<JsonEntity> {
         val dbEntities = when (by) {
             "timestamp" -> jsonEntityDao.searchByTimeStamp(from.toLong(), to.toLong())

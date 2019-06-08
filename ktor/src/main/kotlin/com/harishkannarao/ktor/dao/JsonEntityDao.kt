@@ -84,6 +84,16 @@ class JsonEntityDao(
         }
     }
 
+    fun countEntities(): Int {
+        return jdbi.withHandle<Int, Exception> { handle ->
+            handle.createQuery(COUNT_ALL_SQL)
+                    .map { rs: ResultSet, _: StatementContext ->
+                        rs.getInt("entities_count")
+                    }
+                    .first()
+        }
+    }
+
     fun searchByTimeStamp(from: Long, to: Long): List<JsonDbEntity> {
         return jdbi.withHandle<List<JsonDbEntity>, Exception> { handle ->
             handle.createQuery(SELECT_BY_TIMESTAMP_SQL)
@@ -154,6 +164,8 @@ class JsonEntityDao(
         private const val SELECT_BY_TIMESTAMP_SQL = "select (jsonb_doc - 'metaData') as $COLUMN_JSONB_ENTITY, (jsonb_doc->'metaData') as $COLUMN_JSONB_META_DATA from jsonb_table where (cast(jsonb_doc->>'timeStampInEpochMillis' as numeric)) >= :$PARAM_FROM and (cast(jsonb_doc->>'timeStampInEpochMillis' as numeric)) <= :$PARAM_TO"
 
         private const val SELECT_ALL_SQL = "select (jsonb_doc - 'metaData') as $COLUMN_JSONB_ENTITY from jsonb_table"
+
+        private const val COUNT_ALL_SQL = "select count(*) as entities_count from jsonb_table"
 
         private const val SELECT_BY_DATE_SQL = "select (jsonb_doc - 'metaData') as $COLUMN_JSONB_ENTITY, (jsonb_doc->'metaData') as $COLUMN_JSONB_META_DATA from jsonb_table where (cast(jsonb_doc->>'dateInEpochDays' as numeric)) >= :$PARAM_FROM and (cast(jsonb_doc->>'dateInEpochDays' as numeric)) <= :$PARAM_TO"
 

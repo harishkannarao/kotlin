@@ -64,6 +64,11 @@ class LocationRoutes(
                         dependencies.jsonEntityApi.deleteEntity(jsonEntityWithId.id)
                         call.respond(HttpStatusCode.NoContent, Unit)
                     }
+                    route("count") {
+                        get<Unit> {
+                            call.respond(dependencies.jsonEntityApi.countEntities())
+                        }
+                    }
                     route("search") {
                         get<JsonEntitySearch> { jsonEntitySearch ->
                             call.respond(dependencies.jsonEntityApi.search(jsonEntitySearch.by, jsonEntitySearch.from, jsonEntitySearch.to))

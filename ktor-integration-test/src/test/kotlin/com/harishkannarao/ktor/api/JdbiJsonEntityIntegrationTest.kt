@@ -2,6 +2,7 @@ package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.api.clients.JdbiJsonEntityApiClient
+import com.harishkannarao.ktor.util.TestDataUtil.aRandomJsonEntity
 import com.harishkannarao.ktor.util.TestDataUtil.currentUtcOffsetDateTime
 import com.harishkannarao.ktor.util.TestDataUtil.randomString
 import org.testng.annotations.Test
@@ -15,22 +16,7 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `can perform CRUD operations`() {
-        val initialData = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "2.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
-        )
-
+        val initialData = aRandomJsonEntity()
         val updatedData = initialData.copy(
                 timeStampInEpochMillis = OffsetDateTime.now().plusDays(1).toInstant().toEpochMilli()
         )
@@ -60,29 +46,9 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `can perform list operation`() {
-        val first = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().minusDays(2).toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "2.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
-        )
-
-        val second = first.copy(
-                username = "testUser-${randomString()}"
-        )
-
-        val third = first.copy(
-                username = "testUser-${randomString()}"
-        )
+        val first = aRandomJsonEntity()
+        val second = aRandomJsonEntity()
+        val third = aRandomJsonEntity()
 
         clients.jdbiJsonEntityClient()
                 .get()
@@ -136,23 +102,57 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
     }
 
     @Test
-    fun `post returns 409 for conflict on create`() {
-        val initialData = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "2.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
-        )
+    fun `can get total entities count`() {
+        val first = aRandomJsonEntity()
+        val second = aRandomJsonEntity()
+        val third = aRandomJsonEntity()
 
+        clients.jdbiJsonEntityClient()
+                .get()
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+                            .expectNoContentStatus()
+                }
+
+        clients.jdbiJsonEntityClient()
+                .post(first)
+                .expectCreatedStatus()
+
+        clients.jdbiJsonEntityClient()
+                .post(second)
+                .expectCreatedStatus()
+
+        clients.jdbiJsonEntityClient()
+                .getEntitiesCount()
+                .expectSuccessStatus()
+                .expectTotalCountToBe(2)
+
+        val id = clients.jdbiJsonEntityClient()
+                .post(third)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        clients.jdbiJsonEntityClient()
+                .getEntitiesCount()
+                .expectSuccessStatus()
+                .expectTotalCountToBe(3)
+
+        clients.jdbiJsonEntityClient()
+                .delete(id)
+                .expectNoContentStatus()
+
+        clients.jdbiJsonEntityClient()
+                .getEntitiesCount()
+                .expectSuccessStatus()
+                .expectTotalCountToBe(2)
+    }
+
+    @Test
+    fun `post returns 409 for conflict on create`() {
+        val initialData = aRandomJsonEntity()
         clients.jdbiJsonEntityClient()
                 .post(initialData)
                 .expectCreatedStatus()
@@ -164,22 +164,7 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `put returns 404 for id and username mismatch on update`() {
-        val firstData = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "2.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
-        )
-
+        val firstData = aRandomJsonEntity()
         val secondData = JdbiJsonEntityApiClient.Entity.Data(
                 username = "testUser-${randomString()}",
                 timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
@@ -217,22 +202,7 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `can perform search operation by timestamp`() {
-        val first = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().minusDays(2).toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "2.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
-        )
-
+        val first = aRandomJsonEntity()
         val second = first.copy(
                 username = "testUser-${randomString()}",
                 timeStampInEpochMillis = currentUtcOffsetDateTime().minusDays(1).toInstant().toEpochMilli()
@@ -295,22 +265,9 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `can perform search operation by date`() {
-        val first = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "2.5999".toBigDecimal(),
-                date = LocalDate.now().minusDays(2),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
+        val first = aRandomJsonEntity().copy(
+                date = LocalDate.now().minusDays(2)
         )
-
         val second = first.copy(
                 username = "testUser-${randomString()}",
                 date = LocalDate.now().minusDays(1)
@@ -373,22 +330,9 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `can perform search operation by decimal`() {
-        val first = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "0.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
+        val first = aRandomJsonEntity().copy(
+                decimalField = "0.5999".toBigDecimal()
         )
-
         val second = first.copy(
                 username = "testUser-${randomString()}",
                 decimalField = "1.5999".toBigDecimal()
@@ -451,22 +395,7 @@ class JdbiJsonEntityIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `can perform search operation by tags`() {
-        val first = JdbiJsonEntityApiClient.Entity.Data(
-                username = "testUser-${randomString()}",
-                timeStampInEpochMillis = currentUtcOffsetDateTime().toInstant().toEpochMilli(),
-                intField = 789,
-                booleanField = true,
-                decimalField = "0.5999".toBigDecimal(),
-                date = LocalDate.now(),
-                tags = listOf(randomString(), randomString()),
-                nestedData = listOf(
-                        JdbiJsonEntityApiClient.Entity.Data.NestedData(
-                                stringField = randomString(),
-                                tags = listOf(randomString(), randomString())
-                        )
-                )
-        )
-
+        val first = aRandomJsonEntity()
         val second = first.copy(
                 username = "testUser-${randomString()}",
                 tags = listOf(randomString(), randomString()),
