@@ -63,11 +63,9 @@ class Modules(
         install(FreeMarker) {
             this.templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
             if (config.developmentMode) {
-                this.setSharedVariable("reactJsVariant", ".development")
                 this.setSharedVariable("javaScriptVariant", "")
                 this.setSharedVariable("cssVariant", "")
             } else {
-                this.setSharedVariable("reactJsVariant", ".production.min")
                 this.setSharedVariable("javaScriptVariant", ".min")
                 this.setSharedVariable("cssVariant", ".min")
             }

@@ -81,13 +81,6 @@ class LocationRoutes(
                     }
                 }
             }
-            route("react") {
-                route("like-button") {
-                    get<Unit> {
-                        call.respond(FreeMarkerContent("/react/like_button.ftl", null))
-                    }
-                }
-            }
             route("vue") {
                 get<VueCrudTemplate> { vueCrudTemplate ->
                     val model = mapOf(

@@ -34,8 +34,6 @@ dependencies {
     implementation("org.webjars.npm:vue:$vueJsVersion")
     implementation("org.webjars.npm:axios:$axiosVersion")
     implementation("org.webjars.npm:feather-icons:$featherIconVersion")
-    implementation("org.webjars.npm:react:$reactJsVersion")
-    implementation("org.webjars.npm:react-dom:$reactJsVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
