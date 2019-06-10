@@ -3,6 +3,7 @@ new Vue({
     data() {
         return {
             loading: true,
+            loadingEntities: true,
             errored: false,
             showForm: false,
             autoRefreshServerCount: true,
@@ -37,6 +38,7 @@ new Vue({
             this.getEntities();
         },
         getEntities: function() {
+            this.loadingEntities = true;
             axiosInstance.get('/jdbi/json-entity')
                 .then(response => {
                     console.log(response);
@@ -48,6 +50,7 @@ new Vue({
                 })
                 .finally(() => {
                     this.loading = false;
+                    this.loadingEntities = false;
                 });
         },
         getEntityCount: function() {

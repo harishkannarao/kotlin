@@ -85,6 +85,10 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         return expectElementCountToMatch(className(LOADING_MESSAGE), equalTo(0))
     }
 
+    fun expectRefreshingEntitiesMessageNotToBeDisplayed(): VueCrudWebPage {
+        return expectElementCountToMatch(className(REFRESHING_ENTITIES_MESSAGE), equalTo(0))
+    }
+
     fun expectNewEntityFormToBeDisplayed(): VueCrudWebPage {
         expectElementToBeDisplayed(className(NEW_ENTITY_FORM))
         return this
@@ -322,6 +326,7 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         private const val TAGS = "qa-tags"
         private const val TAG = "qa-tag"
         private const val LOADING_MESSAGE = "qa-loading-message"
+        private const val REFRESHING_ENTITIES_MESSAGE = "qa-refreshing-entities-message"
         private const val DELETE_ENTITY_BUTTON = "qa-delete-entity-btn"
     }
 }

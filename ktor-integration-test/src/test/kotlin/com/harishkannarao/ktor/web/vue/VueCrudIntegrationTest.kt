@@ -235,6 +235,7 @@ class VueCrudIntegrationTest : AbstractBaseWebIntegration() {
                 .expectTotalEntitiesInTable(0)
                 .expectTotalEntitiesInServer(2)
                 .clickRefreshEntitiesIcon()
+                .expectRefreshingEntitiesMessageNotToBeDisplayed()
                 .expectTotalEntities(2)
                 .expectTotalEntitiesInTable(2)
                 .expectEntity(
