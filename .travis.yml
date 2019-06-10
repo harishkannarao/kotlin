@@ -22,8 +22,8 @@ before_script:
 
 script:
   - ./gradlew clean minifyFiles assemble
-  - ./gradlew build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
-  - ./gradlew build -Dapp.development.mode=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./gradlew build --info -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./gradlew build --info -Dapp.development.mode=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
 
 after_script:
   - ./gradlew stopDocker --info
