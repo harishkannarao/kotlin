@@ -5,6 +5,8 @@ new Vue({
             loading: true,
             errored: false,
             showForm: false,
+            autoRefreshCount: true,
+            timer: null,
             newEntity: {
                 username: '',
                 date: '',
@@ -15,10 +17,39 @@ new Vue({
                 tags: ''
             },
             defaultEntity: {},
-            entities: []
+            entities: [],
+            entityCount: {
+                count: 0
+            }
         }
     },
     methods: {
+        startRefreshTime: function() {
+            this.timer = setInterval(this.getEntityCount, 500);
+        },
+        cancelRefreshTime: function() {
+            clearInterval(this.timer);
+        },
+        refreshEntities: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.getEntities();
+        },
+        autoRefreshCountFromServer: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.autoRefreshCount = true;
+            this.startRefreshTime();
+        },
+        stopRefreshCountFromServer: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.autoRefreshCount = false;
+            this.cancelRefreshTime();
+        },
         getEntities: function() {
             axiosInstance.get('/jdbi/json-entity')
                 .then(response => {
@@ -32,6 +63,16 @@ new Vue({
                 .finally(() => {
                     this.loading = false;
                 });
+        },
+        getEntityCount: function() {
+            axiosInstance.get('/jdbi/json-entity/count')
+                .then(response => {
+                    console.log(response);
+                    this.entityCount = response.data;
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         },
         convertToIsoUtcTimeStamp: function(epochMillis) {
             return toIsoUtcTimeStamp(epochMillis);
@@ -97,6 +138,9 @@ new Vue({
         totalEntities: function() {
             return this.entities.length;
         },
+        totalServerEntities: function() {
+            return this.entityCount.count;
+        },
         timeStampIso: function() {
             return this.convertToIsoUtcTimeStamp(Date.parse(this.newEntity.timeStampInEpochMillis));
         }
@@ -104,5 +148,10 @@ new Vue({
     mounted() {
         this.defaultEntity = deepCopy(this.newEntity);
         this.getEntities();
+        this.getEntityCount();
+        this.startRefreshTime();
+    },
+    beforeDestroy() {
+        this.cancelRefreshTime();
     }
 });

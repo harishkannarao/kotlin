@@ -11,6 +11,9 @@
         <span v-if="loading" class="qa-loading-message">Loading...</span>
         <div v-cloak>
             <h1>Total entities: <span class="qa-total-entities">{{ totalEntities }}</span></h1>
+            <h1>Total Server Entities: <span class="qa-total-server-entities">{{ totalServerEntities }}</span></h1>
+            <input type="image" src="/webjars/feather-icons/dist/icons/repeat.svg" alt="Auto Refresh" @click="autoRefreshCountFromServer($event)" :class="[{'hidden' : autoRefreshCount}, 'qa-auto-refresh-entities-count']" />
+            <input type="image" src="/webjars/feather-icons/dist/icons/pause-circle.svg" alt="Stop Auto Refresh" @click="stopRefreshCountFromServer($event)" :class="[{'hidden' : !autoRefreshCount}, 'qa-stop-auto-refresh-entities-count']" />
             <button :class="[{'hidden' : showForm}, 'qa-add-new-btn']" @click="displayForm()">Add New</button>
             <form @submit="submitForm($event)" :class="[{'hidden' : !showForm}, 'qa-new-entity-form']">
                 Username: <input type="text" v-model="newEntity.username" class="qa-username-field"/>
@@ -32,6 +35,7 @@
             </form>
             <br />
             <br />
+            <input type="image" src="/webjars/feather-icons/dist/icons/refresh-cw.svg" alt="Refresh" @click="refreshEntities($event)" class="qa-refresh-entities"/>
             <table style="width:100%">
                 <tr>
                     <th>Number</th>

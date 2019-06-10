@@ -142,6 +142,128 @@ class VueCrudIntegrationTest : AbstractBaseWebIntegration() {
     }
 
     @Test
+    fun `auto fetch entities count from server`() {
+        clients.jdbiJsonEntityClient()
+                .get()
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+
+                }
+
+        val firstEntity = TestDataUtil.aRandomJsonEntity()
+        val secondEntity = TestDataUtil.aRandomJsonEntity()
+
+        val webDriver = newWebDriver()
+
+        val vueCrudWebPage = webPages.vueCrudWebPage(webDriver)
+                .get()
+                .expectLoadingMessageNotToBeDisplayed()
+                .expectTotalEntitiesInServer(0)
+                .expectStopAutoRefreshIconToBeDisplayed()
+                .expectAutoRefreshIconNotToBeDisplayed()
+
+        val firstId = clients.jdbiJsonEntityClient()
+                .post(firstEntity)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        vueCrudWebPage.expectTotalEntitiesInServer(1)
+
+        val secondId = clients.jdbiJsonEntityClient()
+                .post(secondEntity)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        vueCrudWebPage.expectTotalEntitiesInServer(2)
+
+        clients.jdbiJsonEntityClient()
+                .delete(secondId)
+                .expectNoContentStatus()
+
+        vueCrudWebPage.expectTotalEntitiesInServer(1)
+
+        vueCrudWebPage.clickStopAutoRefreshIcon()
+                .expectAutoRefreshIconToBeDisplayed()
+                .expectStopAutoRefreshIconNotToBeDisplayed()
+
+        clients.jdbiJsonEntityClient()
+                .delete(firstId)
+                .expectNoContentStatus()
+
+        vueCrudWebPage.expectTotalEntitiesInServerToRemainAt(1)
+
+        vueCrudWebPage.clickAutoRefreshIcon()
+
+        vueCrudWebPage.expectTotalEntitiesInServer(0)
+    }
+
+    @Test
+    fun `refresh entities from server`() {
+        clients.jdbiJsonEntityClient()
+                .get()
+                .expectSuccessStatus()
+                .getEntities()
+                .forEach {
+                    clients.jdbiJsonEntityClient()
+                            .delete(it.id)
+
+                }
+
+        val firstEntity = TestDataUtil.aRandomJsonEntity()
+        val secondEntity = TestDataUtil.aRandomJsonEntity()
+
+        val webDriver = newWebDriver()
+
+        val vueCrudWebPage = webPages.vueCrudWebPage(webDriver)
+                .get()
+                .expectLoadingMessageNotToBeDisplayed()
+                .expectTotalEntities(0)
+                .expectTotalEntitiesInServer(0)
+                .expectTotalEntitiesInTable(0)
+
+        val firstId = clients.jdbiJsonEntityClient()
+                .post(firstEntity)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        val secondId = clients.jdbiJsonEntityClient()
+                .post(secondEntity)
+                .expectCreatedStatus()
+                .getEntity().id
+
+        vueCrudWebPage
+                .expectTotalEntities(0)
+                .expectTotalEntitiesInTable(0)
+                .expectTotalEntitiesInServer(2)
+                .clickRefreshEntitiesIcon()
+                .expectTotalEntities(2)
+                .expectTotalEntitiesInTable(2)
+                .expectEntity(
+                        username = firstEntity.username,
+                        date = firstEntity.date,
+                        offsetDateTime = DateTimeUtil.toUtcOffsetDateTime(firstEntity.timeStampInEpochMillis),
+                        intField = firstEntity.intField,
+                        decimalField = firstEntity.decimalField,
+                        booleanField = firstEntity.booleanField,
+                        tags = firstEntity.tags,
+                        id = firstId
+                )
+                .expectEntity(
+                        username = secondEntity.username,
+                        date = secondEntity.date,
+                        offsetDateTime = DateTimeUtil.toUtcOffsetDateTime(secondEntity.timeStampInEpochMillis),
+                        intField = secondEntity.intField,
+                        decimalField = secondEntity.decimalField,
+                        booleanField = secondEntity.booleanField,
+                        tags = secondEntity.tags,
+                        id = secondId
+                )
+    }
+
+    @Test
     fun `pre fill add new entity form with default values and verify the display fields`() {
         val webDriver = newWebDriver()
 

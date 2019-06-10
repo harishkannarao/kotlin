@@ -24,27 +24,22 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         return expectElementTextToMatch(className(TOTAL_ENTITIES), equalTo(count.toString()))
     }
 
-    fun expectTotalEntitiesInTable(count: Int): VueCrudWebPage {
-        expectElementCountToMatch(className(ID), equalTo(count))
-        return this
+    fun expectTotalEntitiesInServer(count: Int): VueCrudWebPage {
+        return expectElementTextToMatch(className(TOTAL_SERVER_ENTITIES), equalTo(count.toString()))
     }
 
-    fun expectEntityInTable(index: Int, id: UUID, username: String, tags: List<String>): VueCrudWebPage {
-        expectElementTextToMatch(className(NUMBER), index, equalTo((index + 1).toString()))
-        expectElementTextToMatch(className(ID), index, equalTo(id.toString()))
-        expectElementTextToMatch(className(USER_NAME), index, equalTo(username))
-        tags.forEachIndexed { tagIndex, tag ->
-            expectElementTextToMatch(
-                    {
-                        webDriver
-                                .findElements(className(TAGS)).getOrNull(index)
-                                ?.findElements(className(TAG))?.getOrNull(tagIndex)
-                                ?.text
-                    },
-                    equalTo(tag)
-            )
-        }
+    fun expectTotalEntitiesInServerToRemainAt(count: Int): VueCrudWebPage {
+        return expectElementToMatch(
+                {
+                    getElements(className(TOTAL_SERVER_ENTITIES)).firstOrNull()?.text
+                },
+                equalTo(count.toString()),
+                pollDelayInMillis = 700
+        )
+    }
 
+    fun expectTotalEntitiesInTable(count: Int): VueCrudWebPage {
+        expectElementCountToMatch(className(ID), equalTo(count))
         return this
     }
 
@@ -234,7 +229,13 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         expectElementToMatch({ getElements(className(USER_NAME)).map { it.text } }, hasItem(username))
         val entityIndex = getElements(className(USER_NAME)).map { it.text }.indexOf(username)
         expectElementTextToMatch(className(DATE), entityIndex, equalTo(DateTimeUtil.toIsoLocalDateString(date)))
-        expectElementTextToMatch(className(TIME_STAMP), entityIndex, equalTo(DateTimeUtil.toIsoTimeStampString(offsetDateTime)))
+        expectElementTextToMatch(className(TIME_STAMP), not(emptyOrNullString()))
+        expectElementToMatch(
+                {
+                    DateTimeUtil.toUtcOffsetDateTime(getElements(className(TIME_STAMP))[entityIndex].text)
+                },
+                equalTo(offsetDateTime)
+        )
         expectElementTextToMatch(className(INT_FIELD), entityIndex, equalTo(intField.toString()))
         expectElementTextToMatch(className(DECIMAL_FIELD), entityIndex, equalTo(decimalField.toString()))
         expectElementTextToMatch(className(BOOLEAN_FIELD), entityIndex, equalTo(booleanField.toString()))
@@ -256,7 +257,43 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
     }
 
     fun expectEntityNotToBeInTable(username: String): VueCrudWebPage {
-        return expectElementToMatch({ getElements(className(USER_NAME)).map { it.text } }, not(hasItem(username)))
+        return expectElementToMatch(
+                { getElements(className(USER_NAME)).map { it.text } },
+                not(hasItem(username)),
+                pollDelayInMillis = 500
+        )
+    }
+
+    fun expectStopAutoRefreshIconToBeDisplayed(): VueCrudWebPage {
+        expectElementToBeDisplayed(className(STOP_AUTO_REFRESH_COUNT))
+        return this
+    }
+
+    fun expectStopAutoRefreshIconNotToBeDisplayed(): VueCrudWebPage {
+        expectElementNotToBeDisplayed(className(STOP_AUTO_REFRESH_COUNT))
+        return this
+    }
+
+    fun clickStopAutoRefreshIcon(): VueCrudWebPage {
+        return clickElement(className(STOP_AUTO_REFRESH_COUNT))
+    }
+
+    fun expectAutoRefreshIconToBeDisplayed(): VueCrudWebPage {
+        expectElementToBeDisplayed(className(AUTO_REFRESH_COUNT))
+        return this
+    }
+
+    fun expectAutoRefreshIconNotToBeDisplayed(): VueCrudWebPage {
+        expectElementNotToBeDisplayed(className(AUTO_REFRESH_COUNT))
+        return this
+    }
+
+    fun clickAutoRefreshIcon(): VueCrudWebPage {
+        return clickElement(className(AUTO_REFRESH_COUNT))
+    }
+
+    fun clickRefreshEntitiesIcon(): VueCrudWebPage {
+        return clickElement(className(REFRESH_ENTITIES))
     }
 
     companion object {
@@ -275,6 +312,10 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         private const val DONE_BUTTON = "qa-done-btn"
         private const val SAVE_BUTTON = "qa-save-btn"
         private const val TOTAL_ENTITIES = "qa-total-entities"
+        private const val TOTAL_SERVER_ENTITIES = "qa-total-server-entities"
+        private const val AUTO_REFRESH_COUNT = "qa-auto-refresh-entities-count"
+        private const val REFRESH_ENTITIES = "qa-refresh-entities"
+        private const val STOP_AUTO_REFRESH_COUNT = "qa-stop-auto-refresh-entities-count"
         private const val ID = "qa-id"
         private const val NUMBER = "qa-number"
         private const val DATE = "qa-date"

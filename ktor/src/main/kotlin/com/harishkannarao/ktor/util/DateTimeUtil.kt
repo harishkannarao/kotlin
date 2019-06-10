@@ -15,6 +15,10 @@ object DateTimeUtil {
         return Instant.ofEpochMilli(epochMillis).atOffset(ZoneOffset.UTC)
     }
 
+    fun toUtcOffsetDateTime(isoTimeStamp: String): OffsetDateTime {
+        return OffsetDateTime.parse(isoTimeStamp, DateTimeFormatter.ISO_OFFSET_DATE_TIME).withOffsetSameInstant(ZoneOffset.UTC)
+    }
+
     fun toIsoTimeStampString(offsetDateTime: OffsetDateTime): String {
         return offsetDateTime.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
     }
