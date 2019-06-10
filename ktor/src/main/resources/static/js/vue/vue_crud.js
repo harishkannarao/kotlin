@@ -5,7 +5,7 @@ new Vue({
             loading: true,
             errored: false,
             showForm: false,
-            autoRefreshCount: true,
+            autoRefreshServerCount: true,
             timer: null,
             newEntity: {
                 username: '',
@@ -35,20 +35,6 @@ new Vue({
                 event.preventDefault();
             }
             this.getEntities();
-        },
-        autoRefreshCountFromServer: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.autoRefreshCount = true;
-            this.startRefreshTime();
-        },
-        stopRefreshCountFromServer: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.autoRefreshCount = false;
-            this.cancelRefreshTime();
         },
         getEntities: function() {
             axiosInstance.get('/jdbi/json-entity')
@@ -143,6 +129,15 @@ new Vue({
         },
         timeStampIso: function() {
             return this.convertToIsoUtcTimeStamp(Date.parse(this.newEntity.timeStampInEpochMillis));
+        }
+    },
+    watch: {
+        autoRefreshServerCount: function (newValue, oldValue) {
+            if (newValue == true) {
+                this.startRefreshTime();
+            } else {
+                this.cancelRefreshTime();
+            }
         }
     },
     mounted() {

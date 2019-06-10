@@ -162,8 +162,7 @@ class VueCrudIntegrationTest : AbstractBaseWebIntegration() {
                 .get()
                 .expectLoadingMessageNotToBeDisplayed()
                 .expectTotalEntitiesInServer(0)
-                .expectStopAutoRefreshIconToBeDisplayed()
-                .expectAutoRefreshIconNotToBeDisplayed()
+                .expectAutoRefreshCheckboxToBeTicked()
 
         val firstId = clients.jdbiJsonEntityClient()
                 .post(firstEntity)
@@ -184,20 +183,17 @@ class VueCrudIntegrationTest : AbstractBaseWebIntegration() {
                 .expectNoContentStatus()
 
         vueCrudWebPage.expectTotalEntitiesInServer(1)
-
-        vueCrudWebPage.clickStopAutoRefreshIcon()
-                .expectAutoRefreshIconToBeDisplayed()
-                .expectStopAutoRefreshIconNotToBeDisplayed()
+                .unTickAutoRefreshCheckbox()
+                .expectAutoRefreshCheckboxToBeUnTicked()
 
         clients.jdbiJsonEntityClient()
                 .delete(firstId)
                 .expectNoContentStatus()
 
         vueCrudWebPage.expectTotalEntitiesInServerToRemainAt(1)
-
-        vueCrudWebPage.clickAutoRefreshIcon()
-
-        vueCrudWebPage.expectTotalEntitiesInServer(0)
+                .tickAutoRefreshCheckbox()
+                .expectAutoRefreshCheckboxToBeTicked()
+                .expectTotalEntitiesInServer(0)
     }
 
     @Test

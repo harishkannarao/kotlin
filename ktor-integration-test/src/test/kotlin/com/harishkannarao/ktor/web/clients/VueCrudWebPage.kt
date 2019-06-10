@@ -28,6 +28,30 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         return expectElementTextToMatch(className(TOTAL_SERVER_ENTITIES), equalTo(count.toString()))
     }
 
+    fun expectAutoRefreshCheckboxToBeTicked(): VueCrudWebPage {
+        assertThat(isElementSelected(className(AUTO_REFRESH_SERVER_COUNT)), equalTo(true))
+        return this
+    }
+
+    fun expectAutoRefreshCheckboxToBeUnTicked(): VueCrudWebPage {
+        assertThat(isElementSelected(className(AUTO_REFRESH_SERVER_COUNT)), equalTo(false))
+        return this
+    }
+
+    fun tickAutoRefreshCheckbox(): VueCrudWebPage {
+        if (!isElementSelected(className(AUTO_REFRESH_SERVER_COUNT))) {
+            clickElement(className(AUTO_REFRESH_SERVER_COUNT))
+        }
+        return this
+    }
+
+    fun unTickAutoRefreshCheckbox(): VueCrudWebPage {
+        if (isElementSelected(className(AUTO_REFRESH_SERVER_COUNT))) {
+            clickElement(className(AUTO_REFRESH_SERVER_COUNT))
+        }
+        return this
+    }
+
     fun expectTotalEntitiesInServerToRemainAt(count: Int): VueCrudWebPage {
         return expectElementToMatch(
                 {
@@ -264,34 +288,6 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         )
     }
 
-    fun expectStopAutoRefreshIconToBeDisplayed(): VueCrudWebPage {
-        expectElementToBeDisplayed(className(STOP_AUTO_REFRESH_COUNT))
-        return this
-    }
-
-    fun expectStopAutoRefreshIconNotToBeDisplayed(): VueCrudWebPage {
-        expectElementNotToBeDisplayed(className(STOP_AUTO_REFRESH_COUNT))
-        return this
-    }
-
-    fun clickStopAutoRefreshIcon(): VueCrudWebPage {
-        return clickElement(className(STOP_AUTO_REFRESH_COUNT))
-    }
-
-    fun expectAutoRefreshIconToBeDisplayed(): VueCrudWebPage {
-        expectElementToBeDisplayed(className(AUTO_REFRESH_COUNT))
-        return this
-    }
-
-    fun expectAutoRefreshIconNotToBeDisplayed(): VueCrudWebPage {
-        expectElementNotToBeDisplayed(className(AUTO_REFRESH_COUNT))
-        return this
-    }
-
-    fun clickAutoRefreshIcon(): VueCrudWebPage {
-        return clickElement(className(AUTO_REFRESH_COUNT))
-    }
-
     fun clickRefreshEntitiesIcon(): VueCrudWebPage {
         return clickElement(className(REFRESH_ENTITIES))
     }
@@ -313,9 +309,8 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         private const val SAVE_BUTTON = "qa-save-btn"
         private const val TOTAL_ENTITIES = "qa-total-entities"
         private const val TOTAL_SERVER_ENTITIES = "qa-total-server-entities"
-        private const val AUTO_REFRESH_COUNT = "qa-auto-refresh-entities-count"
+        private const val AUTO_REFRESH_SERVER_COUNT = "qa-auto-refresh-server-count"
         private const val REFRESH_ENTITIES = "qa-refresh-entities"
-        private const val STOP_AUTO_REFRESH_COUNT = "qa-stop-auto-refresh-entities-count"
         private const val ID = "qa-id"
         private const val NUMBER = "qa-number"
         private const val DATE = "qa-date"

@@ -10,10 +10,11 @@
         <input type="hidden" id="default-int-field" value="${defaultIntField}" />
         <span v-if="loading" class="qa-loading-message">Loading...</span>
         <div v-cloak>
-            <h1>Total entities: <span class="qa-total-entities">{{ totalEntities }}</span></h1>
-            <h1>Total Server Entities: <span class="qa-total-server-entities">{{ totalServerEntities }}</span></h1>
-            <input type="image" src="/webjars/feather-icons/dist/icons/repeat.svg" alt="Auto Refresh" @click="autoRefreshCountFromServer($event)" :class="[{'hidden' : autoRefreshCount}, 'qa-auto-refresh-entities-count']" />
-            <input type="image" src="/webjars/feather-icons/dist/icons/pause-circle.svg" alt="Stop Auto Refresh" @click="stopRefreshCountFromServer($event)" :class="[{'hidden' : !autoRefreshCount}, 'qa-stop-auto-refresh-entities-count']" />
+            <p>Total entities: <span class="qa-total-entities">{{ totalEntities }}</span></p>
+            <p>
+                Total Server Entities: <span class="qa-total-server-entities">{{ totalServerEntities }}</span>
+                <input type="checkbox" v-model="autoRefreshServerCount" class="qa-auto-refresh-server-count" />Auto Refresh
+            </p>
             <button :class="[{'hidden' : showForm}, 'qa-add-new-btn']" @click="displayForm()">Add New</button>
             <form @submit="submitForm($event)" :class="[{'hidden' : !showForm}, 'qa-new-entity-form']">
                 Username: <input type="text" v-model="newEntity.username" class="qa-username-field"/>
@@ -26,7 +27,7 @@
                 <br />
                 Decimal: <input type="text" v-model="newEntity.decimalField" class="qa-decimal-field"/>
                 <br />
-                Boolean: <input type="checkbox" v-model="newEntity.booleanField" class="qa-boolean-field" checked /><span class="qa-boolean-field-display">{{ newEntity.booleanField }}</span>
+                Boolean: <input type="checkbox" v-model="newEntity.booleanField" class="qa-boolean-field" /><span class="qa-boolean-field-display">{{ newEntity.booleanField }}</span>
                 <br />
                 Tags (comma separated): <textarea v-model="newEntity.tags" class="qa-tags-field"></textarea>
                 <br />
