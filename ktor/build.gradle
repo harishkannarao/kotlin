@@ -33,6 +33,7 @@ dependencies {
     implementation("org.webjars:jquery:$jQueryVersion")
     implementation("org.webjars.npm:vue:$vueJsVersion")
     implementation("org.webjars.npm:axios:$axiosVersion")
+    implementation("org.webjars:bootstrap:$bootstrapVersion")
     implementation("org.webjars.npm:feather-icons:$featherIconVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
