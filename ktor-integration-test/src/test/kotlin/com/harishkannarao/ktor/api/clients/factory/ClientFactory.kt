@@ -21,6 +21,10 @@ class ClientFactory(private val baseUrl: String) {
         return CustomerByIdApiClient(createRequestSpec())
     }
 
+    fun customerByIdsApiClient(): CustomerByIdsApiClient {
+        return CustomerByIdsApiClient(createRequestSpec())
+    }
+
     fun customersByNameApiClient(): CustomersByNameApiClient {
         return CustomersByNameApiClient(createRequestSpec())
     }

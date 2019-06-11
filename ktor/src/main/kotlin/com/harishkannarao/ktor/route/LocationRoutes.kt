@@ -61,7 +61,7 @@ class LocationRoutes(
                         call.respond(HttpStatusCode.NoContent, Unit)
                     }
                     delete<JsonEntityWithId> { jsonEntityWithId ->
-                        dependencies.jsonEntityApi.deleteEntity(jsonEntityWithId.id)
+                        dependencies.jsonEntityApi.deleteEntityAsync(jsonEntityWithId.id)
                         call.respond(HttpStatusCode.NoContent, Unit)
                     }
                     route("count") {

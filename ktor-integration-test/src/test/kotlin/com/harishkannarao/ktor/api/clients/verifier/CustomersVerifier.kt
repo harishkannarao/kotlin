@@ -19,4 +19,10 @@ class CustomersVerifier(private val customers: List<Customer>) {
         return this
     }
 
+    fun expectCustomer(customer: Customer): CustomersVerifier {
+        val foundCustomer = customers.find { it.firstName == customer.firstName }
+        assertThat(foundCustomer, equalTo(customer))
+        return this
+    }
+
 }

@@ -1,10 +1,7 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseApiIntegration
-import com.harishkannarao.ktor.api.clients.CreateMultipleCustomersApiClient
-import com.harishkannarao.ktor.api.clients.CreateSingleCustomerApiClient
-import com.harishkannarao.ktor.api.clients.CustomerByIdApiClient
-import com.harishkannarao.ktor.api.clients.CustomersByNameApiClient
+import com.harishkannarao.ktor.api.clients.*
 import com.harishkannarao.ktor.api.clients.verifier.Customer
 import com.harishkannarao.ktor.client.customer.CustomerClient
 import com.harishkannarao.ktor.rule.LogbackTestUtil
@@ -44,6 +41,30 @@ class CustomerIntegrationTest : AbstractBaseApiIntegration() {
                 .expectSuccessStatus()
                 .extractCustomerVerifier()
                 .expectEntity(expectedCustomer)
+    }
+
+    @Test
+    fun `should return customers by ids`() {
+        val id1 = "1234"
+        val id2 = "1235"
+
+        val customer1 = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
+        wireMockStub.setUpGetSingleCustomer(id1, customer1, 200)
+        val customer2 = WireMockStub.Customer.newCustomer().copy("name 3", "name 4")
+        wireMockStub.setUpGetSingleCustomer(id2, customer2, 200)
+
+        val expectedCustomer1 = Customer(customer1.firstName, customer1.lastName)
+        val expectedCustomer2 = Customer(customer2.firstName, customer2.lastName)
+        val request = CustomerByIdsApiClient.Request.newRequest().copy(ids = listOf(id1, id2))
+
+        clients.customerByIdsApiClient()
+                .withRequest(request)
+                .get()
+                .expectSuccessStatus()
+                .extractCustomersVerifier()
+                .expectTotalCustomersToBe(2)
+                .expectCustomer(expectedCustomer1)
+                .expectCustomer(expectedCustomer2)
     }
 
     @Test

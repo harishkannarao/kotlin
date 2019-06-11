@@ -5,7 +5,6 @@ import com.harishkannarao.ktor.api.session.HeaderSession
 import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.client.customer.CustomerDto
 import com.harishkannarao.ktor.config.KtorApplicationConfig
-import com.harishkannarao.ktor.dao.entity.RelationalEntity
 import com.harishkannarao.ktor.dependency.Dependencies
 import com.harishkannarao.ktor.intercept.Interceptor
 import com.harishkannarao.ktor.module.Modules
@@ -67,6 +66,13 @@ class Routes(
                 get {
                     val id = call.request.queryParameters["id"] ?: ""
                     call.respond(dependencies.customerApi.getCustomerById(id))
+                }
+            }
+
+            route("customers-by-ids") {
+                get {
+                    val ids = call.request.queryParameters["ids"] ?: ""
+                    call.respond(dependencies.customerApi.getCustomerByIds(ids.split(",")))
                 }
             }
 
