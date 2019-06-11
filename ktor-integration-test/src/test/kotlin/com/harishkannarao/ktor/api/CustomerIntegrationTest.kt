@@ -68,6 +68,24 @@ class CustomerIntegrationTest : AbstractBaseApiIntegration() {
     }
 
     @Test
+    fun `should return bad request for not found status when looking up by ids`() {
+        val id1 = "1234"
+        val id2 = "1235"
+
+        val customer1 = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")
+        wireMockStub.setUpGetSingleCustomer(id1, customer1, 200)
+        val customer2 = WireMockStub.Customer.newCustomer().copy("name 3", "name 4")
+        wireMockStub.setUpGetSingleCustomer(id2, customer2, 404)
+
+        val request = CustomerByIdsApiClient.Request.newRequest().copy(ids = listOf(id1, id2))
+
+        clients.customerByIdsApiClient()
+                .withRequest(request)
+                .get()
+                .expectBadRequestStatus()
+    }
+
+    @Test
     fun `should search customers by name`() {
         val name = "some-name"
         val customer1 = WireMockStub.Customer.newCustomer().copy("name 1", "name 2")

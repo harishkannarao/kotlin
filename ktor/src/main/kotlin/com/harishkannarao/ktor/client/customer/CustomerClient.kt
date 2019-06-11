@@ -9,6 +9,7 @@ import io.ktor.client.request.request
 import io.ktor.client.request.url
 import io.ktor.client.response.HttpResponse
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.fullPath
 import org.apache.http.client.utils.URIBuilder
 import org.slf4j.LoggerFactory
@@ -31,6 +32,9 @@ class CustomerClient(
             this.method = HttpMethod.Get
         }
         val response = execute(request)
+        if (response.status == HttpStatusCode.NotFound) {
+            throw CustomerClientException("$id not found")
+        }
         return json.fromJson(response.readTextAsUTF8())
     }
 

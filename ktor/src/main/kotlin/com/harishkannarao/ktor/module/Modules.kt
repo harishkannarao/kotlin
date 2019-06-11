@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule
 import com.harishkannarao.ktor.api.session.CookieSession
 import com.harishkannarao.ktor.api.session.HeaderSession
+import com.harishkannarao.ktor.client.customer.CustomerClientException
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
 import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
@@ -116,6 +117,10 @@ class Modules(
                     is DbEntityNotFoundException -> {
                         logger.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.NotFound)
+                    }
+                    is CustomerClientException -> {
+                        logger.warn(call.request.uri, error)
+                        call.respond(HttpStatusCode.BadRequest)
                     }
                     else -> {
                         logger.error(call.request.uri, error)

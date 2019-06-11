@@ -13,8 +13,12 @@ class CustomerApi(
 
     suspend fun getCustomerByIds(ids: List<String>): List<CustomerDto> = coroutineScope {
         ids.map {
-            async { customerClient.getCustomerById(it) }
-        }.map { it.await() }
+            async {
+                customerClient.getCustomerById(it)
+            }
+        }.map {
+            it.await()
+        }
     }
 
     suspend fun getCustomersByName(name: String): List<CustomerDto> {
