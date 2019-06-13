@@ -1,6 +1,10 @@
 # Kotlin
 
-This repository is to play with kotlin programming language and related frameworks or libraries
+This repository is to play with kotlin programming language and related frameworks or libraries.
+
+Please read my blog post about the features exercised in this repository
+
+Blog: [Kotlin / Ktor / Jdbi Json / Api / Free Marker / VueJs](https://blogs.harishkannarao.com/2019/06/kotlin-ktor-jdbi-json-api-free-marker.html)
 
 ## Travis CI Build status
 [![Build Status](https://travis-ci.org/harishkannarao/kotlin.svg?branch=master)](https://travis-ci.org/harishkannarao/kotlin)
