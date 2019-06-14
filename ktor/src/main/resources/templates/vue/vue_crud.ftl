@@ -18,17 +18,17 @@
         <span class="qa-loading-message">Loading...</span>
     </div>
     <div v-cloak>
-        <div class="row">
+        <div class="row px-3 py-3">
             <p>Total entities: <span class="qa-total-entities">{{ totalEntities }}</span></p>
         </div>
-        <div class="row">
+        <div class="row px-3 py-3">
             <p>
                 Total Server Entities: <span class="qa-total-server-entities">{{ totalServerEntities }}</span>
                 <input type="checkbox" v-model="autoRefreshServerCount" class="qa-auto-refresh-server-count"/>Auto
                 Refresh
             </p>
         </div>
-        <div class="row">
+        <div class="row px-3 py-3">
             <div class="col-md-auto">
                 <input type="image" src="/webjars/feather-icons/dist/icons/refresh-cw.svg" alt="Refresh"
                        @click="refreshEntities($event)" class="qa-refresh-entities"/>
@@ -40,8 +40,8 @@
                 <span v-if="loadingEntities" class="qa-refreshing-entities-message">Refreshing Entities...</span>
             </div>
         </div>
-        <div class="row">
-            <form @submit="submitForm($event)" :class="[{'hidden' : !showForm}, 'qa-new-entity-form']">
+        <div class="row px-3 py-3">
+            <form @submit="submitForm($event)" :class="[{'hidden' : !showForm}, 'qa-new-entity-form', 'px-3','py-3']">
                 <div class="row">
                     <div class="col-4">
                         Username
@@ -116,7 +116,7 @@
                     </div>
                 </div>
             </form>
-            <table class="table table-bordered table-hover">
+            <table class="px-3 py-3 table table-bordered table-hover">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Number</th>
