@@ -120,7 +120,6 @@
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Number</th>
-                    <th scope="col">Action</th>
                     <th scope="col">UUID</th>
                     <th scope="col">Username</th>
                     <th scope="col">Date</th>
@@ -129,14 +128,12 @@
                     <th scope="col">Boolean</th>
                     <th scope="col">Decimal</th>
                     <th scope="col">Tags</th>
+                    <th scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(entity, index) in entities">
                     <th scope="row" class="qa-number">{{ index + 1 }}</th>
-                    <td>
-                        <button class="qa-delete-entity-btn" @click="deleteEntity(entity.id, $event)">Delete</button>
-                    </td>
                     <td class="qa-id">{{ entity.id }}</td>
                     <td class="qa-username">{{ entity.data.username }}</td>
                     <td class="qa-date">{{ entity.data.date }}</td>
@@ -150,6 +147,9 @@
                                 {{ tag }}
                             </li>
                         </ul>
+                    </td>
+                    <td>
+                        <button class="qa-delete-entity-btn" @click="deleteEntity(entity.id, $event)">Delete</button>
                     </td>
                 </tr>
                 </tbody>
