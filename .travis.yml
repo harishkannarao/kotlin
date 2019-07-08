@@ -6,12 +6,14 @@ language: java
 jdk:
   - openjdk11
 
+addons:
+  chrome: stable
+
 services:
   - docker
 
 install:
   - sudo apt-get -qq update
-  - sudo apt-get -qq install -y chromium-browser
   - sudo apt-get -qq install -y chromium-chromedriver
 
 before_script:
@@ -22,8 +24,8 @@ before_script:
 
 script:
   - ./gradlew clean minifyFiles assemble
-  - ./gradlew build --info -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
-  - ./gradlew build --info -Dapp.development.mode=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./gradlew build --info -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeHeadless=true
+  - ./gradlew build --info -Dapp.development.mode=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeHeadless=true
 
 after_script:
   - ./gradlew stopDocker --info
