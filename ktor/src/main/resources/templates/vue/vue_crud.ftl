@@ -135,7 +135,7 @@
                 <tr v-for="(entity, index) in entities">
                     <th scope="row" class="qa-number">{{ index + 1 }}</th>
                     <td>
-                        <button class="qa-delete-entity-btn" @click="deleteEntity(entity.id, $event)">Delete</button>
+                        <a class="qa-delete-entity-btn" @click="deleteEntity(entity.id, $event)">Delete</a>
                     </td>
                     <td class="qa-id">{{ entity.id }}</td>
                     <td class="qa-username">{{ entity.data.username }}</td>
