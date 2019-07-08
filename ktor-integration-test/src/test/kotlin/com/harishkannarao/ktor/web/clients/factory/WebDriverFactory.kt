@@ -62,7 +62,7 @@ object WebDriverFactory {
         val chromeOptions = ChromeOptions()
         val arguments = ArrayList<String>()
         arguments.add("--allow-insecure-localhost")
-        arguments.add("--window-size=800,600")
+        arguments.add("--start-maximized")
         arguments.add("--disable-gpu")
         arguments.add("--no-sandbox")
         val isChromeHeadlessOn = java.lang.Boolean.parseBoolean(System.getProperty("chromeHeadless", "false"))

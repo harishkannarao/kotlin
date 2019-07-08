@@ -149,7 +149,7 @@
                         </ul>
                     </td>
                     <td>
-                        <a class="qa-delete-entity-btn" @click="deleteEntity(entity.id, $event)">Delete</a>
+                        <button class="qa-delete-entity-btn" @click="deleteEntity(entity.id, $event)">Delete</button>
                     </td>
                 </tr>
                 </tbody>
