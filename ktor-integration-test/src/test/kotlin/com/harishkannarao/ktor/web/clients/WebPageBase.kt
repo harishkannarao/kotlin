@@ -49,7 +49,8 @@ abstract class WebPageBase<T : WebPageBase<T>>(private val baseUrl: String, prot
 
     protected fun clickElement(by: By, index: Int = 0): T {
         val element = getElements(by)[index]
-        Actions(webDriver).moveToElement(element).click().perform()
+        Actions(webDriver).moveToElement(element).perform()
+        element.click()
         return this as T
     }
 
