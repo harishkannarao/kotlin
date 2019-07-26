@@ -9,7 +9,7 @@ object HttpClientFactory {
     fun createHttpClient(): HttpClient {
         return HttpClient(Apache) {
             install(HttpPlainText) {
-                defaultCharset = Charsets.UTF_8
+                register(Charsets.UTF_8)
             }
 
             engine {
