@@ -2,6 +2,7 @@ dependencies {
     testImplementation(project(":ktor"))
     testImplementation(project(":wiremock-stub").sourceSets.test.output)
     testImplementation("io.rest-assured:rest-assured:$restAssuredVersion")
+    testImplementation("com.github.dzieciou.testing:curl-logger:$restAssuredCurlLoggerVersion")
     testImplementation("ch.qos.logback:logback-classic:$logbackVersion")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     testImplementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")

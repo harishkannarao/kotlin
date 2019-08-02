@@ -1,5 +1,6 @@
 package com.harishkannarao.ktor.api.clients
 
+import com.github.dzieciou.testing.curl.CurlLoggingRestAssuredConfigFactory
 import io.restassured.RestAssured
 import io.restassured.config.RedirectConfig
 import io.restassured.config.RestAssuredConfig
@@ -155,7 +156,7 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     }
 
     private fun expectJsonPathNotToBeNull(jsonPath: String): T {
-        assertThat("Response doesn't contain JsonPath: $jsonPath", response!!.jsonPath().getJsonObject(jsonPath), Matchers.notNullValue())
+        assertThat("Response doesn't contain JsonPath: $jsonPath", response!!.jsonPath().getJsonObject(jsonPath), notNullValue())
         return this as T
     }
 
@@ -190,8 +191,9 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     }
 
     private fun createRestAssuredConfig(): RestAssuredConfig {
-        return RestAssuredConfig.config()
+        val restAssuredConfig = RestAssuredConfig.config()
                 .redirect(createRedirectConfig())
+        return CurlLoggingRestAssuredConfigFactory.updateConfig(restAssuredConfig)
     }
 
     private fun createRedirectConfig(): RedirectConfig {
