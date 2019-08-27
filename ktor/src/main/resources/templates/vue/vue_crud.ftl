@@ -160,6 +160,7 @@
 
 <#include "/common/vueScripts.ftl" />
 <script src="/static/js/vue/axios${javaScriptVariant}.js"></script>
+<script src="/static/js/vue/entity_client${javaScriptVariant}.js"></script>
 <script src="/static/js/vue/vue_crud${javaScriptVariant}.js"></script>
 </body>
 

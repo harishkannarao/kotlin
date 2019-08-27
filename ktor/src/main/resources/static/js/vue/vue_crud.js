@@ -39,7 +39,7 @@ new Vue({
         },
         getEntities: function() {
             this.loadingEntities = true;
-            axiosInstance.get('/jdbi/json-entity')
+            entityClient.getEntities()
                 .then(response => {
                     console.log(response);
                     this.entities = response.data;
@@ -54,7 +54,7 @@ new Vue({
                 });
         },
         getEntityCount: function() {
-            axiosInstance.get('/jdbi/json-entity/count')
+            entityClient.getTotalEntities()
                 .then(response => {
                     console.log(response);
                     this.entityCount = response.data;
@@ -93,7 +93,7 @@ new Vue({
             }
             requestEntity.nestedData = [];
 
-            axiosInstance.post('/jdbi/json-entity', requestEntity)
+            entityClient.createEntity(requestEntity)
                 .then(response => {
                     console.log(response);
                     this.entities.push(response.data);
@@ -112,7 +112,7 @@ new Vue({
             if (event) {
                 event.preventDefault();
             }
-            axiosInstance.delete('/jdbi/json-entity/' + id)
+            entityClient.deleteEntity(id)
                 .then(response => {
                     console.log(response);
                     this.getEntities();
