@@ -22,7 +22,10 @@ import io.ktor.request.contentType
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
-import io.ktor.routing.*
+import io.ktor.routing.Route
+import io.ktor.routing.get
+import io.ktor.routing.post
+import io.ktor.routing.route
 import io.ktor.sessions.*
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
@@ -174,6 +177,12 @@ class Routes(
             route("user") {
                 get {
                     call.respond(dependencies.userWeb.displayUser())
+                }
+            }
+
+            route("generate-401") {
+                get {
+                    call.respond(HttpStatusCode.Unauthorized, Unit)
                 }
             }
         }

@@ -83,13 +83,15 @@ class LocationRoutes(
             }
             route("vue") {
                 get<VueCrudTemplate> { vueCrudTemplate ->
-                    val model = mapOf(
-                            "defaultIntField" to vueCrudTemplate.defaultIntValue
-                    )
-                    call.respond(FreeMarkerContent("/vue/vue_crud.ftl", model))
+                    call.respond(FreeMarkerContent("/vue/vue_crud.ftl", vueCrudTemplate.createModel()))
                 }
-                get<VueTemplate> { vueTemplate ->
-                    call.respond(FreeMarkerContent("/vue/${vueTemplate.name}.ftl", null))
+                route("vue_redirect") {
+                    get<Unit> {
+                        call.respond(FreeMarkerContent("/vue/vue_redirect.ftl", null))
+                    }
+                }
+                get<VueLoginTemplate> { vueLoginTemplate ->
+                    call.respond(FreeMarkerContent("/vue/vue_login.ftl", vueLoginTemplate.createModel()))
                 }
             }
         }
@@ -100,6 +102,18 @@ class LocationRoutes(
     @Location("{id}") data class JsonEntityWithId(val id: String)
     @Location("") data class JsonEntitySearch(val by: String, val from: String, val to: String)
     @Location("") data class JsonEntitySearchByTags(val tags: String)
-    @Location("{name}") data class VueTemplate(val name: String)
-    @Location("vue_crud") data class VueCrudTemplate(val defaultIntValue: Int = 1)
+    @Location("vue_crud") data class VueCrudTemplate(val defaultIntValue: Int = 1) {
+        fun createModel(): Map<String, Int> {
+            return mapOf(
+                    "defaultIntField" to defaultIntValue
+            )
+        }
+    }
+    @Location("vue_login") data class VueLoginTemplate(val redirectTo: String?) {
+        fun createModel(): Map<String, Any?> {
+            return mapOf(
+                    "redirectUrl" to redirectTo
+            )
+        }
+    }
 }

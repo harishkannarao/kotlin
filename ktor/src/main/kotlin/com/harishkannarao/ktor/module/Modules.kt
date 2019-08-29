@@ -143,6 +143,9 @@ class Modules(
         }
         install(Locations)
         install(Routing) {
+            if (config.developmentMode) {
+                trace { logger.debug(it.buildText()) }
+            }
             routes.rootPath(this)
             staticRoutes.staticPath(this)
             locationRoutes.locations(this)
