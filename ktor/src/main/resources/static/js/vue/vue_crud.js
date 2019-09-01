@@ -4,7 +4,7 @@ new Vue({
         return {
             loading: true,
             loadingEntities: true,
-            errored: false,
+            error: null,
             showForm: false,
             autoRefreshServerCount: true,
             timer: null,
@@ -41,12 +41,10 @@ new Vue({
             this.loadingEntities = true;
             entityClient.getEntities()
                 .then(response => {
-                    console.log(response);
                     this.entities = response.data;
                 })
                 .catch(error => {
-                    console.log(error);
-                    this.errored = true;
+                    this.error = error;
                 })
                 .finally(() => {
                     this.loading = false;
@@ -56,11 +54,10 @@ new Vue({
         getEntityCount: function() {
             entityClient.getTotalEntities()
                 .then(response => {
-                    console.log(response);
                     this.entityCount = response.data;
                 })
                 .catch(error => {
-                    console.log(error);
+                    this.error = error;
                 })
         },
         convertToIsoUtcTimeStamp: function(epochMillis) {
@@ -95,18 +92,14 @@ new Vue({
 
             entityClient.createEntity(requestEntity)
                 .then(response => {
-                    console.log(response);
                     this.entities.push(response.data);
                 })
                 .catch(error => {
-                    console.log(error);
-                    this.errored = true;
+                    this.error = error;
                 })
                 .finally(() => {
                     this.newEntity = deepCopy(this.defaultEntity);
                 });
-
-            console.log('Submitted form');
         },
         deleteEntity: function(id, event) {
             if (event) {
@@ -114,13 +107,15 @@ new Vue({
             }
             entityClient.deleteEntity(id)
                 .then(response => {
-                    console.log(response);
                     this.getEntities();
                 })
                 .catch(error => {
-                    console.log(error);
-                    this.errored = true;
+                    this.error = error;
                 });
+        },
+        clearError: function(error) {
+            console.log(error);
+            this.error = null;
         }
     },
     computed: {

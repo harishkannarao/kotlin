@@ -116,6 +116,11 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div class="row px-3 py-3">
+            <error-container v-if="error" v-bind:error="error" v-on:clear-error="clearError"></error-container>
+        </div>
+        <div class="row px-3 py-3">
             <table class="px-3 py-3 table table-bordered table-hover">
                 <thead class="thead-dark">
                 <tr>
@@ -160,6 +165,7 @@
 
 <#include "/common/vueScripts.ftl" />
 <script src="/static/js/vue/entity_client${javaScriptVariant}.js"></script>
+<script src="/static/js/vue/vue_error_component${javaScriptVariant}.js"></script>
 <script src="/static/js/vue/vue_crud${javaScriptVariant}.js"></script>
 </body>
 

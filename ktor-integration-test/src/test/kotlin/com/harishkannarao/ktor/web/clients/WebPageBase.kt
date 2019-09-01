@@ -77,7 +77,7 @@ abstract class WebPageBase<T : WebPageBase<T>>(protected val baseUrl: String, pr
     protected fun expectElementDisplayStatus(by: By, matcher: Matcher<Boolean?>): T {
         await.atMost(3L, TimeUnit.SECONDS)
                 .pollInterval(100L, TimeUnit.MILLISECONDS)
-                .until({ getOptionalElement(by)?.isDisplayed }, matcher)
+                .until({ getOptionalElement(by)?.isDisplayed ?: false }, matcher)
         return this as T
     }
 

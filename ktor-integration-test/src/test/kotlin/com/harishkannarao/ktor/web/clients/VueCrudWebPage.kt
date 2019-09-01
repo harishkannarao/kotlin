@@ -90,8 +90,7 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
     }
 
     fun expectNewEntityFormToBeDisplayed(): VueCrudWebPage {
-        expectElementToBeDisplayed(className(NEW_ENTITY_FORM))
-        return this
+        return expectElementToBeDisplayed(className(NEW_ENTITY_FORM))
     }
 
     fun expectNewEntityFormNotToBeDisplayed() {
@@ -244,8 +243,7 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
     }
 
     fun expectBooleanFieldDisplayToBeFalse(): VueCrudWebPage {
-        expectElementTextToMatch(className(NEW_ENTITY_BOOLEAN_FIELD_DISPLAY), equalTo("false"))
-        return this
+        return expectElementTextToMatch(className(NEW_ENTITY_BOOLEAN_FIELD_DISPLAY), equalTo("false"))
     }
 
     fun clickSaveButton(): VueCrudWebPage {
@@ -296,6 +294,22 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         return clickElement(className(REFRESH_ENTITIES))
     }
 
+    fun expectNoErrorMessageToBeDisplayed(): VueCrudWebPage {
+        return expectElementNotToBeDisplayed(className(ERROR_MESSAGE))
+    }
+
+    fun expectErrorMessageToBe(value: String): VueCrudWebPage {
+        return expectElementTextToMatch(className(ERROR_MESSAGE), equalTo(value))
+    }
+
+    fun expectDismissErrorButtonToBeDisplayed(): VueCrudWebPage {
+        return expectElementToBeDisplayed(className(DISMISS_ERROR_MESSAGE_BTN))
+    }
+
+    fun clickDismissErrorButton(): VueCrudWebPage {
+        return clickElement(className(DISMISS_ERROR_MESSAGE_BTN))
+    }
+
     companion object {
         private const val PAGE_URL = "/vue/vue_crud"
         private const val NEW_ENTITY_TIMESTAMP_ISO_PRINT = "qa-epoch-timestamp-iso"
@@ -308,6 +322,8 @@ class VueCrudWebPage(baseUrl: String, webClient: WebDriver) : WebPageBase<VueCru
         private const val NEW_ENTITY_BOOLEAN_FIELD = "qa-boolean-field"
         private const val NEW_ENTITY_BOOLEAN_FIELD_DISPLAY = "qa-boolean-field-display"
         private const val NEW_ENTITY_FORM = "qa-new-entity-form"
+        private const val ERROR_MESSAGE = "qa-error-message"
+        private const val DISMISS_ERROR_MESSAGE_BTN = "qa-clear-error-btn"
         private const val ADD_NEW_BUTTON = "qa-add-new-btn"
         private const val DONE_BUTTON = "qa-done-btn"
         private const val SAVE_BUTTON = "qa-save-btn"

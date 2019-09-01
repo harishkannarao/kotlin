@@ -351,4 +351,21 @@ class VueCrudIntegrationTest : AbstractBaseWebIntegration() {
                         tags = emptyList()
                 )
     }
+
+    @Test
+    fun `display error from the server`() {
+        val webDriver = newWebDriver()
+
+        webPages.vueCrudWebPage(webDriver)
+                .get()
+                .expectAddNewButton()
+                .clickAddNewButton()
+                .expectNoErrorMessageToBeDisplayed()
+                .expectNewEntityFormToBeDisplayed()
+                .clickSaveButton()
+                .expectDismissErrorButtonToBeDisplayed()
+                .expectErrorMessageToBe("Request failed with status code 400")
+                .clickDismissErrorButton()
+                .expectNoErrorMessageToBeDisplayed()
+    }
 }
