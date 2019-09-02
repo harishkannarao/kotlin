@@ -114,8 +114,9 @@ new Vue({
                 });
         },
         clearError: function(error) {
-            console.log(error);
-            this.error = null;
+            if (this.error.message === error.message) {
+                this.error = null;
+            }
         }
     },
     computed: {
