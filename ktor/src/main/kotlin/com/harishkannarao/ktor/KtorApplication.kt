@@ -16,7 +16,7 @@ object KtorApplication {
         val routes = Routes(dependencies, config)
         val locationRoutes = LocationRoutes(dependencies)
         val staticRoutes = StaticRoutes(config)
-        val modules = Modules(config, routes, staticRoutes, locationRoutes)
+        val modules = Modules(config, routes, staticRoutes, locationRoutes, dependencies)
         KtorApplicationServer(config, modules, dependencies).start()
     }
 }

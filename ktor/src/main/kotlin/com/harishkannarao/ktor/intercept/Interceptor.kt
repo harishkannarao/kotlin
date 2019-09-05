@@ -20,8 +20,15 @@ class Interceptor {
         }
     }
 
+    fun requestTimeInterceptor(): suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
+        return {
+            this.context.attributes.put(REQUEST_TIME_ATTRIBUTE_KEY, System.currentTimeMillis())
+        }
+    }
+
     companion object {
         const val KNOWN_COOKIE = "KNOWN_COOKIE"
         val KNOWN_COOKIE_ATTRIBUTE_KEY = AttributeKey<String>("KNOWN_COOKIE")
+        val REQUEST_TIME_ATTRIBUTE_KEY = AttributeKey<Long>("REQUEST_TIME")
     }
 }

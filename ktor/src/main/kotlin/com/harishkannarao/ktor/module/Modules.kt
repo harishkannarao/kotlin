@@ -11,11 +11,14 @@ import com.harishkannarao.ktor.client.customer.CustomerClientException
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dao.exception.DbEntityConflictException
 import com.harishkannarao.ktor.dao.exception.DbEntityNotFoundException
+import com.harishkannarao.ktor.dependency.Dependencies
+import com.harishkannarao.ktor.intercept.Interceptor
 import com.harishkannarao.ktor.route.LocationRoutes
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import freemarker.cache.ClassTemplateLoader
 import io.ktor.application.Application
+import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
@@ -23,6 +26,7 @@ import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.basic
 import io.ktor.features.*
 import io.ktor.freemarker.FreeMarker
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.locations.Locations
@@ -45,7 +49,8 @@ class Modules(
         private val config: KtorApplicationConfig,
         private val routes: Routes,
         private val staticRoutes: StaticRoutes,
-        private val locationRoutes: LocationRoutes
+        private val locationRoutes: LocationRoutes,
+        private val dependencies: Dependencies
 ) {
 
     private val logger = LoggerFactory.getLogger(Modules::class.java)
@@ -102,6 +107,16 @@ class Modules(
                     name = "requestId",
                     provider = { call -> call.request.header("X-Request-Id") }
             )
+            format { call ->
+                val latency = when(val requestTime = call.attributes.getOrNull(Interceptor.REQUEST_TIME_ATTRIBUTE_KEY)) {
+                    null -> 0
+                    else -> System.currentTimeMillis() - requestTime
+                }
+                when (val status = call.response.status() ?: "Unhandled") {
+                    HttpStatusCode.Found -> "$status: $latency: ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"
+                    else -> "$status: $latency: ${call.request.toLogString()}"
+                }
+            }
         }
         install(StatusPages) {
             exception<Throwable> { error ->
@@ -146,6 +161,7 @@ class Modules(
             if (config.developmentMode) {
                 trace { logger.debug(it.buildText()) }
             }
+            intercept(ApplicationCallPipeline.Features, dependencies.interceptor.requestTimeInterceptor())
             routes.rootPath(this)
             staticRoutes.staticPath(this)
             locationRoutes.locations(this)
