@@ -109,7 +109,7 @@ abstract class AbstractBaseIntegration {
             val routes = Routes(dependencies, config)
             val staticRoutes = StaticRoutes(config)
             val locationRoutes = LocationRoutes(dependencies)
-            val modules = Modules(config, routes, staticRoutes, locationRoutes)
+            val modules = Modules(config, routes, staticRoutes, locationRoutes, dependencies)
             val localServer = KtorApplicationServer(config, modules, dependencies)
             localServer.start(wait = false)
             return localServer
