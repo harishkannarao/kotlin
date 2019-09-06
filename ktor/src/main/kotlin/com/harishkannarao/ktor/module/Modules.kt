@@ -53,7 +53,7 @@ class Modules(
         private val dependencies: Dependencies
 ) {
 
-    private val logger = LoggerFactory.getLogger(Modules::class.java)
+    private val log = LoggerFactory.getLogger(Modules::class.java)
 
     val myModule: Application.() -> Unit = {
         install(ContentNegotiation) {
@@ -100,6 +100,7 @@ class Modules(
         }
         install(CallLogging) {
             level = Level.INFO
+            logger = log
             filter(
                     predicate = { call -> call.request.path().startsWith("/") }
             )
@@ -109,12 +110,12 @@ class Modules(
             )
             format { call ->
                 val latency = when(val requestTime = call.attributes.getOrNull(Interceptor.REQUEST_TIME_ATTRIBUTE_KEY)) {
-                    null -> 0
+                    null -> -1
                     else -> System.currentTimeMillis() - requestTime
                 }
                 when (val status = call.response.status() ?: "Unhandled") {
-                    HttpStatusCode.Found -> "$status: $latency: ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"
-                    else -> "$status: $latency: ${call.request.toLogString()}"
+                    HttpStatusCode.Found -> "Access: $status: $latency: ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"
+                    else -> "Access: $status: $latency: ${call.request.toLogString()}"
                 }
             }
         }
@@ -122,23 +123,23 @@ class Modules(
             exception<Throwable> { error ->
                 when (error) {
                     is JsonProcessingException -> {
-                        logger.warn(call.request.uri, error)
+                        log.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.BadRequest)
                     }
                     is DbEntityConflictException -> {
-                        logger.warn(call.request.uri, error)
+                        log.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.Conflict)
                     }
                     is DbEntityNotFoundException -> {
-                        logger.warn(call.request.uri, error)
+                        log.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.NotFound)
                     }
                     is CustomerClientException -> {
-                        logger.warn(call.request.uri, error)
+                        log.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.BadRequest)
                     }
                     else -> {
-                        logger.error(call.request.uri, error)
+                        log.error(call.request.uri, error)
                         call.respond(HttpStatusCode.InternalServerError)
                     }
                 }
@@ -159,7 +160,7 @@ class Modules(
         install(Locations)
         install(Routing) {
             if (config.developmentMode) {
-                trace { logger.debug(it.buildText()) }
+                trace { log.debug(it.buildText()) }
             }
             intercept(ApplicationCallPipeline.Features, dependencies.interceptor.requestTimeInterceptor())
             routes.rootPath(this)

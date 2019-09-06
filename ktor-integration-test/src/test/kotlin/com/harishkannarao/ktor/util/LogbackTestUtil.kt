@@ -1,4 +1,4 @@
-package com.harishkannarao.ktor.rule
+package com.harishkannarao.ktor.util
 
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
@@ -46,6 +46,12 @@ class LogbackTestUtil(
     fun assertLogEntry(expectedString: String) {
         val matchFound = Files.lines(Paths.get(logFile).toAbsolutePath()).anyMatch { s -> s.contains(expectedString) }
         assertThat("Log file: ${Paths.get(logFile).toAbsolutePath()} does not contain expected string $expectedString", matchFound, equalTo(true))
+    }
+
+    fun assertLogEntryUsingRegEx(regEx: String) {
+        val matchFound = Files.lines(Paths.get(logFile).toAbsolutePath())
+                .anyMatch { s -> regEx.toRegex().containsMatchIn(s) }
+        assertThat("Log file: ${Paths.get(logFile).toAbsolutePath()} does not contain expected regEx: '$regEx'", matchFound, equalTo(true))
     }
 
     private fun createPatternLayoutEncoder(loggingPattern: String, context: LoggerContext): PatternLayoutEncoder {

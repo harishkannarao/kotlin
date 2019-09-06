@@ -1,7 +1,7 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseApiIntegration
-import com.harishkannarao.ktor.rule.LogbackTestUtil
+import com.harishkannarao.ktor.util.LogbackTestUtil
 import com.harishkannarao.ktor.server.KtorApplicationServer
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
