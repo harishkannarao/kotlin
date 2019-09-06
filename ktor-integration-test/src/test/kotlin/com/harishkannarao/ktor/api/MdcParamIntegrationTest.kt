@@ -25,7 +25,7 @@ class MdcParamIntegrationTest : AbstractBaseApiIntegration() {
     @Test
     fun `print request id MDC param in application log`() {
         val requestId = UUID.randomUUID().toString()
-        val expectedApplicationLogMessage = "[$requestId] INFO  sample log message to test MDC param"
+        val expectedApplicationLogMessage = "[$requestId] INFO sample log message to test MDC param"
         clients.rootApiClient()
                 .withRequestIdHeader(requestId)
                 .get()
@@ -36,7 +36,7 @@ class MdcParamIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `prints empty request id MDC param in application log`() {
-        val expectedApplicationLogMessage = "[] INFO  sample log message to test MDC param"
+        val expectedApplicationLogMessage = "[] INFO sample log message to test MDC param"
         clients.rootApiClient()
                 .get()
                 .expectSuccessStatus()

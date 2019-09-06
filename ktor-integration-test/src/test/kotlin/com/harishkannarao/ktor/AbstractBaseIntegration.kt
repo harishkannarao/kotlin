@@ -43,6 +43,11 @@ abstract class AbstractBaseIntegration {
         }
     }
 
+    @AfterMethod(alwaysRun = true)
+    fun closeAllWebDrivers() {
+        WebDriverFactory.closeAllWebDrivers()
+    }
+
     @BeforeSuite(alwaysRun = true)
     fun globalSetup() {
         WebDriverFactory.startChromeDriverService()
