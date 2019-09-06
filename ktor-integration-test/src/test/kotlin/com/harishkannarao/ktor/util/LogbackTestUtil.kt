@@ -14,7 +14,7 @@ import java.util.*
 
 class LogbackTestUtil(
         loggerName: String,
-        loggingPattern: String = "[%X{requestId}] %-5level %message%n"
+        loggingPattern: String = "[%X{requestId}] %level %message%n"
 ) {
 
     private val logFileLocation: String = "build/logs"

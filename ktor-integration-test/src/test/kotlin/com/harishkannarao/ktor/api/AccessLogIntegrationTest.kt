@@ -26,7 +26,7 @@ class AccessLogIntegrationTest : AbstractBaseApiIntegration() {
                 .get()
                 .expectSuccessStatus()
 
-        modulesLogger.assertLogEntryUsingRegEx("""Access: 200 OK: [0-9]+: GET - /""")
+        modulesLogger.assertLogEntryUsingRegEx("""INFO Access: 200 OK: [0-9]+: GET - /""")
     }
 
     @Test
@@ -35,6 +35,6 @@ class AccessLogIntegrationTest : AbstractBaseApiIntegration() {
                 .get("/something-junk")
                 .expectNotFoundStatus()
 
-        modulesLogger.assertLogEntry("""Access: Unhandled: -1: GET - /something-junk""")
+        modulesLogger.assertLogEntry("""INFO Access: Unhandled: -1: GET - /something-junk""")
     }
 }
