@@ -1,5 +1,7 @@
 # Kotlin
 
+Hello world
+
 This repository is to play with kotlin programming language and related frameworks or libraries.
 
 Please read my blog post about the features exercised in this repository
