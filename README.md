@@ -98,3 +98,5 @@ Change logback configuration
     ./gradlew clean :ktor-integration-test:nonAuthIntegrationTest
     
 ### Just a sample
+
+    Hello World
