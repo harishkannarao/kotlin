@@ -94,3 +94,11 @@ Change logback configuration
 #### Non Auth Integration tests
 
     ./gradlew clean :ktor-integration-test:nonAuthIntegrationTest
+    
+## Generate dependency license reports
+
+    ./gradlew :ktor:generateLicenseReport
+    
+Report will be under
+
+    ./ktor/build/reports/dependency-license/index.html

@@ -7,6 +7,9 @@ pluginManagement {
             if (requested.id.id == "com.github.johnrengelman.shadow") {
                 useVersion shadowJarVersion
             }
+            if (requested.id.id == "com.github.jk1.dependency-license-report") {
+                useVersion gradleLicenseReportVersion
+            }
         }
     }
 }
