@@ -1,9 +1,6 @@
 package com.harishkannarao.ktor.web.clients.factory
 
-import com.harishkannarao.ktor.web.clients.UserWebPage
-import com.harishkannarao.ktor.web.clients.VueCrudWebPage
-import com.harishkannarao.ktor.web.clients.VueLoginWebPage
-import com.harishkannarao.ktor.web.clients.VueRedirectWebPage
+import com.harishkannarao.ktor.web.clients.*
 import org.openqa.selenium.WebDriver
 
 class WebPageFactory(private val baseUrl: String) {
@@ -22,5 +19,9 @@ class WebPageFactory(private val baseUrl: String) {
 
     fun vueLoginWebPage(webDriver: WebDriver): VueLoginWebPage {
         return VueLoginWebPage(baseUrl, webDriver)
+    }
+
+    fun vueErrorContainerReferencePage(webDriver: WebDriver): VueErrorContainerReferenceWebPage {
+        return VueErrorContainerReferenceWebPage(baseUrl, webDriver)
     }
 }

@@ -13,6 +13,7 @@ import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import com.harishkannarao.ktor.server.KtorApplicationServer
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
+import com.harishkannarao.ktor.util.TestRoutes
 import com.harishkannarao.ktor.web.clients.factory.WebDriverFactory
 import com.harishkannarao.ktor.web.clients.factory.WebPageFactory
 import org.awaitility.kotlin.await
@@ -114,7 +115,14 @@ abstract class AbstractBaseIntegration {
             val routes = Routes(dependencies, config)
             val staticRoutes = StaticRoutes(config)
             val locationRoutes = LocationRoutes(dependencies)
-            val modules = Modules(config, routes, staticRoutes, locationRoutes, dependencies)
+            val modules = Modules(
+                    config = config,
+                    routes = routes,
+                    staticRoutes = staticRoutes,
+                    locationRoutes = locationRoutes,
+                    dependencies = dependencies,
+                    additionalRoutes = TestRoutes.createTestRoutes()
+            )
             val localServer = KtorApplicationServer(config, modules, dependencies)
             localServer.start(wait = false)
             return localServer

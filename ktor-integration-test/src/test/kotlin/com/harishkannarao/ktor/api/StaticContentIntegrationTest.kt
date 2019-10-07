@@ -25,6 +25,15 @@ class StaticContentIntegrationTest : AbstractBaseApiIntegration() {
     }
 
     @Test
+    fun `servers static html content under test resources`() {
+        clients.staticContentClient()
+                .get("/static/html/testPage.html")
+                .expectSuccessStatus()
+                .expectHtmlContentType()
+                .expectResponseTextToContain("Test Html Page")
+    }
+
+    @Test
     fun `servers static json content`() {
         clients.staticContentClient()
                 .get("/static/json/sample.json")

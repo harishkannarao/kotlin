@@ -34,6 +34,7 @@ import io.ktor.request.header
 import io.ktor.request.path
 import io.ktor.request.uri
 import io.ktor.response.respond
+import io.ktor.routing.Route
 import io.ktor.routing.Routing
 import io.ktor.sessions.SessionStorageMemory
 import io.ktor.sessions.Sessions
@@ -50,7 +51,8 @@ class Modules(
         private val routes: Routes,
         private val staticRoutes: StaticRoutes,
         private val locationRoutes: LocationRoutes,
-        private val dependencies: Dependencies
+        private val dependencies: Dependencies,
+        private val additionalRoutes: Route.() -> Unit = {}
 ) {
 
     private val log = LoggerFactory.getLogger(Modules::class.java)
@@ -166,6 +168,7 @@ class Modules(
             routes.rootPath(this)
             staticRoutes.staticPath(this)
             locationRoutes.locations(this)
+            additionalRoutes(this)
         }
     }
 
