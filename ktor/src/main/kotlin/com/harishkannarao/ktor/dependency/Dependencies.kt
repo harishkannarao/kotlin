@@ -33,7 +33,10 @@ class Dependencies(
     private val dbJsonUtil = DbJsonUtil()
     private val relationalEntityDao = RelationalEntityDao(jdbi)
     private val jsonEntityDao = JsonEntityDao(jdbi, dbJsonUtil)
-    val flyway: Flyway = Flyway.configure().dataSource(dataSource).load()
+    val flyway: Flyway = Flyway.configure()
+            .dataSource(dataSource)
+            .locations("classpath:flyway/db/migration")
+            .load()
 
     // interceptors
     val interceptor = Interceptor()
