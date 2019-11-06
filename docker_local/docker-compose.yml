@@ -3,19 +3,6 @@ networks:
   main_network:
 
 services:
-  flyway:
-    container_name: ktor-flyway-db-schema
-    image: boxfuse/flyway:latest-alpine
-    command: -url=jdbc:postgresql://ktor-jdbi-postgres:5432/myuser -user=myuser -password=superpassword -connectRetries=60 migrate
-    volumes:
-      - ../flyway/sql:/flyway/sql
-    depends_on:
-      - ktor-jdbi-postgres
-    networks:
-      main_network:
-        aliases:
-          - flyway
-
   ktor-jdbi-postgres:
     container_name: ktor-jdbi-postgres
     image: "postgres:11-alpine"

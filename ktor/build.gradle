@@ -47,6 +47,7 @@ dependencies {
     implementation("org.jdbi:jdbi3-kotlin:$jdbiVersion")
     implementation("org.jdbi:jdbi3-kotlin-sqlobject:$jdbiVersion")
     implementation("org.jdbi:jdbi3-postgres:$jdbiVersion")
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
     implementation("com.zaxxer:HikariCP:$hikariVersion")
     implementation("org.postgresql:postgresql:$postgresqlVersion")
 

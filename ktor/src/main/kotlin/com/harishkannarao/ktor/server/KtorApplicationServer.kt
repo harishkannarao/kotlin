@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 open class KtorApplicationServer(
         private val config: KtorApplicationConfig,
         modules: Modules,
-        dependencies: Dependencies
+        private val dependencies: Dependencies
 ) {
 
     private val logger = LoggerFactory.getLogger(KtorApplicationServer::class.java)
@@ -34,6 +34,7 @@ open class KtorApplicationServer(
                 definition = ApplicationStopped,
                 handler = stoppedEventHandler
         )
+        dependencies.flyway.migrate()
         server.start(wait)
     }
 

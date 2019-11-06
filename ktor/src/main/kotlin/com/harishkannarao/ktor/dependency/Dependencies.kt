@@ -15,6 +15,7 @@ import com.harishkannarao.ktor.http.HttpClientFactory
 import com.harishkannarao.ktor.intercept.Interceptor
 import com.harishkannarao.ktor.jdbi.JdbiFactory
 import com.harishkannarao.ktor.web.user.UserWeb
+import org.flywaydb.core.Flyway
 
 class Dependencies(
         config: KtorApplicationConfig,
@@ -32,6 +33,7 @@ class Dependencies(
     private val dbJsonUtil = DbJsonUtil()
     private val relationalEntityDao = RelationalEntityDao(jdbi)
     private val jsonEntityDao = JsonEntityDao(jdbi, dbJsonUtil)
+    val flyway: Flyway = Flyway.configure().dataSource(dataSource).load()
 
     // interceptors
     val interceptor = Interceptor()
