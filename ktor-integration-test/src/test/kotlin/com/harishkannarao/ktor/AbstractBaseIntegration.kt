@@ -100,13 +100,14 @@ abstract class AbstractBaseIntegration {
         val defaultConfig = createDefaultTestConfig()
         private var server: KtorApplicationServer = createAndStartServerWithConfig(defaultConfig)
         const val baseUrl = "http://localhost:8080"
-        val clients: ClientFactory = ClientFactory(baseUrl)
+        val clients: ClientFactory = ClientFactory(baseUrl, defaultConfig.enableCallTrace)
         val webPages = WebPageFactory(baseUrl)
 
         private fun createDefaultTestConfig(): KtorApplicationConfig {
             return KtorApplicationConfig()
                     .copy(
-                            developmentMode = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE","app.development.mode", "true").toBoolean()
+                            developmentMode = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE","app.development.mode", "true").toBoolean(),
+                            enableCallTrace = ConfigUtil.lookupValue("APP_ENABLE_CALL_TRACE","app.enable.call.trace", "true").toBoolean()
                     )
         }
 

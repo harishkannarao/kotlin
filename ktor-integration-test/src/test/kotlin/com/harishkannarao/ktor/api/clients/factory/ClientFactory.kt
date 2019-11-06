@@ -7,7 +7,10 @@ import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.specification.RequestSpecification
 
-class ClientFactory(private val baseUrl: String) {
+class ClientFactory(
+        private val baseUrl: String,
+        private val enableCallTrace: Boolean
+) {
 
     fun listSnippetsApiClient(): ListSnippetsApiClient {
         return ListSnippetsApiClient(createRequestSpec())
@@ -78,10 +81,12 @@ class ClientFactory(private val baseUrl: String) {
     }
 
     private fun createRequestSpec(): RequestSpecification {
-        return RequestSpecBuilder()
-                .addFilter(RequestLoggingFilter(LogDetail.ALL))
-                .addFilter(ResponseLoggingFilter(LogDetail.ALL))
-                .setBaseUri(baseUrl)
-                .build()
+        val requestSpecBuilder = RequestSpecBuilder().setBaseUri(baseUrl)
+        if (enableCallTrace) {
+            requestSpecBuilder
+                    .addFilter(RequestLoggingFilter(LogDetail.ALL))
+                    .addFilter(ResponseLoggingFilter(LogDetail.ALL))
+        }
+        return requestSpecBuilder.build()
     }
 }

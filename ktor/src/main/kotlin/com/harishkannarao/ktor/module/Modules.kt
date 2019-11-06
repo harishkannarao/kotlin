@@ -161,7 +161,7 @@ class Modules(
         }
         install(Locations)
         install(Routing) {
-            if (config.developmentMode) {
+            if (config.enableCallTrace) {
                 trace { log.debug(it.buildText()) }
             }
             intercept(ApplicationCallPipeline.Features, dependencies.interceptor.requestTimeInterceptor())
