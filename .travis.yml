@@ -22,8 +22,8 @@ before_script:
 
 script:
   - ./gradlew clean minifyFiles assemble
-  - ./gradlew build --info -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true -Dapp.enable.call.trace=false
-  - ./gradlew build --info -Dapp.development.mode=false -Dapp.enable.call.trace=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+  - ./gradlew build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true -Dapp.enable.call.trace=false
+  - ./gradlew build -Dapp.development.mode=false -Dapp.enable.call.trace=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
   - ./gradlew :ktor:generateLicenseReport
 
 after_script:
