@@ -27,7 +27,7 @@ Docker dependencies needs to be started using docker-compose before the build
     
 #### Start docker services
 
-    ./gradlew clean minifyFiles copyAppToDocker startDocker
+    ./gradlew clean minifyFiles copyAppToDocker copyWiremockToDocker startDocker
     
 #### Stop docker services
 
@@ -36,15 +36,15 @@ Docker dependencies needs to be started using docker-compose before the build
   
 ## To build
 
-    ./gradlew stopDocker pullDocker clean minifyFiles copyAppToDocker startDocker build
+    ./gradlew stopDocker pullDocker clean minifyFiles copyAppToDocker copyWiremockToDocker startDocker build
     
 To run web integration tests in head less mode
 
-    ./gradlew stopDocker pullDocker clean copyAppToDocker startDocker build -DchromeHeadless=true
+    ./gradlew stopDocker pullDocker clean copyAppToDocker copyWiremockToDocker startDocker build -DchromeHeadless=true
     
 To print the http request and response during integration test execution
 
-    ./gradlew stopDocker pullDocker clean copyAppToDocker startDocker build --info
+    ./gradlew stopDocker pullDocker clean copyAppToDocker copyWiremockToDocker startDocker build --info
     
 
 ## To run ktor application

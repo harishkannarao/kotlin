@@ -42,6 +42,11 @@ task copyAppToDocker(type: Copy) {
     into "docker_local/ktor-application"
 }
 
+task copyWiremockToDocker(type: Copy) {
+    from "wiremock-runner/build/libs/wiremock-runner-exec.jar"
+    into "docker_local/wiremock"
+}
+
 allprojects {
     apply plugin: "java-library"
     apply plugin: "org.jetbrains.kotlin.jvm"
