@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 networks:
   main_network:
 
@@ -15,3 +15,22 @@ services:
       main_network:
         aliases:
           - ktor-jdbi-postgres
+
+  ktor-application:
+    container_name: ktor-application
+    build: ./ktor-application
+    depends_on:
+      - ktor-jdbi-postgres
+    ports:
+      - "18080:18080"
+    environment:
+      - "PORT=18080"
+      - "JS_CONFIG_PROFILE=local_docker"
+      - "APP_DEVELOPMENT_MODE=true"
+      - "JDBC_URL=jdbc:postgresql://ktor-jdbi-postgres:5432/myuser"
+      - "JDBC_USERNAME=myuser"
+      - "JDBC_PASSWORD=superpassword"
+    networks:
+      main_network:
+        aliases:
+          - ktor-application

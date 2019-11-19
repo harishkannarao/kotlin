@@ -27,7 +27,7 @@ Docker dependencies needs to be started using docker-compose before the build
     
 #### Start docker services
 
-    ./gradlew startDocker
+    ./gradlew clean minifyFiles copyAppToDocker startDocker
     
 #### Stop docker services
 
@@ -36,15 +36,15 @@ Docker dependencies needs to be started using docker-compose before the build
   
 ## To build
 
-    ./gradlew stopDocker pullDocker clean minifyFiles startDocker build
+    ./gradlew stopDocker pullDocker clean minifyFiles copyAppToDocker startDocker build
     
 To run web integration tests in head less mode
 
-    ./gradlew stopDocker pullDocker clean startDocker build -DchromeHeadless=true
+    ./gradlew stopDocker pullDocker clean copyAppToDocker startDocker build -DchromeHeadless=true
     
 To print the http request and response during integration test execution
 
-    ./gradlew stopDocker pullDocker clean startDocker build --info
+    ./gradlew stopDocker pullDocker clean copyAppToDocker startDocker build --info
     
 
 ## To run ktor application
@@ -67,7 +67,15 @@ Change logback configuration
 
 Change logback configuration
 
-    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar   
+    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar
+    
+#### Using Docker
+
+    ./gradlew clean minifyFiles assemble copyAppToDocker
+    
+    docker build --pull -t example/ktor-application:latest -f docker_local/ktor-application/Dockerfile docker_local/ktor-application/
+    
+    docker run --rm -it --name ktor-application -p "8080:8080" -e "JS_CONFIG_PROFILE={js_profile}" -e "JDBC_URL={postgres_url}" -e "JDBC_USERNAME={postgres_username}" -e "JDBC_PASSWORD={postgres_password}" example/ktor-application:latest   
     
 ## Formatting js, css, html and ftl files
 

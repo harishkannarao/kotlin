@@ -37,6 +37,11 @@ task minifyFiles(type: Exec) {
     commandLine 'docker-compose', '-f', './docker_local/docker-compose-minify-files.yml', '-p', 'minify_files', 'up', '--build', '-d'
 }
 
+task copyAppToDocker(type: Copy) {
+    from "ktor/build/libs/ktor-exec.jar"
+    into "docker_local/ktor-application"
+}
+
 allprojects {
     apply plugin: "java-library"
     apply plugin: "org.jetbrains.kotlin.jvm"
