@@ -47,6 +47,15 @@ task copyWiremockToDocker(type: Copy) {
     into "docker_local/wiremock"
 }
 
+startDocker.dependsOn copyAppToDocker
+startDocker.dependsOn copyWiremockToDocker
+startDocker.dependsOn minifyFiles
+startDocker.dependsOn ":ktor:assemble"
+startDocker.dependsOn ":wiremock-runner:assemble"
+
+assemble.mustRunAfter minifyFiles
+minifyFiles.mustRunAfter formatFiles
+
 allprojects {
     apply plugin: "java-library"
     apply plugin: "org.jetbrains.kotlin.jvm"

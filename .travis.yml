@@ -27,7 +27,7 @@ before_script:
   - docker --version
   - docker-compose --version
   - ./gradlew pullDocker --info
-  - ./gradlew clean minifyFiles assemble copyAppToDocker copyWiremockToDocker
+  - ./gradlew clean
   - ./gradlew startDocker --info
 
 script:
