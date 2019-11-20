@@ -134,6 +134,7 @@ abstract class AbstractBaseIntegration {
                     options()
                             .port(8089)
                             .maxRequestJournalEntries(100)
+                            .notifier(null)
             )
             wireMockServer.start()
             return wireMockServer
