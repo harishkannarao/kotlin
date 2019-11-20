@@ -47,13 +47,11 @@ task copyWiremockToDocker(type: Copy) {
     into "docker_local/wiremock"
 }
 
+copyAppToDocker.dependsOn ":ktor:assemble"
+copyWiremockToDocker.dependsOn ":wiremock-runner:assemble"
 startDocker.dependsOn copyAppToDocker
 startDocker.dependsOn copyWiremockToDocker
-startDocker.dependsOn minifyFiles
-startDocker.dependsOn ":ktor:assemble"
-startDocker.dependsOn ":wiremock-runner:assemble"
 
-assemble.mustRunAfter minifyFiles
 minifyFiles.mustRunAfter formatFiles
 
 allprojects {

@@ -20,6 +20,8 @@ shadowJar {
     version = null
 }
 
+assemble.dependsOn ":minifyFiles"
+
 dependencies {
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-cio:$ktorVersion")
