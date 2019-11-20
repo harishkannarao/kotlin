@@ -94,7 +94,7 @@ abstract class AbstractBaseIntegration {
 
     companion object {
         private val wireMockServer = createAndStartWireMock()
-        private val wireMockClient = WireMock(wireMockServer)
+        private val wireMockClient = WireMock("http", "localhost", wireMockServer.port())
         val wireMockStub = WireMockStub(wireMockClient)
         private var runningWithDefaultConfig = true
         val defaultConfig = createDefaultTestConfig()
