@@ -22,3 +22,13 @@ jobs:
     - name: 'CI Build Command'
       run: |
         ./ci-build.sh
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v1
+      with:
+        name: ktor-exec.jar
+        path: ktor/build/libs/ktor-exec.jar
+    - name: Archive integration test results
+      uses: actions/upload-artifact@v1
+      with:
+        name: ktor-integration-test-result
+        path: ktor-integration-test/build/reports/tests
