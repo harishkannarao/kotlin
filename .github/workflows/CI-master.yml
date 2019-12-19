@@ -27,6 +27,11 @@ jobs:
         key: ${{ runner.os }}-gradle-cache-master-v1
         restore-keys: |
           ${{ runner.os }}-gradle-cache-master-v1
+    - name: 'Print environment variables'
+      run: |
+        ./print-env-vars.sh
+      env:
+        CUSTOM_VARIABLE: 'Test 123'
     - name: 'Install dependencies'
       run: |
         ./ci-install-dependencies.sh
