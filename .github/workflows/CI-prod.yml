@@ -1,16 +1,12 @@
-name: 'Kotlin-CI'
+name: 'CI-master'
 
 on:
   push:
-    branches:
-      - master
     tags:
-      - v1
-  schedule:
-    - cron:  '0 11 * * *'
+      - prod
 
 jobs:
-  my-first-build:
+  prod-build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -20,7 +16,7 @@ jobs:
         java-version: '11'
         java-package: jdk
         architecture: x64
-    - name: Install dependencies
+    - name: 'Install dependencies'
       run: |
         ./ci-install-dependencies.sh
     - name: 'CI Build Command'
