@@ -38,7 +38,7 @@ jobs:
       with:
         name: ktor-integration-test-result
         path: ktor-integration-test/build/reports/tests
-    - name: Archive integration test results
+    - name: Archive dependencies license
       uses: actions/upload-artifact@v1
       with:
         name: ktor-dependency-license
