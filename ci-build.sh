@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Make the script to abort if any command fails
+set -e
+
+# Print the commands as it is executed. Useful for debugging
+set -x
+
+./gradlew pullDocker
+./gradlew clean
+./gradlew startDocker
+./gradlew minifyFiles
+./gradlew assemble
+./gradlew build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true -Dapp.enable.call.trace=false
+./gradlew build -Dapp.development.mode=false -Dapp.enable.call.trace=false -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true
+./gradlew :ktor:generateLicenseReport
