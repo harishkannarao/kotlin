@@ -32,6 +32,7 @@ jobs:
         ./print-env-vars.sh
       env:
         CUSTOM_VARIABLE: 'Test 123'
+        ENCRYPTED_VARIABLE: ${{ secrets.EncryptedVariable }}
     - name: 'Install dependencies'
       run: |
         ./ci-install-dependencies.sh
