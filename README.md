@@ -9,6 +9,9 @@ Blog: [Kotlin / Ktor / Jdbi Json / Api / Free Marker / VueJs](https://blogs.hari
 ## Travis CI Build status
 [![Build Status](https://travis-ci.org/harishkannarao/kotlin.svg?branch=master)](https://travis-ci.org/harishkannarao/kotlin)
 
+## Github Actions Build status
+[![Build Status](https://github.com/harishkannarao/kotlin/workflows/CI-master/badge.svg)](https://github.com/harishkannarao/kotlin/actions?query=workflow%3ACI-master)
+
 ## Required Softwares, Tools and Version
 * Java JDK Version: 11 Adopt OpenJDK (`java -version`)
 * Docker Version: Docker version 18.09.2, build 6247962 (`docker --version`)
