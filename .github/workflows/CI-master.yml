@@ -20,6 +20,13 @@ jobs:
         java-version: '11'
         java-package: jdk
         architecture: x64
+    - name: Cache gradle dependencies
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-cache-master-v1
+        restore-keys: |
+          ${{ runner.os }}-gradle-cache-master-v1
     - name: 'Install dependencies'
       run: |
         ./ci-install-dependencies.sh

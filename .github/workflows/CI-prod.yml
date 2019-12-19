@@ -16,6 +16,13 @@ jobs:
         java-version: '11'
         java-package: jdk
         architecture: x64
+    - name: Cache gradle dependencies
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle
+        key: ${{ runner.os }}-gradle-cache-prod-v1
+        restore-keys: |
+          ${{ runner.os }}-gradle-cache-prod-v1
     - name: 'Install dependencies'
       run: |
         ./ci-install-dependencies.sh
@@ -25,7 +32,7 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: ktor-exec.jar
+        name: ktor-exec
         path: ktor/build/libs/ktor-exec.jar
     - name: Archive integration test results
       uses: actions/upload-artifact@v1
