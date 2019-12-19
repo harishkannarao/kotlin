@@ -1,4 +1,4 @@
-name: CI
+name: 'Kotlin-CI'
 
 on:
   push:
@@ -6,6 +6,8 @@ on:
       - master
     tags:
       - v1
+  schedule:
+    - cron:  '0 11 * * *'
 
 jobs:
   my-first-build:
@@ -23,7 +25,7 @@ jobs:
         sudo apt-get -qq update
         sudo apt-get -qq install -y chromium-browser
         sudo apt-get -qq install -y chromium-chromedriver
-    - name: Run a multi-line script
+    - name: 'CI Build Command'
       run: |
         ./gradlew pullDocker
         ./gradlew clean
