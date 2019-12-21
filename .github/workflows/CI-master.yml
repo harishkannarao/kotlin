@@ -12,6 +12,7 @@ on:
 jobs:
   master-build:
     runs-on: ubuntu-latest
+    timeout-minutes: 420
     steps:
     - uses: actions/checkout@v1
       with:
@@ -39,6 +40,7 @@ jobs:
       run: |
         ./ci-install-dependencies.sh
     - name: 'CI Build Command'
+      timeout-minutes: 20
       run: |
         ./ci-build.sh
     - name: Archive integration test results
