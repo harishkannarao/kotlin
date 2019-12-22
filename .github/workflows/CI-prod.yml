@@ -26,6 +26,10 @@ jobs:
         echo "TransactionId: $TRANSACTION_ID"
       env:
         TRANSACTION_ID: ${{ github.event.client_payload.transaction_id }}
+    - name: 'Get git commit sha'
+      id: 'get_git_commit_sha'
+      run: |
+        echo "::set-output name=git_commit_sha::$(git rev-parse HEAD)"
     - name: Cache gradle dependencies
       uses: actions/cache@v1
       with:
@@ -42,7 +46,7 @@ jobs:
     - name: Archive production artifacts
       uses: actions/upload-artifact@v1
       with:
-        name: ktor-exec-${{ github.sha }}
+        name: ktor-exec-${{ steps.get_git_commit_sha.outputs.git_commit_sha }}
         path: ktor/build/libs/ktor-exec.jar
     - name: Archive integration test results
       uses: actions/upload-artifact@v1
