@@ -114,3 +114,12 @@ Report will be under
 
     ./ktor/build/reports/dependency-license/index.html
     
+## Triggering github actions using http
+
+```
+curl -H "Accept: application/vnd.github.everest-preview+json" \
+    -H "Authorization: token {github-personal-access-token}" \
+    --request POST \
+    --data '{"event_type": "do-master-ci", "client_payload": { "transaction_id": "some reference"}}' \
+    'https://api.github.com/repos/harishkannarao/kotlin/dispatches'
+```
