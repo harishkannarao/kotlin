@@ -1,6 +1,8 @@
 name: 'CI-prod'
 
 on:
+  repository_dispatch:
+    types: do-prod-ci
   push:
     tags:
       - prod
@@ -18,6 +20,11 @@ jobs:
         java-version: '11'
         java-package: jdk
         architecture: x64
+    - name: 'Print event data'
+      run: |
+        echo "TransactionId: $TRANSACTION_ID"
+      env:
+        TRANSACTION_ID: ${{ github.event.client_payload.transaction_id }}
     - name: Cache gradle dependencies
       uses: actions/cache@v1
       with:
