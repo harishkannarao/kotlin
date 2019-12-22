@@ -117,7 +117,7 @@ Report will be under
 ## Triggering github actions using http
 
 ```
-curl -H "Accept: application/vnd.github.everest-preview+json" \
+curl -v -H "Accept: application/vnd.github.everest-preview+json" \
     -H "Authorization: token {github-personal-access-token}" \
     --request POST \
     --data '{"event_type": "do-master-ci", "client_payload": { "transaction_id": "some reference"}}' \
