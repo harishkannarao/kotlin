@@ -114,12 +114,22 @@ Report will be under
 
     ./ktor/build/reports/dependency-license/index.html
     
-## Triggering github actions using http
+## Triggering github CI-master workflow/actions using http
 
 ```
 curl -v -H "Accept: application/vnd.github.everest-preview+json" \
     -H "Authorization: token {github-personal-access-token}" \
     --request POST \
     --data '{"event_type": "do-master-ci", "client_payload": { "transaction_id": "some reference"}}' \
+    'https://api.github.com/repos/harishkannarao/kotlin/dispatches'
+```
+
+## Triggering github CI-tag workflow/actions using http with dynamic tag
+
+```
+curl -v -H "Accept: application/vnd.github.everest-preview+json" \
+    -H "Authorization: token {github-personal-access-token}" \
+    --request POST \
+    --data '{"event_type": "do-tag-ci", "client_payload": { "tag": "v2.0"}}' \
     'https://api.github.com/repos/harishkannarao/kotlin/dispatches'
 ```
