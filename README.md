@@ -74,9 +74,9 @@ Change logback configuration
     
 #### Using Docker
 
-    ./gradlew clean minifyFiles assemble copyAppToDocker
+    ./gradlew clean minifyFiles assemble
     
-    docker build --pull -t example/ktor-application:latest -f docker_local/ktor-application/Dockerfile docker_local/ktor-application/
+    docker build --pull -t example/ktor-application:latest -f docker_local/ktor-application/Dockerfile ktor/build/libs
     
     docker run --rm -it --name ktor-application -p "8080:8080" -e "JS_CONFIG_PROFILE={js_profile}" -e "JDBC_URL={postgres_url}" -e "JDBC_USERNAME={postgres_username}" -e "JDBC_PASSWORD={postgres_password}" example/ktor-application:latest   
     
