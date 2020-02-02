@@ -185,6 +185,12 @@ class Routes(
                     call.respond(HttpStatusCode.Unauthorized, Unit)
                 }
             }
+
+            route("ping-external") {
+                get {
+                    call.respond(HttpStatusCode.OK, dependencies.thirdPartyApiClient.pingUrl())
+                }
+            }
         }
     }
 }

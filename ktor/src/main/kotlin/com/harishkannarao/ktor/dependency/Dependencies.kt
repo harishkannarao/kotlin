@@ -7,6 +7,7 @@ import com.harishkannarao.ktor.api.snippets.SnippetsApi
 import com.harishkannarao.ktor.client.customer.CustomerApi
 import com.harishkannarao.ktor.client.customer.CustomerClient
 import com.harishkannarao.ktor.client.json.ClientJsonUtil
+import com.harishkannarao.ktor.client.thirdparty.ThirdPartyApiClient
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dao.JsonEntityDao
 import com.harishkannarao.ktor.dao.RelationalEntityDao
@@ -26,6 +27,7 @@ class Dependencies(
     val client = HttpClientFactory.createHttpClient()
     private val clientJsonUtil = ClientJsonUtil()
     private val customerClient = CustomerClient(clientJsonUtil, client, config.thirdPartyCustomerServiceUrl)
+    val thirdPartyApiClient = ThirdPartyApiClient(client, config.thirdPartyApiUrl)
 
     // data access objects
     val dataSource = JdbiFactory.createHikariCpDataSource(config)

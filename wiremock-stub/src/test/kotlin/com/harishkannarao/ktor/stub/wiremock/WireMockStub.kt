@@ -102,6 +102,16 @@ class WireMockStub(private val wireMock: WireMock) {
         )
     }
 
+    fun setUpGetThirdPartyApi(status: Int) {
+        wireMock.register(
+                WireMock.get(WireMock.urlPathMatching("/third-party"))
+                        .willReturn(
+                                WireMock.aResponse()
+                                        .withStatus(status)
+                        )
+        )
+    }
+
     companion object {
         const val CUSTOM_HEADER_KEY = "X-Custom-Header"
         const val CUSTOM_HEADER_VALUE = "SECRET_VALUE"

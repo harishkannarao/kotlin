@@ -144,6 +144,10 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
         return this as T
     }
 
+    protected fun expectJsonInt(jsonPath: String, value: Int) {
+        assertThat("jsonPath: $jsonPath", getJsonInt(jsonPath), equalTo(value))
+    }
+
     protected fun expectJsonListSizeToBe(jsonPath: String, expectedCount: Int): T {
         expectJsonPathNotToBeNull(jsonPath)
         assertThat(response!!.jsonPath().getList<Any>(jsonPath).size, equalTo(expectedCount))
@@ -163,6 +167,11 @@ abstract class ApiClientBase<T : ApiClientBase<T>>(protected val requestSpecific
     private fun getJsonString(jsonPath: String): String {
         expectJsonPathNotToBeNull(jsonPath)
         return response!!.jsonPath().getString(jsonPath)
+    }
+
+    private fun getJsonInt(jsonPath: String): Int {
+        expectJsonPathNotToBeNull(jsonPath)
+        return response!!.jsonPath().getInt(jsonPath)
     }
 
     fun withBasicAuth(username: String, password: String): T {

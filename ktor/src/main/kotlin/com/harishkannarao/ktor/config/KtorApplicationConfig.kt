@@ -8,6 +8,7 @@ data class KtorApplicationConfig(
         val redirectToHttps: Boolean = false,
         val httpsPort: Int = ConfigUtil.lookupValue("PORT", "port", "8443").toInt(),
         val thirdPartyCustomerServiceUrl: String = ConfigUtil.lookupValue("CUSTOMER_SERVICE_BASE_URL", "customer.service.base.url", "http://localhost:8089"),
+        val thirdPartyApiUrl: String = ConfigUtil.lookupValue("THIRD_PARTY_API_URL", "thirdParty.url", "http://localhost:8089/third-party"),
         val jdbcUrl: String = ConfigUtil.lookupValue("JDBC_URL","jdbc.url", "jdbc:postgresql://localhost:25432/myuser"),
         val jdbcUserName: String = ConfigUtil.lookupValue("JDBC_USERNAME","jdbc.username", "myuser"),
         val jdbcPassword: String = ConfigUtil.lookupValue("JDBC_PASSWORD","jdbc.password", "superpassword"),

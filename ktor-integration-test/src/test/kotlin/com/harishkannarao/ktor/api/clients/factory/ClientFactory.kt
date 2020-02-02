@@ -48,6 +48,10 @@ class ClientFactory(
         return RootApiClient(createRequestSpec())
     }
 
+    fun pingExternalApiClient(): PingExternalApiClient {
+        return PingExternalApiClient(createRequestSpec())
+    }
+
     fun basicAuthApiClient(): BasicAuthApiClient {
         return BasicAuthApiClient(createRequestSpec())
     }
