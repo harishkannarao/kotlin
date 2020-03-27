@@ -11,20 +11,36 @@ plugins {
     id "org.jetbrains.kotlin.jvm"
 }
 
-task pullDocker(type: Exec) {
+task pullDockerDependencies(type: Exec) {
     ignoreExitValue=false
-    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'pull'
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-dependencies.yml', '-p', 'kotlin_project', 'pull'
 }
 
-task startDocker(type: Exec) {
+task startDockerDependencies(type: Exec) {
     ignoreExitValue=false
-    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'up', '--build', '-d'
-    mustRunAfter tasks.pullDocker
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-dependencies.yml', '-p', 'kotlin_project', 'up', '--build', '-d'
+    mustRunAfter tasks.pullDockerDependencies
 }
 
-task stopDocker(type: Exec) {
+task stopDockerDependencies(type: Exec) {
     ignoreExitValue=false
-    commandLine 'docker-compose', '-f', './docker_local/docker-compose.yml', '-p', 'kotlin_project', 'down', '-v'
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-dependencies.yml', '-p', 'kotlin_project', 'down', '-v'
+}
+
+task pullDockerApps(type: Exec) {
+    ignoreExitValue=false
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-dependencies.yml', '-f', './docker_local/docker-compose-apps.yml', '-p', 'kotlin_project', 'pull'
+}
+
+task startDockerApps(type: Exec) {
+    ignoreExitValue=false
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-dependencies.yml', '-f', './docker_local/docker-compose-apps.yml', '-p', 'kotlin_project', 'up', '--build', '-d'
+    mustRunAfter tasks.pullDockerApps
+}
+
+task stopDockerApps(type: Exec) {
+    ignoreExitValue=false
+    commandLine 'docker-compose', '-f', './docker_local/docker-compose-dependencies.yml', '-f', './docker_local/docker-compose-apps.yml', '-p', 'kotlin_project', 'down', '-v'
 }
 
 task formatFiles(type: Exec) {
@@ -49,8 +65,8 @@ task copyWiremockToDocker(type: Copy) {
 
 copyAppToDocker.dependsOn ":ktor:assemble"
 copyWiremockToDocker.dependsOn ":wiremock-runner:assemble"
-startDocker.dependsOn copyAppToDocker
-startDocker.dependsOn copyWiremockToDocker
+startDockerApps.dependsOn copyAppToDocker
+startDockerApps.dependsOn copyWiremockToDocker
 
 minifyFiles.mustRunAfter formatFiles
 

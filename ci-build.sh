@@ -6,9 +6,9 @@ set -e
 # Print the commands as it is executed. Useful for debugging
 set -x
 
-./gradlew pullDocker
+./gradlew pullDockerDependencies
 ./gradlew clean
-./gradlew startDocker
+./gradlew startDockerDependencies
 ./gradlew minifyFiles
 ./gradlew assemble
 ./gradlew build -DchromeDriverBinary=/usr/lib/chromium-browser/chromedriver -DchromeBinary=/usr/bin/chromium-browser -DchromeHeadless=true -Dapp.enable.call.trace=false

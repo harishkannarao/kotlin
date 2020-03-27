@@ -3,18 +3,6 @@ networks:
   main_network:
 
 services:
-  ktor-jdbi-postgres:
-    container_name: ktor-jdbi-postgres
-    image: "postgres:11-alpine"
-    ports:
-      - "25432:5432"
-    environment:
-      - "POSTGRES_USER=myuser"
-      - "POSTGRES_PASSWORD=superpassword"
-    networks:
-      main_network:
-        aliases:
-          - ktor-jdbi-postgres
 
   wiremock:
     container_name: wiremock

@@ -26,9 +26,9 @@ cache:
 before_script:
   - docker --version
   - docker-compose --version
-  - ./gradlew pullDocker --info
+  - ./gradlew pullDockerDependencies --info
   - ./gradlew clean
-  - ./gradlew startDocker --info
+  - ./gradlew startDockerDependencies --info
 
 script:
   - ./gradlew clean minifyFiles assemble
@@ -37,4 +37,4 @@ script:
   - ./gradlew :ktor:generateLicenseReport
 
 after_script:
-  - ./gradlew stopDocker --info
+  - ./gradlew stopDockerDependencies --info
