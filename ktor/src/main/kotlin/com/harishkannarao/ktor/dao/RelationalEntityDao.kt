@@ -121,7 +121,7 @@ class RelationalEntityDao(
                 "(id, username, date_field, long_field, int_field, double_field, boolean_field, decimal_field) " +
                 "values " +
                 "(:$COLUMN_ID, :$COLUMN_USERNAME, :$COLUMN_DATE_FIELD, :$COLUMN_LONG_FIELD, :$COLUMN_INT_FIELD, :$COLUMN_DOUBLE_FIELD, :$COLUMN_BOOLEAN_FIELD, :$COLUMN_DECIMAL_FIELD)" +
-                "ON CONFLICT (username) DO UPDATE SET username = EXCLUDED.username " +
+                "ON CONFLICT ON CONSTRAINT unique_index_username_constraint DO UPDATE SET username = EXCLUDED.username " +
                 "RETURNING *"
 
         private const val SELECT_SQL = "select id, username, date_field, long_field, int_field, double_field, boolean_field, decimal_field from sample_table where id = :$COLUMN_ID"

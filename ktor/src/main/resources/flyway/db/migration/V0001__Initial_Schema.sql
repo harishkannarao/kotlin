@@ -11,4 +11,6 @@ CREATE TABLE sample_table (
 
 CREATE UNIQUE INDEX unique_index_username ON sample_table (username);
 
+ALTER TABLE sample_table ADD CONSTRAINT unique_index_username_constraint UNIQUE USING INDEX unique_index_username;
+
 CREATE INDEX index_date_field ON sample_table (date_field);
