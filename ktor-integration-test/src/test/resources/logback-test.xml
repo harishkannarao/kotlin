@@ -18,7 +18,7 @@
         <appender-ref ref="CURLLOGGER_STDOUT"/>
     </logger>
 
-    <root level="trace">
+    <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
 
