@@ -115,9 +115,9 @@ class Modules(
                     null -> -1
                     else -> System.currentTimeMillis() - requestTime
                 }
-                when (val status = call.response.status() ?: "Unhandled") {
-                    HttpStatusCode.Found -> "Access: $status: $latency: ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"
-                    else -> "Access: $status: $latency: ${call.request.toLogString()}"
+                when (val status = call.response.status() ?: "404") {
+                    HttpStatusCode.Found -> "ACCESS_LOG $status $latency ${call.request.toLogString()} -> ${call.response.headers[HttpHeaders.Location]}"
+                    else -> "ACCESS_LOG $status $latency ${call.request.toLogString()}"
                 }
             }
         }
