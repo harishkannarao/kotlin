@@ -18,7 +18,10 @@ import com.harishkannarao.ktor.web.clients.factory.WebDriverFactory
 import com.harishkannarao.ktor.web.clients.factory.WebPageFactory
 import org.awaitility.kotlin.await
 import org.openqa.selenium.WebDriver
+import org.slf4j.LoggerFactory
+import org.testng.ITestResult
 import org.testng.annotations.*
+import java.lang.reflect.Method
 import java.net.ConnectException
 import java.nio.channels.ClosedChannelException
 import java.util.concurrent.TimeUnit
@@ -31,6 +34,16 @@ abstract class AbstractBaseIntegration {
         wireMockClient.resetMappings()
         wireMockClient.resetRequests()
         wireMockClient.resetScenarios()
+    }
+
+    @BeforeMethod(alwaysRun = true)
+    fun printTestNameBeforeStarting(method: Method) {
+        logger.info("Starting test: ${method.name}")
+    }
+
+    @AfterMethod(alwaysRun = true)
+    fun printTestNameAfterComplete(method: Method) {
+        logger.info("Completing test: ${method.name}")
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -93,6 +106,7 @@ abstract class AbstractBaseIntegration {
     }
 
     companion object {
+        private val logger = LoggerFactory.getLogger(AbstractBaseIntegration::class.java)
         private val wireMockServer = createAndStartWireMock()
         private val wireMockClient = WireMock("http", "localhost", wireMockServer.port())
         val wireMockStub = WireMockStub(wireMockClient)
