@@ -52,6 +52,7 @@ jobs:
         ./ci-build.sh
     - name: Archive integration test results
       uses: actions/upload-artifact@v1
+      if: ${{ always() }}
       with:
         name: ktor-integration-test-result
         path: ktor-integration-test/build/reports/tests
