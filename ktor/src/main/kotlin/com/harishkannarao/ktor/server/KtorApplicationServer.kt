@@ -23,6 +23,7 @@ open class KtorApplicationServer(
         logger.info("Ktor Application stopped")
     }
 
+    @Suppress("EXPERIMENTAL_API_USAGE")
     private val server = embeddedServer(
             factory = CIO,
             port = config.port,
@@ -41,8 +42,7 @@ open class KtorApplicationServer(
     fun stop() {
         server.stop(
                 config.shutdownGracePeriodInMillis,
-                config.shutdownTimeoutInSeconds,
-                TimeUnit.SECONDS
+                config.shutdownTimeoutInMillis
         )
     }
 }

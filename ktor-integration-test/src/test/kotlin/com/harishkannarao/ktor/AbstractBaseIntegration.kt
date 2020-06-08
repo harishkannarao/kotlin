@@ -16,6 +16,7 @@ import com.harishkannarao.ktor.stub.wiremock.WireMockStub
 import com.harishkannarao.ktor.util.TestRoutes
 import com.harishkannarao.ktor.web.clients.factory.WebDriverFactory
 import com.harishkannarao.ktor.web.clients.factory.WebPageFactory
+import io.ktor.locations.KtorExperimentalLocationsAPI
 import org.awaitility.kotlin.await
 import org.openqa.selenium.WebDriver
 import org.slf4j.LoggerFactory

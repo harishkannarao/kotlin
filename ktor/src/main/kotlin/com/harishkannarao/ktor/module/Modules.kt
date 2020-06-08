@@ -66,6 +66,7 @@ class Modules(
                 this.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             }
         }
+        @Suppress("EXPERIMENTAL_API_USAGE")
         install(Webjars)
         install(AutoHeadResponse)
         install(FreeMarker) {
@@ -83,6 +84,7 @@ class Modules(
                     "COOKIE_NAME",
                     SessionStorageMemory()
             ) {
+                @Suppress("EXPERIMENTAL_API_USAGE")
                 identity { UUID.randomUUID().toString() }
                 cookie.path = "/"
             }
@@ -91,13 +93,6 @@ class Modules(
                     SessionStorageMemory()
             ) {
                 identity { UUID.randomUUID().toString() }
-            }
-        }
-        if (config.redirectToHttps) {
-            install(XForwardedHeaderSupport)
-            install(HttpsRedirect) {
-                sslPort = config.httpsPort
-                permanentRedirect = true
             }
         }
         install(CallLogging) {
@@ -159,6 +154,7 @@ class Modules(
                 }
             }
         }
+        @Suppress("EXPERIMENTAL_API_USAGE")
         install(Locations)
         install(Routing) {
             if (config.enableCallTrace) {

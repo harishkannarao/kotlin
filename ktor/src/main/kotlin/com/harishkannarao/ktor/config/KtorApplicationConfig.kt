@@ -3,9 +3,8 @@ package com.harishkannarao.ktor.config
 data class KtorApplicationConfig(
         val port: Int = ConfigUtil.lookupValue("PORT", "port", "8080").toInt(),
         val shutdownGracePeriodInMillis: Long = 0L,
-        val shutdownTimeoutInSeconds: Long = 0L,
+        val shutdownTimeoutInMillis: Long = 0L,
         val enableSnippetsApi: Boolean = true,
-        val redirectToHttps: Boolean = false,
         val httpsPort: Int = ConfigUtil.lookupValue("PORT", "port", "8443").toInt(),
         val thirdPartyCustomerServiceUrl: String = ConfigUtil.lookupValue("CUSTOMER_SERVICE_BASE_URL", "customer.service.base.url", "http://localhost:8089"),
         val thirdPartyApiUrl: String = ConfigUtil.lookupValue("THIRD_PARTY_API_URL", "thirdParty.url", "http://localhost:8089/third-party"),

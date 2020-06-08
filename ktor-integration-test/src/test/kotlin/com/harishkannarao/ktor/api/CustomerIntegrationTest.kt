@@ -3,9 +3,9 @@ package com.harishkannarao.ktor.api
 import com.harishkannarao.ktor.AbstractBaseApiIntegration
 import com.harishkannarao.ktor.api.clients.*
 import com.harishkannarao.ktor.api.clients.verifier.Customer
-import com.harishkannarao.ktor.client.customer.CustomerClient
-import com.harishkannarao.ktor.util.LogbackTestUtil
+import com.harishkannarao.ktor.client.AbstractBaseClient
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
+import com.harishkannarao.ktor.util.LogbackTestUtil
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
@@ -13,7 +13,7 @@ import org.testng.annotations.Test
 
 class CustomerIntegrationTest : AbstractBaseApiIntegration() {
 
-    private val customerClientLogger = LogbackTestUtil(CustomerClient::class.java.name)
+    private val customerClientLogger = LogbackTestUtil(AbstractBaseClient::class.java.name)
 
     @BeforeMethod(alwaysRun = true)
     fun setUpTestLogger() {
