@@ -3,10 +3,8 @@ package com.harishkannarao.ktor.client.json
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.type.CollectionType
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.content.TextContent
-import io.ktor.http.ContentType
 
 class ClientJsonUtil {
     val objectMapper = createAndConfigureObjectMapper()
@@ -15,13 +13,19 @@ class ClientJsonUtil {
         return objectMapper.writeValueAsString(content)
     }
 
-    fun toJsonTextContent(customer: Any): TextContent {
-        return TextContent(this.toJson(customer), contentType = ContentType.Application.Json)
+    fun <T> asJsonObject(content: String, clazz: Class<T>): T {
+        try {
+            return objectMapper.readValue(content, clazz)
+        } catch (e: JsonProcessingException) {
+            throw ClientJsonException(e)
+        }
     }
 
-    inline fun <reified T> fromJson(content: String): T {
+    fun <T> asJsonList(content: String, clazz: Class<T>): List<T> {
         try {
-            return objectMapper.readValue(content)
+            val javaType: CollectionType = objectMapper.typeFactory
+                    .constructCollectionType(List::class.java, clazz)
+            return objectMapper.readValue(content, javaType)
         } catch (e: JsonProcessingException) {
             throw ClientJsonException(e)
         }

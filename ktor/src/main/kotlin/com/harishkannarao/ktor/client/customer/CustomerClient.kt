@@ -10,10 +10,10 @@ import io.ktor.http.HttpStatusCode
 import org.apache.http.client.utils.URIBuilder
 
 class CustomerClient(
-        private val json: ClientJsonUtil,
+        json: ClientJsonUtil,
         client: HttpClient,
         private val baseUrl: String
-) : AbstractBaseClient(client) {
+) : AbstractBaseClient(json, client) {
 
     suspend fun getCustomerById(id: String): CustomerDto {
         val url = URIBuilder(baseUrl)
@@ -28,7 +28,7 @@ class CustomerClient(
         if (response.status == HttpStatusCode.NotFound) {
             throw CustomerClientException("$id not found")
         }
-        return json.fromJson(readTextAsUTF8(response))
+        return asJsonObject(response, CustomerDto::class.java)
     }
 
     suspend fun getCustomersByName(name: String): List<CustomerDto> {
@@ -40,8 +40,7 @@ class CustomerClient(
             this.url(url)
             this.method = HttpMethod.Get
         }
-        val response = execute(request)
-        return json.fromJson(readTextAsUTF8(response))
+        return executeAndExtractList(request, CustomerDto::class.java)
     }
 
     suspend fun createCustomer(customer: CustomerDto) {
@@ -51,7 +50,7 @@ class CustomerClient(
         val request: HttpRequestBuilder.() -> Unit = {
             this.url(url)
             this.method = HttpMethod.Post
-            this.body = json.toJsonTextContent(customer)
+            this.body = toJsonBody(customer)
         }
         execute(request)
     }
@@ -63,7 +62,7 @@ class CustomerClient(
         val request: HttpRequestBuilder.() -> Unit = {
             this.url(url)
             this.method = HttpMethod.Post
-            this.body = json.toJsonTextContent(customers)
+            this.body = toJsonBody(customers)
         }
         execute(request)
     }

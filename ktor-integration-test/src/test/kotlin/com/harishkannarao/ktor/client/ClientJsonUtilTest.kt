@@ -13,14 +13,14 @@ class ClientJsonUtilTest {
     fun `jackson kotlin data class serialization and deserialization test`() {
         val testClass1 = TestClass("123", "abc")
         val testClass2 = TestClass("456", "def")
-        val jsonObject = jsonUtil.toJson(testClass1)
+        val jsonObject = clientJsonUtil.toJson(testClass1)
 
-        val jsonArray = jsonUtil.toJson(listOf(testClass1, testClass2))
+        val jsonArray = clientJsonUtil.toJson(listOf(testClass1, testClass2))
 
-        val testClass = jsonUtil.fromJson<TestClass>(jsonObject)
+        val testClass = clientJsonUtil.asJsonObject(jsonObject, TestClass::class.java)
         assertThat(testClass, equalTo(testClass1))
 
-        val testClasses = jsonUtil.fromJson<List<TestClass>>(jsonArray)
+        val testClasses = clientJsonUtil.asJsonList(jsonArray, TestClass::class.java)
         assertThat(testClasses.size, equalTo(2))
         assertThat(testClasses, hasItem(testClass1))
         assertThat(testClasses, hasItem(testClass2))
@@ -31,11 +31,11 @@ class ClientJsonUtilTest {
         val jsonObject = """
             {"id":"abc","name":"123"}
         """.trimIndent()
-        jsonUtil.fromJson<List<TestClass>>(jsonObject)
+        clientJsonUtil.asJsonList(jsonObject, TestClass::class.java)
     }
 
     companion object {
-        val jsonUtil = ClientJsonUtil()
+        val clientJsonUtil = ClientJsonUtil()
     }
 
     data class TestClass(val id: String, val name: String)
