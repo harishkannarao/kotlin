@@ -49,7 +49,7 @@ class LocationRoutes(
                         call.respond(HttpStatusCode.Created, jsonEntity)
                     }
                     get<Unit> {
-                        call.respond(dependencies.jsonEntityApi.allEntities())
+                        call.respond(dependencies.jsonEntityApi.allEntitiesAsync().await())
                     }
                     get<JsonEntityWithId> { jsonEntityWithId ->
                         call.respond(dependencies.jsonEntityApi.readEntityAsync(jsonEntityWithId.id).await())
@@ -66,17 +66,17 @@ class LocationRoutes(
                     }
                     route("count") {
                         get<Unit> {
-                            call.respond(dependencies.jsonEntityApi.countEntities())
+                            call.respond(dependencies.jsonEntityApi.countEntitiesAsync().await())
                         }
                     }
                     route("search") {
                         get<JsonEntitySearch> { jsonEntitySearch ->
-                            call.respond(dependencies.jsonEntityApi.search(jsonEntitySearch.by, jsonEntitySearch.from, jsonEntitySearch.to))
+                            call.respond(dependencies.jsonEntityApi.searchAsync(jsonEntitySearch.by, jsonEntitySearch.from, jsonEntitySearch.to).await())
                         }
                     }
                     route("search-by-tags") {
                         get<JsonEntitySearchByTags> { jsonEntitySearchByTags ->
-                            call.respond(dependencies.jsonEntityApi.searchByTags(jsonEntitySearchByTags.tags))
+                            call.respond(dependencies.jsonEntityApi.searchByTagsAsync(jsonEntitySearchByTags.tags).await())
                         }
                     }
                 }
