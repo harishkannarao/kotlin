@@ -9,6 +9,7 @@ import org.jdbi.v3.core.statement.StatementContext
 import java.math.BigDecimal
 import java.sql.ResultSet
 import java.util.*
+import kotlin.concurrent.thread
 
 class JsonEntityDao(
         private val jdbi: Jdbi,
@@ -67,10 +68,12 @@ class JsonEntityDao(
     }
 
     fun deleteEntity(id: UUID) {
-        jdbi.useHandle<Exception> { handle ->
-            handle.createUpdate(DELETE_SQL)
-                    .bind(COLUMN_ID, id.toString())
-                    .execute()
+        thread(start = true) {
+            jdbi.useHandle<Exception> { handle ->
+                handle.createUpdate(DELETE_SQL)
+                        .bind(COLUMN_ID, id.toString())
+                        .execute()
+            }
         }
     }
 

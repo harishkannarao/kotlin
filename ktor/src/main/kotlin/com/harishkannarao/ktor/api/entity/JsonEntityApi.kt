@@ -1,8 +1,10 @@
 package com.harishkannarao.ktor.api.entity
 
 import com.harishkannarao.ktor.dao.JsonEntityDao
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.*
 
@@ -14,8 +16,8 @@ class JsonEntityApi(
         jsonEntityDao.createEntity(jsonEntityMapper.toJsonDbEntity(input))
     }
 
-    fun readEntity(id: String): JsonEntity {
-        return jsonEntityMapper.fromJsonDbEntity(jsonEntityDao.readEntity(UUID.fromString(id)))
+    suspend fun readEntityAsync(id: String): Deferred<JsonEntity> = coroutineScope {
+        async { jsonEntityMapper.fromJsonDbEntity(jsonEntityDao.readEntity(UUID.fromString(id))) }
     }
 
     fun updateEntity(input: JsonEntity) {
@@ -23,7 +25,7 @@ class JsonEntityApi(
     }
 
     suspend fun deleteEntityAsync(id: String) = coroutineScope {
-        async { jsonEntityDao.deleteEntity(UUID.fromString(id)) }
+        launch { jsonEntityDao.deleteEntity(UUID.fromString(id)) }
     }
 
     fun allEntities(): List<JsonEntity> {

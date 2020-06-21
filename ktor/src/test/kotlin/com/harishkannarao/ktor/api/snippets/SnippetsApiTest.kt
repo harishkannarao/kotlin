@@ -3,22 +3,25 @@ package com.harishkannarao.ktor.api.snippets
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 class SnippetsApiTest {
 
-    private lateinit var testConfig: KtorApplicationConfig
+    private lateinit var mockConfig: KtorApplicationConfig
     private lateinit var subject: SnippetsApi
 
     @BeforeMethod
     fun setUp() {
-        testConfig = KtorApplicationConfig().copy(port = 9999)
-        subject = SnippetsApi(testConfig)
+        mockConfig = mock(KtorApplicationConfig::class.java)
+        subject = SnippetsApi(mockConfig)
     }
 
     @Test
     fun `default snippets should return snippets`() {
+        `when`(mockConfig.port).thenReturn(9999)
         val result = subject.getDefaultSnippets()
 
         assertThat(result.size, equalTo(1))

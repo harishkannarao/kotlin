@@ -52,7 +52,7 @@ class LocationRoutes(
                         call.respond(dependencies.jsonEntityApi.allEntities())
                     }
                     get<JsonEntityWithId> { jsonEntityWithId ->
-                        call.respond(dependencies.jsonEntityApi.readEntity(jsonEntityWithId.id))
+                        call.respond(dependencies.jsonEntityApi.readEntityAsync(jsonEntityWithId.id).await())
                     }
                     put<JsonEntityWithId> { jsonEntityWithId ->
                         val input = call.receive<JsonEntity.Data>()
