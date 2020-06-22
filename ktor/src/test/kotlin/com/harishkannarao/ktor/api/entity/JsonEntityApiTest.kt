@@ -27,48 +27,44 @@ class JsonEntityApiTest {
     }
 
     @Test
-    fun `readEntityAsync returns entity from dao`() {
-        runBlocking {
-            val id = UUID.randomUUID()
-            val jsonDbEntity = JsonDbEntity(
-                    id = id,
-                    booleanField = false,
-                    dateInEpochDays = 0L,
-                    decimalField = BigDecimal("0.00"),
-                    intField = 2,
-                    nestedData = emptyList(),
-                    tags = emptyList(),
-                    timeStampInEpochMillis = 0L,
-                    username = id.toString()
-            )
-            `when`(mockJsonEntityDao.readEntity(id)).thenReturn(jsonDbEntity)
-            val jsonEntity = JsonEntity(
-                    id = id,
-                    data = JsonEntity.Data(
-                            jsonDbEntity.username,
-                            LocalDate.now(),
-                            jsonDbEntity.timeStampInEpochMillis,
-                            jsonDbEntity.intField,
-                            jsonDbEntity.booleanField,
-                            jsonDbEntity.decimalField,
-                            emptyList(),
-                            emptyList()
-                    )
-            )
-            `when`(mockJsonEntityMapper.fromJsonDbEntity(jsonDbEntity)).thenReturn(jsonEntity)
-            val result = subject.readEntityAsync(id.toString()).await()
-            assertThat(result, equalTo(jsonEntity))
-        }
+    fun `readEntityAsync returns entity from dao`() = runBlocking {
+        val id = UUID.randomUUID()
+        val jsonDbEntity = JsonDbEntity(
+                id = id,
+                booleanField = false,
+                dateInEpochDays = 0L,
+                decimalField = BigDecimal("0.00"),
+                intField = 2,
+                nestedData = emptyList(),
+                tags = emptyList(),
+                timeStampInEpochMillis = 0L,
+                username = id.toString()
+        )
+        `when`(mockJsonEntityDao.readEntity(id)).thenReturn(jsonDbEntity)
+        val jsonEntity = JsonEntity(
+                id = id,
+                data = JsonEntity.Data(
+                        jsonDbEntity.username,
+                        LocalDate.now(),
+                        jsonDbEntity.timeStampInEpochMillis,
+                        jsonDbEntity.intField,
+                        jsonDbEntity.booleanField,
+                        jsonDbEntity.decimalField,
+                        emptyList(),
+                        emptyList()
+                )
+        )
+        `when`(mockJsonEntityMapper.fromJsonDbEntity(jsonDbEntity)).thenReturn(jsonEntity)
+        val result = subject.readEntityAsync(id.toString()).await()
+        assertThat(result, equalTo(jsonEntity))
     }
 
     @Test
-    fun `deleteEntityAsync deletes the entity`() {
-        runBlocking {
-            val id = UUID.randomUUID()
-            val uuidCaptor: ArgumentCaptor<UUID> = ArgumentCaptor.forClass(UUID::class.java)
-            doNothing().`when`(mockJsonEntityDao).deleteEntity(MockitoHelper.capture(uuidCaptor))
-            subject.deleteEntityAsync(id.toString())
-            assertThat(uuidCaptor.value, equalTo(id))
-        }
+    fun `deleteEntityAsync deletes the entity`() = runBlocking {
+        val id = UUID.randomUUID()
+        val uuidCaptor: ArgumentCaptor<UUID> = ArgumentCaptor.forClass(UUID::class.java)
+        doNothing().`when`(mockJsonEntityDao).deleteEntity(MockitoHelper.capture(uuidCaptor))
+        subject.deleteEntityAsync(id.toString())
+        assertThat(uuidCaptor.value, equalTo(id))
     }
 }
