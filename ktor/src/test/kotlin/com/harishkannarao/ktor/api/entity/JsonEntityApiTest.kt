@@ -5,7 +5,9 @@ import com.harishkannarao.ktor.dao.JsonEntityDao
 import com.harishkannarao.ktor.dao.entity.JsonDbEntity
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.equalTo
+import org.hamcrest.Matchers.nullValue
 import org.mockito.ArgumentCaptor
 import org.mockito.Mockito.*
 import org.testng.annotations.BeforeMethod
@@ -65,6 +67,8 @@ class JsonEntityApiTest {
         val uuidCaptor: ArgumentCaptor<UUID> = ArgumentCaptor.forClass(UUID::class.java)
         doNothing().`when`(mockJsonEntityDao).deleteEntity(MockitoHelper.capture(uuidCaptor))
         subject.deleteEntityAsync(id.toString())
-        assertThat(uuidCaptor.value, equalTo(id))
+        val values = uuidCaptor.allValues.toList()
+        assertThat(values.size, equalTo(1))
+        assertThat(values[0], equalTo(id))
     }
 }
