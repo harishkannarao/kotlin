@@ -68,12 +68,10 @@ class JsonEntityDao(
     }
 
     fun deleteEntity(id: UUID) {
-        thread(start = true) {
-            jdbi.useHandle<Exception> { handle ->
-                handle.createUpdate(DELETE_SQL)
-                        .bind(COLUMN_ID, id.toString())
-                        .execute()
-            }
+        jdbi.useHandle<Exception> { handle ->
+            handle.createUpdate(DELETE_SQL)
+                    .bind(COLUMN_ID, id.toString())
+                    .execute()
         }
     }
 
