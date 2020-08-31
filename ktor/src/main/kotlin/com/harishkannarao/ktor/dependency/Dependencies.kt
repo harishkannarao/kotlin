@@ -20,7 +20,7 @@ import org.flywaydb.core.Flyway
 
 class Dependencies(
         config: KtorApplicationConfig,
-        overriddenDependencies: OverriddenDependencies = OverriddenDependencies()
+        overriddenDependencies: OverriddenDependencies
 ) {
 
     // third party http api clients

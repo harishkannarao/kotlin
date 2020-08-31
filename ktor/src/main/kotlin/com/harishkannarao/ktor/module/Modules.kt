@@ -52,7 +52,7 @@ class Modules(
         private val staticRoutes: StaticRoutes,
         private val locationRoutes: LocationRoutes,
         private val dependencies: Dependencies,
-        private val additionalRoutes: Route.() -> Unit = {}
+        private val additionalRoutes: Route.() -> Unit
 ) {
 
     private val log = LoggerFactory.getLogger(Modules::class.java)
