@@ -46,11 +46,7 @@ abstract class AbstractBaseIntegration {
     fun restartServerWithDefaultConfig() {
         if (!runningWithDefaultConfig) {
             server.stop()
-            server = createAndStartServerWithConfig(
-                    config = defaultConfig,
-                    overriddenDependencies = OverriddenDependencies(),
-                    additionalRoutes = TestRoutes.createTestRoutes()
-            )
+            server = createAndStartServerWithConfig()
             runningWithDefaultConfig = true
 
             waitForServerToStart()
@@ -116,11 +112,7 @@ abstract class AbstractBaseIntegration {
         val wireMockStub = WireMockStub(wireMockClient)
         private var runningWithDefaultConfig = true
         val defaultConfig = createDefaultTestConfig()
-        private var server: KtorApplicationServer = createAndStartServerWithConfig(
-                config = defaultConfig,
-                overriddenDependencies = OverriddenDependencies(),
-                additionalRoutes = TestRoutes.createTestRoutes()
-        )
+        private var server: KtorApplicationServer = createAndStartServerWithConfig()
         const val baseUrl = "http://localhost:8080"
         val clients: ClientFactory = ClientFactory(baseUrl, defaultConfig.enableCallTrace)
         val webPages = WebPageFactory(baseUrl)
@@ -134,9 +126,9 @@ abstract class AbstractBaseIntegration {
         }
 
         private fun createAndStartServerWithConfig(
-                config: KtorApplicationConfig,
-                overriddenDependencies: OverriddenDependencies,
-                additionalRoutes: Route.() -> Unit
+                config: KtorApplicationConfig = createDefaultTestConfig(),
+                overriddenDependencies: OverriddenDependencies = OverriddenDependencies(),
+                additionalRoutes: Route.() -> Unit = TestRoutes.createTestRoutes()
         ): KtorApplicationServer {
             val localServer = KtorApplicationServer(
                     config = config,

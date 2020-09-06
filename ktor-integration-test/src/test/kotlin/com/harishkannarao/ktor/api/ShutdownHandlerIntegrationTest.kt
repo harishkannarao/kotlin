@@ -23,9 +23,7 @@ class ShutdownHandlerIntegrationTest : AbstractBaseApiIntegration() {
 
     @Test
     fun `should execute shutdown handler`() {
-        restartServerWithConfig(
-                defaultConfig
-        )
+        restartServerWithConfig(defaultConfig)
         val expectedApplicationLogMessage = "[] INFO Ktor Application stopped"
         ktorApplicationServerLogger.assertLogEntry(expectedApplicationLogMessage)
     }
