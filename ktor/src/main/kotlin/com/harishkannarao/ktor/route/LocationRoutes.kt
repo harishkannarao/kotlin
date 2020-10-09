@@ -9,15 +9,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.locations.*
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.route
+import io.ktor.routing.*
 import java.util.*
 
 class LocationRoutes(
         private val dependencies: Dependencies
 ) {
-    val locations: Route.() -> Unit = {
-        route("") {
+    fun configure(routing: Routing) {
+        routing.route("") {
             route("jdbi") {
                 route("relational-entity") {
                     get<SearchRelationalEntity> { searchRelationalEntity ->

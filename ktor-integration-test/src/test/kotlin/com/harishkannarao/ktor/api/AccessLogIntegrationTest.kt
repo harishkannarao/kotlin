@@ -1,14 +1,14 @@
 package com.harishkannarao.ktor.api
 
 import com.harishkannarao.ktor.AbstractBaseApiIntegration
-import com.harishkannarao.ktor.module.Modules
+import com.harishkannarao.ktor.feature.Features
 import com.harishkannarao.ktor.util.LogbackTestUtil
 import org.testng.annotations.AfterMethod
 import org.testng.annotations.BeforeMethod
 import org.testng.annotations.Test
 
 class AccessLogIntegrationTest : AbstractBaseApiIntegration() {
-    private val modulesLogger = LogbackTestUtil(Modules::class.java.name)
+    private val modulesLogger = LogbackTestUtil(Features::class.java.name)
 
     @BeforeMethod(alwaysRun = true)
     fun setUpTestLogger() {

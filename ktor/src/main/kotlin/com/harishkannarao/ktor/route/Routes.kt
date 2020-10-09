@@ -6,8 +6,8 @@ import com.harishkannarao.ktor.api.snippets.SnippetDto
 import com.harishkannarao.ktor.client.customer.CustomerDto
 import com.harishkannarao.ktor.config.KtorApplicationConfig
 import com.harishkannarao.ktor.dependency.Dependencies
+import com.harishkannarao.ktor.feature.Features
 import com.harishkannarao.ktor.intercept.Interceptor
-import com.harishkannarao.ktor.module.Modules
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.call
 import io.ktor.auth.authenticate
@@ -22,10 +22,7 @@ import io.ktor.request.contentType
 import io.ktor.request.receive
 import io.ktor.request.receiveMultipart
 import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.routing.*
 import io.ktor.sessions.*
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
@@ -37,8 +34,8 @@ class Routes(
 ) {
     private val logger = LoggerFactory.getLogger(Routes::class.java)
 
-    val rootPath: Route.() -> Unit = {
-        route("") {
+    fun configure(routing: Routing) {
+        routing.route("") {
 
             get {
                 logger.info("sample log message to test MDC param")
@@ -46,7 +43,7 @@ class Routes(
             }
 
             route("basic-auth-get") {
-                authenticate(Modules.BASIC_AUTH) {
+                authenticate(Features.BASIC_AUTH) {
                     get {
                         call.respond(TextContent("Successfully authenticated with basic auth", ContentType.Text.Plain))
                     }

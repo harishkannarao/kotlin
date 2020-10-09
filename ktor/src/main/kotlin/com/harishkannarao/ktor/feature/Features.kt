@@ -1,4 +1,4 @@
-package com.harishkannarao.ktor.module
+package com.harishkannarao.ktor.feature
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.SerializationFeature
@@ -17,48 +17,29 @@ import com.harishkannarao.ktor.route.LocationRoutes
 import com.harishkannarao.ktor.route.Routes
 import com.harishkannarao.ktor.route.StaticRoutes
 import freemarker.cache.ClassTemplateLoader
-import io.ktor.application.Application
-import io.ktor.application.ApplicationCallPipeline
-import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.basic
+import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.freemarker.FreeMarker
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.jackson.jackson
-import io.ktor.locations.Locations
-import io.ktor.request.header
-import io.ktor.request.path
-import io.ktor.request.uri
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.Routing
-import io.ktor.sessions.SessionStorageMemory
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.header
-import io.ktor.webjars.Webjars
+import io.ktor.freemarker.*
+import io.ktor.http.*
+import io.ktor.jackson.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.sessions.*
+import io.ktor.webjars.*
 import org.slf4j.LoggerFactory
 import org.slf4j.event.Level
 import java.util.*
 
+object Features {
 
-class Modules(
-        private val config: KtorApplicationConfig,
-        private val routes: Routes,
-        private val staticRoutes: StaticRoutes,
-        private val locationRoutes: LocationRoutes,
-        private val dependencies: Dependencies,
-        private val additionalRoutes: Route.() -> Unit
-) {
+    const val BASIC_AUTH = "my-basic-auth"
+    private val LOG = LoggerFactory.getLogger(Features::class.java)
 
-    private val log = LoggerFactory.getLogger(Modules::class.java)
-
-    val myModule: Application.() -> Unit = {
-        install(ContentNegotiation) {
+    fun installContentNegotiation(application: Application) {
+        application.install(ContentNegotiation) {
             jackson {
                 this.registerModule(ParameterNamesModule())
                 this.registerModule(Jdk8Module())
@@ -66,11 +47,20 @@ class Modules(
                 this.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             }
         }
+    }
+
+    fun installWebJars(application: Application) {
         @Suppress("EXPERIMENTAL_API_USAGE")
-        install(Webjars)
-        install(AutoHeadResponse)
-        install(FreeMarker) {
-            this.templateLoader = ClassTemplateLoader(Modules::class.java.classLoader, "templates")
+        application.install(Webjars)
+    }
+
+    fun installAutoHeadResponse(application: Application) {
+        application.install(AutoHeadResponse)
+    }
+
+    fun installFreeMarker(application: Application, config: KtorApplicationConfig) {
+        application.install(FreeMarker) {
+            this.templateLoader = ClassTemplateLoader(Features::class.java.classLoader, "templates")
             if (config.developmentMode) {
                 this.setSharedVariable("javaScriptVariant", "")
                 this.setSharedVariable("cssVariant", "")
@@ -79,7 +69,10 @@ class Modules(
                 this.setSharedVariable("cssVariant", ".min")
             }
         }
-        install(Sessions) {
+    }
+
+    fun installSessions(application: Application) {
+        application.install(Sessions) {
             cookie<CookieSession>(
                     "COOKIE_NAME",
                     SessionStorageMemory()
@@ -95,9 +88,13 @@ class Modules(
                 identity { UUID.randomUUID().toString() }
             }
         }
-        install(CallLogging) {
+
+    }
+
+    fun installCallLogging(application: Application) {
+        application.install(CallLogging) {
             level = Level.INFO
-            logger = log
+            logger = LOG
             filter(
                     predicate = { call -> call.request.path().startsWith("/") }
             )
@@ -116,35 +113,41 @@ class Modules(
                 }
             }
         }
-        install(StatusPages) {
+    }
+
+    fun installStatusPages(application: Application) {
+        application.install(StatusPages) {
             exception<Throwable> { error ->
                 when (error) {
                     is JsonProcessingException -> {
-                        log.warn(call.request.uri, error)
+                        LOG.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.BadRequest)
                     }
                     is DbEntityConflictException -> {
-                        log.warn(call.request.uri, error)
+                        LOG.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.Conflict)
                     }
                     is DbEntityNotFoundException -> {
-                        log.warn(call.request.uri, error)
+                        LOG.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.NotFound)
                     }
                     is CustomerClientException -> {
-                        log.warn(call.request.uri, error)
+                        LOG.warn(call.request.uri, error)
                         call.respond(HttpStatusCode.BadRequest)
                     }
                     else -> {
-                        log.error(call.request.uri, error)
+                        LOG.error(call.request.uri, error)
                         call.respond(HttpStatusCode.InternalServerError)
                     }
                 }
             }
         }
-        install(Authentication) {
+    }
+
+    fun installAuthentication(application: Application) {
+        application.install(Authentication) {
             basic(name = BASIC_AUTH) {
-                realm = BASIC_AUTH_REALM
+                realm = "Ktor Server - Basic Auth"
                 validate { credentials ->
                     if (credentials.name == credentials.password) {
                         UserIdPrincipal(credentials.name)
@@ -154,22 +157,21 @@ class Modules(
                 }
             }
         }
-        @Suppress("EXPERIMENTAL_API_USAGE")
-        install(Locations)
-        install(Routing) {
-            if (config.enableCallTrace) {
-                trace { log.debug(it.buildText()) }
-            }
-            intercept(ApplicationCallPipeline.Features, dependencies.interceptor.requestTimeInterceptor())
-            routes.rootPath(this)
-            staticRoutes.staticPath(this)
-            locationRoutes.locations(this)
-            additionalRoutes(this)
-        }
+
     }
 
-    companion object {
-        const val BASIC_AUTH = "my-basic-auth"
-        const val BASIC_AUTH_REALM = "Ktor Server - Basic Auth"
+    fun installRouting(application: Application, dependencies: Dependencies, routes: Routes, staticRoutes: StaticRoutes, locationRoutes: LocationRoutes, additionalRoutes: Route.() -> Unit, config: KtorApplicationConfig) {
+        @Suppress("EXPERIMENTAL_API_USAGE")
+        application.install(Locations)
+        application.install(Routing) {
+            if (config.enableCallTrace) {
+                trace { LOG.debug(it.buildText()) }
+            }
+            intercept(ApplicationCallPipeline.Features, dependencies.interceptor.requestTimeInterceptor())
+            routes.configure(this)
+            staticRoutes.configure(this)
+            locationRoutes.configure(this)
+            additionalRoutes(this)
+        }
     }
 }
