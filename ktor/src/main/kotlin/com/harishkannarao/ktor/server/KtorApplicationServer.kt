@@ -10,8 +10,8 @@ import com.harishkannarao.ktor.route.StaticRoutes
 import io.ktor.application.Application
 import io.ktor.application.ApplicationStopped
 import io.ktor.routing.*
-import io.ktor.server.cio.CIO
 import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.*
 import org.slf4j.LoggerFactory
 
 open class KtorApplicationServer(
@@ -39,9 +39,8 @@ open class KtorApplicationServer(
         logger.info("Ktor Application stopped")
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private val server = embeddedServer(
-            factory = CIO,
+            factory = Netty,
             port = config.port,
             module = modules.myModule
     )

@@ -68,9 +68,9 @@ Change logback configuration
     
     java -jar ktor/build/libs/ktor-exec.jar
 
-Change logback configuration
+Change logback configuration and port
 
-    java -Dlogback.configurationFile=logback-cloud.xml -jar ktor/build/libs/ktor-exec.jar
+    java -Dlogback.configurationFile=logback-cloud.xml -Dport=8081 -jar ktor/build/libs/ktor-exec.jar
     
 #### Using Docker
 
