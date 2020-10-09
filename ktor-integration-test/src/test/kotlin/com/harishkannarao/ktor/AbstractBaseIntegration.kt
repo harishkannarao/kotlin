@@ -4,8 +4,8 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import com.harishkannarao.ktor.api.clients.factory.ClientFactory
-import com.harishkannarao.ktor.config.ConfigUtil
 import com.harishkannarao.ktor.config.KtorApplicationConfig
+import com.harishkannarao.ktor.config.KtorApplicationConfig.Companion.lookupOrDefault
 import com.harishkannarao.ktor.dependency.OverriddenDependencies
 import com.harishkannarao.ktor.server.KtorApplicationServer
 import com.harishkannarao.ktor.stub.wiremock.WireMockStub
@@ -118,11 +118,10 @@ abstract class AbstractBaseIntegration {
         val webPages = WebPageFactory(baseUrl)
 
         private fun createDefaultTestConfig(): KtorApplicationConfig {
-            return KtorApplicationConfig()
-                    .copy(
-                            developmentMode = ConfigUtil.lookupValue("APP_DEVELOPMENT_MODE", "app.development.mode", "true").toBoolean(),
-                            enableCallTrace = ConfigUtil.lookupValue("APP_ENABLE_CALL_TRACE", "app.enable.call.trace", "true").toBoolean()
-                    )
+            return KtorApplicationConfig(
+                    developmentMode = lookupOrDefault("APP_DEVELOPMENT_MODE", "app.development.mode", "true").toBoolean(),
+                    enableCallTrace = lookupOrDefault("APP_ENABLE_CALL_TRACE", "app.enable.call.trace", "true").toBoolean()
+            )
         }
 
         private fun createAndStartServerWithConfig(
