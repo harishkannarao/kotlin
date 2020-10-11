@@ -5,7 +5,7 @@ import io.restassured.specification.RequestSpecification
 class HeaderSessionClient(requestSpecification: RequestSpecification) : ApiClientBase<HeaderSessionClient>(requestSpecification) {
 
     fun get(): HeaderSessionClient {
-        requestSpecification.basePath("/header-session")
+        requestSpecification.basePath("/session/header-session")
         requestSpecification.accept("text/plain")
 
         return doGet()

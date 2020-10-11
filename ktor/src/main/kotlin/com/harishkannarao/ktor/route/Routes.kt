@@ -100,37 +100,39 @@ class Routes(
             }
         }
 
-        routing.route("cookie-session") {
-            get {
-                val session: CookieSession = call.sessions.getOrSet(
-                        generator = { CookieSession(0) }
-                )
-                val updatedSession = session.copy(value = session.value + 1)
-                call.sessions.set(updatedSession)
-                val sessionCookie: String? = call.request.cookies["COOKIE_NAME"]
-                call.respond(TextContent("SessionId: $sessionCookie, counter: ${updatedSession.value}", ContentType.Text.Plain))
-            }
-        }
-
-        routing.route("header-session") {
-            get {
-                val existingSession = call.sessions.get<HeaderSession>()
-                val session: HeaderSession = when {
-                    existingSession != null -> existingSession
-                    else -> {
-                        call.sessions.clear<HeaderSession>()
-                        HeaderSession(0)
-                    }
-                }
-                val updatedSession = session.copy(value = session.value + 1)
-                if (updatedSession.value > 9) {
-                    call.sessions.clear<HeaderSession>()
-                    call.respond(TextContent("Session invalidated", ContentType.Text.Plain))
-                } else {
-                    call.sessions.clear<HeaderSession>()
+        routing.route("/session") {
+            route("/cookie-session") {
+                get {
+                    val session: CookieSession = call.sessions.getOrSet(
+                            generator = { CookieSession(0) }
+                    )
+                    val updatedSession = session.copy(value = session.value + 1)
                     call.sessions.set(updatedSession)
-                    val sessionHeader: String? = call.request.headers["HEADER_NAME"]
-                    call.respond(TextContent("SessionId: $sessionHeader, counter: ${updatedSession.value}", ContentType.Text.Plain))
+                    val sessionCookie: String? = call.request.cookies["COOKIE_NAME"]
+                    call.respond(TextContent("SessionId: $sessionCookie, counter: ${updatedSession.value}", ContentType.Text.Plain))
+                }
+            }
+
+            route("/header-session") {
+                get {
+                    val existingSession = call.sessions.get<HeaderSession>()
+                    val session: HeaderSession = when {
+                        existingSession != null -> existingSession
+                        else -> {
+                            call.sessions.clear<HeaderSession>()
+                            HeaderSession(0)
+                        }
+                    }
+                    val updatedSession = session.copy(value = session.value + 1)
+                    if (updatedSession.value > 9) {
+                        call.sessions.clear<HeaderSession>()
+                        call.respond(TextContent("Session invalidated", ContentType.Text.Plain))
+                    } else {
+                        call.sessions.clear<HeaderSession>()
+                        call.sessions.set(updatedSession)
+                        val sessionHeader: String? = call.request.headers["HEADER_NAME"]
+                        call.respond(TextContent("SessionId: $sessionHeader, counter: ${updatedSession.value}", ContentType.Text.Plain))
+                    }
                 }
             }
         }

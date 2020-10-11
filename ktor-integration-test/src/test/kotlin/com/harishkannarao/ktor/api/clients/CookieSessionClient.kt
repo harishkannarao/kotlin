@@ -5,7 +5,7 @@ import io.restassured.specification.RequestSpecification
 class CookieSessionClient(requestSpecification: RequestSpecification) : ApiClientBase<CookieSessionClient>(requestSpecification) {
 
     fun get(): CookieSessionClient {
-        requestSpecification.basePath("/cookie-session")
+        requestSpecification.basePath("/session/cookie-session")
         requestSpecification.accept("text/plain")
 
         return doGet()
